@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Diócesis de Santo Tomé</title>
+    <link rel="icon" href="https://firebasestorage.googleapis.com/v0/b/diocesisdesantotome.firebasestorage.app/o/LOGOS%2Flogo%20iglesia%20samaritana.png?alt=media&token=56fd32c1-bb7d-4537-83f7-ace6662ff768" type="image/png">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <!-- Swiper.js for Carousel -->
@@ -40,32 +41,45 @@
 
     <!-- Header & Navigation -->
     <header class="bg-white shadow-md sticky top-0 z-50">
-        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
-            <a href="#" class="text-xl font-bold text-blue-600">Diócesis de Santo Tomé</a>
-            <div class="hidden md:flex space-x-6">
-                <a href="#noticias" class="text-gray-600 hover:text-blue-600 transition">Noticias</a>
-                <a href="#videos" class="text-gray-600 hover:text-blue-600 transition">Videos</a>
-                <a href="#historia" class="text-gray-600 hover:text-blue-600 transition">Nuestra Historia</a>
+        <nav class="container mx-auto px-6 py-2 flex justify-between items-center">
+            <a href="#" class="flex items-center gap-3">
+                 <img src="https://firebasestorage.googleapis.com/v0/b/diocesisdesantotome.firebasestorage.app/o/LOGOS%2Flogo%20iglesia%20samaritana.png?alt=media&token=56fd32c1-bb7d-4537-83f7-ace6662ff768" alt="Logo Diócesis de Santo Tomé" class="h-14 w-auto">
+                 <div class="hidden sm:block">
+                    <span class="font-bold text-lg md:text-xl text-gray-700 block leading-tight">Diócesis de Santo Tomé</span>
+                    <span class="text-sm italic text-gray-500 block leading-tight">Corrientes, Argentina</span>
+                 </div>
+            </a>
+            <div class="hidden md:flex items-center space-x-4">
+                <a href="#" class="text-gray-600 hover:text-blue-600 transition">Inicio</a>
+                <a href="#recursos" class="text-gray-600 hover:text-blue-600 transition">Recursos</a>
+                <a href="#fragiles" class="text-gray-600 hover:text-blue-600 transition">Cuidado de los frágiles</a>
+                <a href="#obispo" class="text-gray-600 hover:text-blue-600 transition">Nuestro Obispo</a>
+                <a href="#decretos" class="text-gray-600 hover:text-blue-600 transition">Decretos</a>
+                <a href="#jubilar" class="text-gray-600 hover:text-blue-600 transition">Año Jubilar</a>
                 <a href="#contacto" class="text-gray-600 hover:text-blue-600 transition">Contacto</a>
+                <a href="#dona" class="text-white font-bold py-2 px-4 rounded-lg bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700 transition shadow-md">Doná</a>
             </div>
             <button id="mobile-menu-btn" class="md:hidden">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
             </button>
         </nav>
-        <div id="mobile-menu" class="hidden md:hidden bg-white">
-            <a href="#noticias" class="block px-6 py-3 text-gray-600 hover:bg-gray-100">Noticias</a>
-            <a href="#videos" class="block px-6 py-3 text-gray-600 hover:bg-gray-100">Videos</a>
-            <a href="#historia" class="block px-6 py-3 text-gray-600 hover:bg-gray-100">Nuestra Historia</a>
+        <div id="mobile-menu" class="hidden md:hidden bg-white py-2">
+            <a href="#" class="block px-6 py-3 text-gray-600 hover:bg-gray-100">Inicio</a>
+            <a href="#recursos" class="block px-6 py-3 text-gray-600 hover:bg-gray-100">Recursos</a>
+            <a href="#fragiles" class="block px-6 py-3 text-gray-600 hover:bg-gray-100">Cuidado de los frágiles</a>
+            <a href="#obispo" class="block px-6 py-3 text-gray-600 hover:bg-gray-100">Nuestro Obispo</a>
+            <a href="#decretos" class="block px-6 py-3 text-gray-600 hover:bg-gray-100">Decretos</a>
+            <a href="#jubilar" class="block px-6 py-3 text-gray-600 hover:bg-gray-100">Año Jubilar</a>
             <a href="#contacto" class="block px-6 py-3 text-gray-600 hover:bg-gray-100">Contacto</a>
+            <div class="px-6 py-2">
+                 <a href="#dona" class="block text-center text-white font-bold py-3 px-4 rounded-lg bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700 transition shadow-md">Doná</a>
+            </div>
         </div>
     </header>
 
-    <!-- Portada -->
-    <section class="bg-blue-600 text-white h-96 flex items-center justify-center text-center" style="background-image: url('https://firebasestorage.googleapis.com/v0/b/diocesisdesantotome.appspot.com/o/assets%2Fcatedral-santo-tome.jpg?alt=media&token=e9e6e4a2-8e14-4a4b-8d7b-1b15c96a793c'); background-size: cover; background-position: center;">
-        <div class="bg-black bg-opacity-40 p-8 rounded-lg">
-            <h1 class="text-4xl md:text-5xl font-extrabold mb-4 drop-shadow-lg">Bienvenidos a la Diócesis de Santo Tomé</h1>
-            <p class="text-lg md:text-xl drop-shadow">Unidos en la fe, sirviendo a la comunidad.</p>
-        </div>
+    <!-- Encabezado Banner -->
+    <section>
+        <img src="https://firebasestorage.googleapis.com/v0/b/diocesisdesantotome.firebasestorage.app/o/LOGOS%2FEncabezado%20para%20Paginas.png?alt=media&token=38a267bb-78ba-49cb-a6b5-86d457b07473" alt="Encabezado Diócesis de Santo Tomé" class="w-full h-auto">
     </section>
 
     <!-- Blog de Noticias -->
@@ -157,8 +171,49 @@
         </div>
     </section>
 
+    <!-- Recursos -->
+    <section id="recursos" class="bg-gray-100 py-16">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="text-3xl font-bold text-center mb-10">Recursos</h2>
+            <p>Aquí encontrarás recursos pastorales, documentos y más.</p>
+        </div>
+    </section>
+
+    <!-- Cuidado de los frágiles -->
+    <section id="fragiles" class="py-16">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="text-3xl font-bold text-center mb-10">Cuidado de los frágiles</h2>
+            <p>Información sobre nuestras iniciativas y programas de caridad.</p>
+        </div>
+    </section>
+
+    <!-- Nuestro Obispo -->
+    <section id="obispo" class="bg-gray-100 py-16">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="text-3xl font-bold text-center mb-10">Nuestro Obispo</h2>
+            <p>Conoce más sobre nuestro obispo, su ministerio y sus escritos.</p>
+        </div>
+    </section>
+
+    <!-- Decretos -->
+    <section id="decretos" class="py-16">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="text-3xl font-bold text-center mb-10">Decretos</h2>
+            <p>Accede a los decretos y documentos oficiales de la diócesis.</p>
+        </div>
+    </section>
+
+    <!-- Año Jubilar -->
+    <section id="jubilar" class="bg-gray-100 py-16">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="text-3xl font-bold text-center mb-10">Año Jubilar</h2>
+            <p>Información y calendario de eventos para el Año Jubilar.</p>
+        </div>
+    </section>
+
+
     <!-- Contacto y Mapa -->
-    <section id="contacto" class="bg-gray-100 py-16">
+    <section id="contacto" class="py-16">
        <div class="container mx-auto px-6">
             <h2 class="text-3xl font-bold text-center mb-10">Contacto</h2>
             <div class="flex flex-col md:flex-row gap-10">
@@ -186,6 +241,15 @@
                 </div>
             </div>
        </div>
+    </section>
+
+    <!-- Doná -->
+    <section id="dona" class="bg-gray-100 py-16">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="text-3xl font-bold text-center mb-10">Apoya nuestra Misión</h2>
+            <p class="max-w-2xl mx-auto mb-8">Tu donación nos ayuda a continuar nuestra labor pastoral y social en toda la diócesis. ¡Gracias por tu generosidad!</p>
+            <a href="#" class="inline-block text-white font-bold py-3 px-8 rounded-lg bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700 transition shadow-lg text-lg">Hacer una Donación</a>
+        </div>
     </section>
 
     <!-- Footer -->
@@ -223,6 +287,12 @@
         mobileMenuBtn.addEventListener('click', () => {
             mobileMenu.classList.toggle('hidden');
         });
+        document.querySelectorAll('#mobile-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+
 
         // Load News Posts
         const blogPostsContainer = document.getElementById('blog-posts');
@@ -345,3 +415,4 @@
 
 </body>
 </html>
+
