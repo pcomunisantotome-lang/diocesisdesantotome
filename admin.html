@@ -13,6 +13,14 @@
         #editor { height: 250px; }
         .ql-toolbar.ql-snow { border-radius: 0.5rem 0.5rem 0 0; }
         .ql-container.ql-snow { border-radius: 0 0 0.5rem 0.5rem; }
+        .toast {
+            transform: translateY(100%);
+            transition: transform 0.5s ease-in-out;
+            z-index: 9999;
+        }
+        .toast.show {
+            transform: translateY(0);
+        }
     </style>
 </head>
 <body class="bg-gray-100">
@@ -42,7 +50,7 @@
 
     <!-- Admin Panel Section -->
     <div id="admin-panel" class="hidden">
-        <header class="bg-white shadow-md">
+        <header class="bg-white shadow-md sticky top-0 z-10">
             <div class="container mx-auto px-6 py-4 flex justify-between items-center">
                 <h1 class="text-2xl font-bold text-gray-800">Panel de Administración</h1>
                 <button id="logout-btn" class="bg-red-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-red-600 transition">Cerrar Sesión</button>
@@ -50,7 +58,6 @@
         </header>
 
         <main class="container mx-auto p-6">
-            <!-- News Management -->
             <div class="bg-white p-8 rounded-lg shadow-xl">
                 <h2 class="text-2xl font-bold mb-6">Gestionar Noticias</h2>
                 <form id="news-form">
@@ -67,12 +74,12 @@
                     </div>
 
                     <div class="mb-6">
-                        <label for="summary" class="block text-gray-700 font-semibold mb-2">Contenido / Resumen</label>
+                        <label for="editor" class="block text-gray-700 font-semibold mb-2">Contenido / Resumen</label>
                         <div id="editor"></div>
                     </div>
                     
                     <div class="flex items-center gap-4">
-                        <button type="submit" class="bg-green-500 text-white font-bold py-3 px-6 rounded-lg hover:bg-green-600 transition">Guardar Noticia</button>
+                        <button id="submit-btn" type="submit" class="bg-green-500 text-white font-bold py-3 px-6 rounded-lg hover:bg-green-600 transition disabled:bg-gray-400">Guardar Noticia</button>
                         <button type="button" id="cancel-edit-btn" class="bg-gray-500 text-white font-bold py-3 px-6 rounded-lg hover:bg-gray-600 transition hidden">Cancelar Edición</button>
                     </div>
                     <div id="upload-progress-container" class="w-full bg-gray-200 rounded-full h-2.5 mt-4 hidden">
@@ -89,6 +96,11 @@
             </div>
         </main>
     </div>
+    
+    <!-- Toast Notification -->
+    <div id="toast" class="toast fixed bottom-5 right-5 bg-gray-800 text-white py-3 px-6 rounded-lg shadow-xl">
+        <p id="toast-message"></p>
+    </div>
 
     <!-- Quill.js -->
     <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
@@ -97,16 +109,17 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, collection, getDocs, addDoc, doc, updateDoc, deleteDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, doc, updateDoc, deleteDoc, onSnapshot, serverTimestamp, query, orderBy, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
         import { getStorage, ref, uploadBytesResumable, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-storage.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyCIC457rky1NFQCas3uWFfIDVRBHfdbEAQ",
             authDomain: "diocesisdesantotome.firebaseapp.com",
             projectId: "diocesisdesantotome",
-            storageBucket: "diocesisdesantotome.appspot.com",
+            // ESTA LÍNEA ES LA CORRECCIÓN:
+            storageBucket: "diocesisdesantotome.firebasestorage.app",
             messagingSenderId: "313851932898",
-            appId: "1:3851932898:web:0b7e65d0da8d09d762aebb"
+            appId: "1:313851932898:web:0b7e65d0da8d09d762aebb"
         };
 
         const app = initializeApp(firebaseConfig);
@@ -114,13 +127,35 @@
         const db = getFirestore(app);
         const storage = getStorage(app);
 
+        // --- UI Elements ---
         const loginSection = document.getElementById('login-section');
         const adminPanel = document.getElementById('admin-panel');
         const loginForm = document.getElementById('login-form');
         const loginError = document.getElementById('login-error');
         const logoutBtn = document.getElementById('logout-btn');
+        const newsForm = document.getElementById('news-form');
+        const newsIdField = document.getElementById('news-id');
+        const cancelEditBtn = document.getElementById('cancel-edit-btn');
+        const imageFilesInput = document.getElementById('image-files');
+        const imagePreviewsContainer = document.getElementById('image-previews');
+        const progressContainer = document.getElementById('upload-progress-container');
+        const progressBar = document.getElementById('upload-progress-bar');
+        const submitBtn = document.getElementById('submit-btn');
+        const existingNewsContainer = document.getElementById('existing-news');
+        const toast = document.getElementById('toast');
+        const toastMessage = document.getElementById('toast-message');
 
-        // Quill Editor
+        // --- Toast Notification Logic ---
+        function showToast(message, isError = false) {
+            toastMessage.textContent = message;
+            toast.style.backgroundColor = isError ? '#ef4444' : '#22c55e';
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // --- Quill Editor ---
         const quill = new Quill('#editor', {
             theme: 'snow',
             modules: {
@@ -128,12 +163,12 @@
                     [{ 'header': [1, 2, 3, false] }],
                     ['bold', 'italic', 'underline'],
                     [{'list': 'ordered'}, {'list': 'bullet'}],
-                    ['clean']
+                    ['link', 'clean']
                 ]
             }
         });
         
-        // Auth State
+        // --- Auth State ---
         onAuthStateChanged(auth, user => {
             if (user) {
                 loginSection.classList.add('hidden');
@@ -145,48 +180,29 @@
             }
         });
 
-        // Login
+        // --- Login / Logout ---
         loginForm.addEventListener('submit', (e) => {
             e.preventDefault();
-            const email = loginForm.email.value;
-            const password = loginForm.password.value;
-            signInWithEmailAndPassword(auth, email, password)
+            signInWithEmailAndPassword(auth, loginForm.email.value, loginForm.password.value)
                 .catch(error => {
                     loginError.textContent = "Email o contraseña incorrectos.";
                     loginError.classList.remove('hidden');
                 });
         });
+        logoutBtn.addEventListener('click', () => signOut(auth));
 
-        // Logout
-        logoutBtn.addEventListener('click', () => {
-            signOut(auth);
-        });
+        // --- News Form Logic ---
+        let imageFiles = []; 
+        let existingImageUrls = []; 
 
-        // News Form
-        const newsForm = document.getElementById('news-form');
-        const newsIdField = document.getElementById('news-id');
-        const cancelEditBtn = document.getElementById('cancel-edit-btn');
-
-        const imageFilesInput = document.getElementById('image-files');
-        const imagePreviewsContainer = document.getElementById('image-previews');
-        const progressContainer = document.getElementById('upload-progress-container');
-        const progressBar = document.getElementById('upload-progress-bar');
-        
-        let imageFiles = []; // To store File objects for upload
-        let existingImageUrls = []; // To store URLs when editing
-
-        imageFilesInput.addEventListener('change', (e) => {
-            handleFiles(e.target.files);
-        });
+        imageFilesInput.addEventListener('change', (e) => handleFiles(e.target.files));
         
         function handleFiles(files) {
             for (const file of files) {
-                if (!file.type.startsWith('image/')){ continue }
+                if (!file.type.startsWith('image/')) continue;
                 imageFiles.push(file);
                 const reader = new FileReader();
-                reader.onload = (e) => {
-                   createPreviewElement(e.target.result, file.name, 'new');
-                }
+                reader.onload = (e) => createPreviewElement(e.target.result, file.name, 'new');
                 reader.readAsDataURL(file);
             }
         }
@@ -194,29 +210,18 @@
         function createPreviewElement(src, name, type) {
             const previewWrapper = document.createElement('div');
             previewWrapper.className = 'relative group';
-
-            const img = document.createElement('img');
-            img.src = src;
-            img.className = 'w-full h-32 object-cover rounded-lg shadow-md';
-            previewWrapper.appendChild(img);
-            
-            const removeBtn = document.createElement('button');
-            removeBtn.innerHTML = '&times;';
-            removeBtn.className = 'absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center font-bold opacity-0 group-hover:opacity-100 transition-opacity';
-            removeBtn.onclick = () => {
-                if (type === 'new') {
-                    imageFiles = imageFiles.filter(f => f.name !== name);
-                } else { // 'existing'
-                    existingImageUrls = existingImageUrls.filter(url => url !== src);
-                }
+            previewWrapper.innerHTML = `
+                <img src="${src}" class="w-full h-32 object-cover rounded-lg shadow-md">
+                <button type="button" class="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center font-bold opacity-0 group-hover:opacity-100 transition-opacity">&times;</button>
+            `;
+            previewWrapper.querySelector('button').onclick = () => {
+                if (type === 'new') imageFiles = imageFiles.filter(f => f.name !== name);
+                else existingImageUrls = existingImageUrls.filter(url => url !== src);
                 previewWrapper.remove();
             };
-            previewWrapper.appendChild(removeBtn);
-
             imagePreviewsContainer.appendChild(previewWrapper);
         }
 
-        // Reset Form
         function resetForm() {
             newsForm.reset();
             newsIdField.value = '';
@@ -229,74 +234,61 @@
         
         cancelEditBtn.addEventListener('click', resetForm);
 
-        // Upload and Save Logic
+        // --- Main Submit Logic ---
         newsForm.addEventListener('submit', async (e) => {
             e.preventDefault();
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Guardando...';
 
-            const title = newsForm.title.value;
-            const summary = quill.root.innerHTML;
             const newsId = newsIdField.value;
 
-            if (!title || summary === '<p><br></p>') {
-                alert("Por favor, completa el título y el contenido.");
-                return;
-            }
-            if (imageFiles.length === 0 && existingImageUrls.length === 0) {
-                 alert("Por favor, sube al menos una imagen.");
-                return;
-            }
-
             try {
-                // Upload new images first
                 const newImageUrls = await uploadImages(imageFiles);
                 const allImageUrls = [...existingImageUrls, ...newImageUrls];
 
-                const featuredImageUrl = allImageUrls[0] || '';
-                const galleryImageUrls = allImageUrls.slice(1);
+                if (allImageUrls.length === 0) {
+                    throw new Error("Debes subir al menos una imagen.");
+                }
 
                 const newsData = {
-                    title,
-                    summary,
-                    featuredImageUrl,
-                    galleryImageUrls
+                    title: newsForm.title.value,
+                    summary: quill.root.innerHTML,
+                    featuredImageUrl: allImageUrls[0],
+                    galleryImageUrls: allImageUrls.slice(1),
+                    createdAt: serverTimestamp() 
                 };
                 
-                if (newsId) { // Update existing news
-                    const docRef = doc(db, "noticias", newsId);
-                    await updateDoc(docRef, newsData);
-                    alert("Noticia actualizada con éxito");
-                } else { // Create new news
+                if (newsId) {
+                    await updateDoc(doc(db, "noticias", newsId), { ...newsData, updatedAt: serverTimestamp() });
+                    showToast("Noticia actualizada con éxito");
+                } else {
                     await addDoc(collection(db, "noticias"), newsData);
-                    alert("Noticia creada con éxito");
+                    showToast("Noticia creada con éxito");
                 }
                 resetForm();
 
             } catch (error) {
                 console.error("Error al guardar la noticia:", error);
-                alert("Error al guardar la noticia.");
+                showToast(error.message || "Error al guardar la noticia.", true);
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Guardar Noticia';
             }
         });
 
         function uploadImages(files) {
+            if (files.length === 0) return Promise.resolve([]);
             progressContainer.classList.remove('hidden');
             progressBar.style.width = '0%';
-
+            
             const uploadPromises = files.map(file => {
                 const storageRef = ref(storage, `noticias/${Date.now()}_${file.name}`);
                 const uploadTask = uploadBytesResumable(storageRef, file);
-
                 return new Promise((resolve, reject) => {
                     uploadTask.on('state_changed', 
-                        (snapshot) => {
-                            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                            progressBar.style.width = progress + '%';
-                        }, 
+                        (snapshot) => progressBar.style.width = `${(snapshot.bytesTransferred / snapshot.totalBytes) * 100}%`, 
                         (error) => reject(error), 
-                        () => {
-                            getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-                                resolve(downloadURL);
-                            });
-                        }
+                        async () => resolve(await getDownloadURL(uploadTask.snapshot.ref))
                     );
                 });
             });
@@ -306,16 +298,11 @@
             });
         }
 
-        // Load News in Admin Panel
-        const existingNewsContainer = document.getElementById('existing-news');
+        // --- Load, Edit, Delete News ---
         function loadNews() {
-            const newsCollection = collection(db, "noticias");
-            onSnapshot(newsCollection, (snapshot) => {
-                if (snapshot.empty) {
-                    existingNewsContainer.innerHTML = '<p>No hay noticias creadas.</p>';
-                    return;
-                }
-                existingNewsContainer.innerHTML = '';
+            const q = query(collection(db, "noticias"), orderBy("createdAt", "desc"));
+            onSnapshot(q, (snapshot) => {
+                existingNewsContainer.innerHTML = snapshot.empty ? '<p>No hay noticias creadas.</p>' : '';
                 snapshot.forEach(doc => {
                     const news = doc.data();
                     const newsItem = document.createElement('div');
@@ -335,49 +322,56 @@
             });
         }
         
-        // Edit and Delete
-        existingNewsContainer.addEventListener('click', (e) => {
-            const docId = e.target.dataset.id;
-            if (!docId) return;
+        existingNewsContainer.addEventListener('click', async (e) => {
+            const btn = e.target.closest('button');
+            if (!btn) return;
+            const docId = btn.dataset.id;
+            const newsRef = doc(db, "noticias", docId);
+            
+            if (btn.classList.contains('delete-btn')) {
+                if (confirm('¿Estás seguro de que quieres eliminar esta noticia? Esto también borrará sus imágenes.')) {
+                    try {
+                        const allDocs = await getDocs(collection(db, "noticias"));
+                        const docSnapshot = allDocs.docs.find(doc => doc.id === docId);
+                        if (!docSnapshot) throw new Error("Documento no encontrado");
 
-            if (e.target.classList.contains('delete-btn')) {
-                if (confirm('¿Estás seguro de que quieres eliminar esta noticia?')) {
-                    const docRef = doc(db, "noticias", docId);
-                    // TODO: Also delete images from storage
-                    deleteDoc(docRef);
-                }
-            }
+                        const { featuredImageUrl, galleryImageUrls } = docSnapshot.data();
 
-            if (e.target.classList.contains('edit-btn')) {
-                const newsItemDiv = e.target.closest('div.flex').previousElementSibling;
-                const title = newsItemDiv.querySelector('p.font-bold').textContent;
-                
-                // Find the full data from the snapshot (or fetch again)
-                const newsCollection = collection(db, "noticias");
-                getDocs(newsCollection).then(snapshot => {
-                    snapshot.forEach(doc => {
-                        if (doc.id === docId) {
-                            const data = doc.data();
-                            newsForm.title.value = data.title;
-                            newsIdField.value = docId;
-                            quill.root.innerHTML = data.summary;
-                            
-                            // Reset and populate image previews
-                            imagePreviewsContainer.innerHTML = '';
-                            imageFiles = [];
-                            existingImageUrls = [data.featuredImageUrl, ...(data.galleryImageUrls || [])].filter(Boolean);
-                            existingImageUrls.forEach(url => createPreviewElement(url, url, 'existing'));
-
-                            cancelEditBtn.classList.remove('hidden');
-                            window.scrollTo(0, 0);
+                        const imageUrlsToDelete = [featuredImageUrl, ...(galleryImageUrls || [])].filter(Boolean);
+                        for (const url of imageUrlsToDelete) {
+                           try {
+                                await deleteObject(ref(storage, url));
+                           } catch (storageError) {
+                               console.warn("No se pudo eliminar la imagen, puede que ya no exista:", url, storageError);
+                           }
                         }
-                    });
-                });
+                        
+                        await deleteDoc(newsRef);
+                        showToast('Noticia eliminada correctamente.');
+                    } catch (error) {
+                        console.error("Error deleting news:", error);
+                        showToast('Error al eliminar la noticia.', true);
+                    }
+                }
+            } else if (btn.classList.contains('edit-btn')) {
+                 const allDocs = await getDocs(collection(db, "noticias"));
+                 const docToEdit = allDocs.docs.find(doc => doc.id === docId).data();
+                 
+                 newsForm.title.value = docToEdit.title;
+                 newsIdField.value = docId;
+                 quill.root.innerHTML = docToEdit.summary;
+                 
+                 imagePreviewsContainer.innerHTML = '';
+                 imageFiles = [];
+                 existingImageUrls = [docToEdit.featuredImageUrl, ...(docToEdit.galleryImageUrls || [])].filter(Boolean);
+                 existingImageUrls.forEach(url => createPreviewElement(url, url, 'existing'));
+
+                 cancelEditBtn.classList.remove('hidden');
+                 window.scrollTo({ top: 0, behavior: 'smooth' });
             }
         });
 
     </script>
-
 </body>
 </html>
 
