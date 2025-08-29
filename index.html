@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diócesis de Santo Tomé</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Swiper.js for Carousel -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+    <style>
+        body { font-family: 'Inter', sans-serif; scroll-behavior: smooth; }
+        .hidden { display: none; }
+        /* Style for Quill content from editor */
+        .ql-editor { padding: 0; line-height: 1.6; }
+        .ql-editor h1, .ql-editor h2, .ql-editor h3 { font-weight: 600; margin-bottom: 0.5rem; margin-top: 1rem; }
+        .ql-editor h1 { font-size: 1.875rem; }
+        .ql-editor h2 { font-size: 1.5rem; }
+        .ql-editor h3 { font-size: 1.25rem; }
+        .ql-editor p { margin-bottom: 1rem; }
+        .ql-editor ul, .ql-editor ol { margin-left: 1.5rem; margin-bottom: 1rem; }
+        .ql-editor li { margin-bottom: 0.5rem; }
+        /* Swiper styles */
+        .swiper-button-next, .swiper-button-prev {
+            color: #ffffff;
+            background-color: rgba(0,0,0,0.3);
+            border-radius: 50%;
+            width: 44px;
+            height: 44px;
+        }
+        .swiper-button-next::after, .swiper-button-prev::after { font-size: 20px; }
+        /* Skeleton loader animation */
+        @keyframes pulse {
+            50% { opacity: .5; }
+        }
+        .animate-pulse { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <!-- Header & Navigation -->
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#" class="text-xl font-bold text-blue-600">Diócesis de Santo Tomé</a>
+            <div class="hidden md:flex space-x-6">
+                <a href="#noticias" class="text-gray-600 hover:text-blue-600 transition">Noticias</a>
+                <a href="#videos" class="text-gray-600 hover:text-blue-600 transition">Videos</a>
+                <a href="#historia" class="text-gray-600 hover:text-blue-600 transition">Nuestra Historia</a>
+                <a href="#contacto" class="text-gray-600 hover:text-blue-600 transition">Contacto</a>
+            </div>
+            <button id="mobile-menu-btn" class="md:hidden">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+            </button>
+        </nav>
+        <div id="mobile-menu" class="hidden md:hidden bg-white">
+            <a href="#noticias" class="block px-6 py-3 text-gray-600 hover:bg-gray-100">Noticias</a>
+            <a href="#videos" class="block px-6 py-3 text-gray-600 hover:bg-gray-100">Videos</a>
+            <a href="#historia" class="block px-6 py-3 text-gray-600 hover:bg-gray-100">Nuestra Historia</a>
+            <a href="#contacto" class="block px-6 py-3 text-gray-600 hover:bg-gray-100">Contacto</a>
+        </div>
+    </header>
+
+    <!-- Portada -->
+    <section class="bg-blue-600 text-white h-96 flex items-center justify-center text-center" style="background-image: url('https://firebasestorage.googleapis.com/v0/b/diocesisdesantotome.appspot.com/o/assets%2Fcatedral-santo-tome.jpg?alt=media&token=e9e6e4a2-8e14-4a4b-8d7b-1b15c96a793c'); background-size: cover; background-position: center;">
+        <div class="bg-black bg-opacity-40 p-8 rounded-lg">
+            <h1 class="text-4xl md:text-5xl font-extrabold mb-4 drop-shadow-lg">Bienvenidos a la Diócesis de Santo Tomé</h1>
+            <p class="text-lg md:text-xl drop-shadow">Unidos en la fe, sirviendo a la comunidad.</p>
+        </div>
+    </section>
+
+    <!-- Blog de Noticias -->
+    <section id="noticias" class="py-16">
+        <div class="container mx-auto px-6">
+            <h2 class="text-3xl font-bold text-center mb-10">Últimas Noticias</h2>
+            <div id="blog-posts" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Skeleton Loaders -->
+                <div class="skeleton-card bg-white rounded-lg shadow-lg overflow-hidden animate-pulse">
+                    <div class="w-full h-48 bg-gray-300"></div>
+                    <div class="p-6">
+                        <div class="h-6 bg-gray-300 rounded w-3/4 mb-2"></div>
+                        <div class="h-4 bg-gray-300 rounded w-full mb-1"></div>
+                        <div class="h-4 bg-gray-300 rounded w-full mb-1"></div>
+                        <div class="h-4 bg-gray-300 rounded w-1/2"></div>
+                    </div>
+                </div>
+                <div class="skeleton-card bg-white rounded-lg shadow-lg overflow-hidden animate-pulse">
+                    <div class="w-full h-48 bg-gray-300"></div>
+                    <div class="p-6">
+                        <div class="h-6 bg-gray-300 rounded w-3/4 mb-2"></div>
+                        <div class="h-4 bg-gray-300 rounded w-full mb-1"></div>
+                        <div class="h-4 bg-gray-300 rounded w-full mb-1"></div>
+                        <div class="h-4 bg-gray-300 rounded w-1/2"></div>
+                    </div>
+                </div>
+                <div class="skeleton-card bg-white rounded-lg shadow-lg overflow-hidden animate-pulse">
+                    <div class="w-full h-48 bg-gray-300"></div>
+                    <div class="p-6">
+                        <div class="h-6 bg-gray-300 rounded w-3/4 mb-2"></div>
+                        <div class="h-4 bg-gray-300 rounded w-full mb-1"></div>
+                        <div class="h-4 bg-gray-300 rounded w-full mb-1"></div>
+                        <div class="h-4 bg-gray-300 rounded w-1/2"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- News Modal -->
+    <div id="news-modal" class="fixed inset-0 bg-black bg-opacity-70 z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white w-full max-w-4xl max-h-[90vh] rounded-lg shadow-xl flex flex-col">
+            <div class="p-4 flex justify-between items-center border-b">
+                <h3 id="modal-title" class="text-2xl font-bold"></h3>
+                <button id="close-modal-btn" class="text-gray-500 hover:text-gray-800 text-3xl font-bold">&times;</button>
+            </div>
+            <div class="p-6 overflow-y-auto">
+                <div id="modal-content" class="max-w-none ql-editor"></div>
+                <div id="modal-carousel-container" class="mt-6">
+                    <div class="swiper">
+                        <div class="swiper-wrapper"></div>
+                        <div class="swiper-button-prev"></div>
+                        <div class="swiper-button-next"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Videos Destacados -->
+    <section id="videos" class="bg-gray-100 py-16">
+        <div class="container mx-auto px-6">
+            <h2 class="text-3xl font-bold text-center mb-10">Videos Destacados</h2>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="aspect-w-16 aspect-h-9">
+                    <iframe class="rounded-lg shadow-lg" src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+                <div class="aspect-w-16 aspect-h-9">
+                    <iframe class="rounded-lg shadow-lg" src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Nuestra Historia -->
+    <section id="historia" class="py-16">
+        <div class="container mx-auto px-6">
+            <h2 class="text-3xl font-bold text-center mb-10">Nuestra Historia</h2>
+            <div class="flex flex-col md:flex-row items-center gap-10">
+                <div class="md:w-1/2">
+                    <img src="https://placehold.co/600x400/CCCCCC/FFFFFF?text=Imagen+Histórica" alt="Historia de la Diócesis" class="rounded-lg shadow-lg">
+                </div>
+                <div class="md:w-1/2">
+                    <p class="mb-4">La Diócesis de Santo Tomé fue erigida el 3 de julio de 1979 por el Papa Juan Pablo II. Su primer obispo fue Monseñor Carlos Esteban Cremata.</p>
+                    <p>Comprende un vasto territorio en la provincia de Corrientes, sirviendo a numerosas comunidades con una rica historia de fe y devoción. Desde sus inicios, ha sido un faro de esperanza y un centro de actividad pastoral para la región.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contacto y Mapa -->
+    <section id="contacto" class="bg-gray-100 py-16">
+       <div class="container mx-auto px-6">
+            <h2 class="text-3xl font-bold text-center mb-10">Contacto</h2>
+            <div class="flex flex-col md:flex-row gap-10">
+                <div class="md:w-1/2 bg-white p-8 rounded-lg shadow-lg">
+                    <h3 class="text-2xl font-semibold mb-4">Envíanos un mensaje</h3>
+                    <form id="contact-form">
+                         <div class="mb-4">
+                            <label for="name" class="block text-gray-700 font-semibold mb-2">Nombre</label>
+                            <input type="text" id="name" name="name" class="w-full px-3 py-2 border border-gray-300 rounded-lg" required>
+                        </div>
+                        <div class="mb-4">
+                            <label for="contact-email" class="block text-gray-700 font-semibold mb-2">Email</label>
+                            <input type="email" id="contact-email" name="email" class="w-full px-3 py-2 border border-gray-300 rounded-lg" required>
+                        </div>
+                        <div class="mb-4">
+                            <label for="message" class="block text-gray-700 font-semibold mb-2">Mensaje</label>
+                            <textarea id="message" name="message" rows="4" class="w-full px-3 py-2 border border-gray-300 rounded-lg" required></textarea>
+                        </div>
+                        <button type="submit" class="w-full bg-blue-600 text-white font-bold py-3 rounded-lg hover:bg-blue-700 transition">Enviar Mensaje</button>
+                    </form>
+                    <p id="contact-success" class="text-green-600 mt-4 hidden">¡Mensaje enviado con éxito!</p>
+                </div>
+                <div class="md:w-1/2">
+                     <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3493.633857643444!2d-56.04639402449175!3d-28.879483175553027!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94508e7512a86c69%3A0xdb659c2354c0341d!2sCatedral%20Inmaculada%20Concepci%C3%B3n!5e0!3m2!1ses-419!2sar!4v1724960350436!5m2!1ses-419!2sar" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" class="rounded-lg shadow-lg"></iframe>
+                </div>
+            </div>
+       </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="container mx-auto px-6 text-center">
+            <p>&copy; 2025 Diócesis de Santo Tomé. Todos los derechos reservados.</p>
+            <p class="text-sm text-gray-400 mt-2">Desarrollado con ❤️ para nuestra comunidad.</p>
+        </div>
+    </footer>
+
+    <!-- Swiper.js -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    
+    <!-- Firebase -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getFirestore, collection, getDocs, doc, getDoc, addDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCIC457rky1NFQCas3uWFfIDVRBHfdbEAQ",
+            authDomain: "diocesisdesantotome.firebaseapp.com",
+            projectId: "diocesisdesantotome",
+            storageBucket: "diocesisdesantotome.appspot.com",
+            messagingSenderId: "313851932898",
+            appId: "1:313851932898:web:0b7e65d0da8d09d762aebb",
+            measurementId: "G-DKT3J181CT"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Mobile Menu Toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Load News Posts
+        const blogPostsContainer = document.getElementById('blog-posts');
+        async function loadNoticias() {
+            try {
+                const querySnapshot = await getDocs(collection(db, "noticias"));
+                // Clear skeleton loaders
+                blogPostsContainer.innerHTML = ''; 
+                if (querySnapshot.empty) {
+                    blogPostsContainer.innerHTML = '<p class="text-center col-span-full">No hay noticias para mostrar.</p>';
+                    return;
+                }
+                querySnapshot.forEach((doc) => {
+                    const post = doc.data();
+                    const postCard = document.createElement('div');
+                    postCard.className = 'bg-white rounded-lg shadow-lg overflow-hidden transform hover:-translate-y-2 transition-transform duration-300';
+                    const summaryPreview = (post.summary || '').replace(/<[^>]+>/g, '').substring(0, 100);
+
+                    postCard.innerHTML = `
+                        <img src="${post.featuredImageUrl}" alt="${post.title}" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold mb-2">${post.title}</h3>
+                            <p class="text-gray-600 mb-4">${summaryPreview}...</p>
+                            <button data-id="${doc.id}" class="read-more-btn text-blue-600 font-semibold hover:underline">Leer más &rarr;</button>
+                        </div>
+                    `;
+                    blogPostsContainer.appendChild(postCard);
+                });
+            } catch (error) {
+                console.error("Error cargando noticias:", error);
+                blogPostsContainer.innerHTML = '<p class="text-center col-span-full text-red-500">Error al cargar las noticias. Intente más tarde.</p>';
+            }
+        }
+
+        // Modal Logic
+        const newsModal = document.getElementById('news-modal');
+        const modalTitle = document.getElementById('modal-title');
+        const modalContent = document.getElementById('modal-content');
+        const closeModalBtn = document.getElementById('close-modal-btn');
+        const modalCarouselContainer = document.querySelector('#modal-carousel-container .swiper-wrapper');
+
+        let swiper;
+
+        async function openNewsModal(postId) {
+            try {
+                const docRef = doc(db, "noticias", postId);
+                const docSnap = await getDoc(docRef);
+
+                if (docSnap.exists()) {
+                    const post = docSnap.data();
+                    modalTitle.textContent = post.title;
+                    modalContent.innerHTML = post.summary;
+
+                    const allImages = [post.featuredImageUrl, ...(post.galleryImageUrls || [])];
+                    modalCarouselContainer.innerHTML = allImages.map(url => `
+                        <div class="swiper-slide bg-gray-200 flex items-center justify-center">
+                            <img src="${url}" class="w-full h-auto object-contain rounded-lg max-h-96">
+                        </div>
+                    `).join('');
+                    
+                    if (swiper) swiper.destroy(true, true);
+                    swiper = new Swiper('#modal-carousel-container .swiper', {
+                        navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
+                        loop: true,
+                    });
+                    
+                    newsModal.classList.remove('hidden');
+                } else {
+                    console.log("No such document!");
+                }
+            } catch (error) {
+                console.error("Error al abrir la noticia:", error);
+            }
+        }
+
+        function closeNewsModal() {
+            newsModal.classList.add('hidden');
+        }
+
+        blogPostsContainer.addEventListener('click', (e) => {
+            const readMoreBtn = e.target.closest('.read-more-btn');
+            if (readMoreBtn) {
+                const postId = readMoreBtn.dataset.id;
+                openNewsModal(postId);
+            }
+        });
+
+        closeModalBtn.addEventListener('click', closeNewsModal);
+        newsModal.addEventListener('click', (e) => {
+            if (e.target === newsModal) {
+                closeNewsModal();
+            }
+        });
+
+        // Contact Form Logic
+        const contactForm = document.getElementById('contact-form');
+        const contactSuccessMsg = document.getElementById('contact-success');
+        contactForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = {
+                name: contactForm.name.value,
+                email: contactForm.email.value,
+                message: contactForm.message.value,
+                sentAt: new Date()
+            };
+            try {
+                await addDoc(collection(db, "mensajes_contacto"), formData);
+                contactForm.reset();
+                contactSuccessMsg.classList.remove('hidden');
+                setTimeout(() => contactSuccessMsg.classList.add('hidden'), 5000);
+            } catch (error) {
+                console.error("Error enviando mensaje: ", error);
+                alert("Hubo un error al enviar el mensaje. Por favor, intente de nuevo.");
+            }
+        });
+
+        // Initial Load
+        loadNoticias();
+    </script>
+
+</body>
+</html>
