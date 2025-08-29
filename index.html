@@ -7,412 +7,236 @@
     <link rel="icon" href="https://firebasestorage.googleapis.com/v0/b/diocesisdesantotome.firebasestorage.app/o/LOGOS%2Flogo%20iglesia%20samaritana.png?alt=media&token=56fd32c1-bb7d-4537-83f7-ace6662ff768" type="image/png">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <!-- Swiper.js for Carousel -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
     <style>
         body { font-family: 'Inter', sans-serif; scroll-behavior: smooth; }
-        .hidden { display: none; }
-        /* Style for Quill content from editor */
-        .ql-editor { padding: 0; line-height: 1.6; }
-        .ql-editor h1, .ql-editor h2, .ql-editor h3 { font-weight: 600; margin-bottom: 0.5rem; margin-top: 1rem; }
-        .ql-editor h1 { font-size: 1.875rem; }
-        .ql-editor h2 { font-size: 1.5rem; }
-        .ql-editor h3 { font-size: 1.25rem; }
-        .ql-editor p { margin-bottom: 1rem; }
-        .ql-editor ul, .ql-editor ol { margin-left: 1.5rem; margin-bottom: 1rem; }
-        .ql-editor li { margin-bottom: 0.5rem; }
-        /* Swiper styles */
-        .swiper-button-next, .swiper-button-prev {
-            color: #ffffff;
-            background-color: rgba(0,0,0,0.3);
-            border-radius: 50%;
-            width: 44px;
-            height: 44px;
+        .news-skeleton {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
         }
-        .swiper-button-next::after, .swiper-button-prev::after { font-size: 20px; }
-        /* Skeleton loader animation */
         @keyframes pulse {
             50% { opacity: .5; }
         }
-        .animate-pulse { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
     </style>
 </head>
-<body class="bg-gray-50 text-gray-800">
+<body class="bg-gray-50">
 
-    <!-- Header & Navigation -->
+    <!-- Header / Navigation -->
     <header class="bg-white shadow-md sticky top-0 z-50">
-        <nav class="container mx-auto px-6 py-2 flex justify-between items-center">
-            <a href="#" class="flex items-center gap-3">
-                 <img src="https://firebasestorage.googleapis.com/v0/b/diocesisdesantotome.firebasestorage.app/o/LOGOS%2Flogo%20iglesia%20samaritana.png?alt=media&token=56fd32c1-bb7d-4537-83f7-ace6662ff768" alt="Logo Diócesis de Santo Tomé" class="h-14 w-auto">
-                 <div class="hidden sm:block">
-                    <span class="font-bold text-lg md:text-xl text-gray-700 block leading-tight">Diócesis de Santo Tomé</span>
-                    <span class="text-sm italic text-gray-500 block leading-tight">Corrientes, Argentina</span>
-                 </div>
-            </a>
-            <div class="hidden md:flex items-center space-x-4">
-                <a href="#" class="text-gray-600 hover:text-blue-600 transition">Inicio</a>
-                <a href="#recursos" class="text-gray-600 hover:text-blue-600 transition">Recursos</a>
-                <a href="#fragiles" class="text-gray-600 hover:text-blue-600 transition">Cuidado de los frágiles</a>
-                <a href="#obispo" class="text-gray-600 hover:text-blue-600 transition">Nuestro Obispo</a>
-                <a href="#decretos" class="text-gray-600 hover:text-blue-600 transition">Decretos</a>
-                <a href="#jubilar" class="text-gray-600 hover:text-blue-600 transition">Año Jubilar</a>
-                <a href="#contacto" class="text-gray-600 hover:text-blue-600 transition">Contacto</a>
-                <a href="#dona" class="text-white font-bold py-2 px-4 rounded-lg bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700 transition shadow-md">Doná</a>
+        <nav class="container mx-auto px-4 lg:px-6 py-2.5">
+            <div class="flex flex-wrap justify-between items-center">
+                <a href="#" class="flex items-center">
+                    <img src="https://firebasestorage.googleapis.com/v0/b/diocesisdesantotome.firebasestorage.app/o/LOGOS%2Flogo%20iglesia%20samaritana.png?alt=media&token=56fd32c1-bb7d-4537-83f7-ace6662ff768" class="mr-3 h-12" alt="Logo Diócesis" />
+                    <div class="hidden sm:flex sm:flex-col">
+                        <span class="text-xl font-semibold whitespace-nowrap text-gray-800">Diócesis de Santo Tomé</span>
+                        <span class="text-sm font-light italic text-gray-500">Corrientes, Argentina</span>
+                    </div>
+                </a>
+                <div class="flex items-center lg:order-2">
+                    <a href="#donar" class="text-white bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 focus:outline-none">Doná</a>
+                    <button id="mobile-menu-button" type="button" class="inline-flex items-center p-2 ml-1 text-sm text-gray-500 rounded-lg lg:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200" aria-controls="mobile-menu" aria-expanded="false">
+                        <span class="sr-only">Abrir menú principal</span>
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"></path></svg>
+                    </button>
+                </div>
+                <div class="hidden justify-between items-center w-full lg:flex lg:w-auto lg:order-1" id="mobile-menu">
+                    <ul class="flex flex-col mt-4 font-medium lg:flex-row lg:space-x-8 lg:mt-0">
+                        <li><a href="#inicio" class="block py-2 pr-4 pl-3 text-gray-700 hover:text-blue-600 lg:p-0">Inicio</a></li>
+                        <li><a href="#noticias" class="block py-2 pr-4 pl-3 text-gray-700 hover:text-blue-600 lg:p-0">Noticias</a></li>
+                        <li><a href="#recursos" class="block py-2 pr-4 pl-3 text-gray-700 hover:text-blue-600 lg:p-0">Recursos</a></li>
+                        <li><a href="#fragiles" class="block py-2 pr-4 pl-3 text-gray-700 hover:text-blue-600 lg:p-0">Cuidado de los Frágiles</a></li>
+                        <li><a href="#obispo" class="block py-2 pr-4 pl-3 text-gray-700 hover:text-blue-600 lg:p-0">Nuestro Obispo</a></li>
+                        <li><a href="#decretos" class="block py-2 pr-4 pl-3 text-gray-700 hover:text-blue-600 lg:p-0">Decretos</a></li>
+                        <li><a href="#jubilar" class="block py-2 pr-4 pl-3 text-gray-700 hover:text-blue-600 lg:p-0">Año Jubilar</a></li>
+                        <li><a href="#contacto" class="block py-2 pr-4 pl-3 text-gray-700 hover:text-blue-600 lg:p-0">Contacto</a></li>
+                    </ul>
+                </div>
             </div>
-            <button id="mobile-menu-btn" class="md:hidden">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
-            </button>
         </nav>
-        <div id="mobile-menu" class="hidden md:hidden bg-white py-2">
-            <a href="#" class="block px-6 py-3 text-gray-600 hover:bg-gray-100">Inicio</a>
-            <a href="#recursos" class="block px-6 py-3 text-gray-600 hover:bg-gray-100">Recursos</a>
-            <a href="#fragiles" class="block px-6 py-3 text-gray-600 hover:bg-gray-100">Cuidado de los frágiles</a>
-            <a href="#obispo" class="block px-6 py-3 text-gray-600 hover:bg-gray-100">Nuestro Obispo</a>
-            <a href="#decretos" class="block px-6 py-3 text-gray-600 hover:bg-gray-100">Decretos</a>
-            <a href="#jubilar" class="block px-6 py-3 text-gray-600 hover:bg-gray-100">Año Jubilar</a>
-            <a href="#contacto" class="block px-6 py-3 text-gray-600 hover:bg-gray-100">Contacto</a>
-            <div class="px-6 py-2">
-                 <a href="#dona" class="block text-center text-white font-bold py-3 px-4 rounded-lg bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700 transition shadow-md">Doná</a>
-            </div>
-        </div>
     </header>
+    
+    <main>
+        <!-- Section Banner -->
+        <section id="inicio" class="w-full">
+            <img src="https://firebasestorage.googleapis.com/v0/b/diocesisdesantotome.firebasestorage.app/o/LOGOS%2FEncabezado%20para%20Paginas.png?alt=media&token=38a267bb-78ba-49cb-a6b5-86d457b07473" alt="Banner Principal Diócesis de Santo Tomé" class="w-full h-auto object-cover">
+        </section>
 
-    <!-- Encabezado Banner -->
-    <section>
-        <img src="https://firebasestorage.googleapis.com/v0/b/diocesisdesantotome.firebasestorage.app/o/LOGOS%2FEncabezado%20para%20Paginas.png?alt=media&token=38a267bb-78ba-49cb-a6b5-86d457b07473" alt="Encabezado Diócesis de Santo Tomé" class="w-full h-auto">
-    </section>
-
-    <!-- Blog de Noticias -->
-    <section id="noticias" class="py-16">
-        <div class="container mx-auto px-6">
-            <h2 class="text-3xl font-bold text-center mb-10">Últimas Noticias</h2>
-            <div id="blog-posts" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Skeleton Loaders -->
-                <div class="skeleton-card bg-white rounded-lg shadow-lg overflow-hidden animate-pulse">
-                    <div class="w-full h-48 bg-gray-300"></div>
-                    <div class="p-6">
-                        <div class="h-6 bg-gray-300 rounded w-3/4 mb-2"></div>
-                        <div class="h-4 bg-gray-300 rounded w-full mb-1"></div>
-                        <div class="h-4 bg-gray-300 rounded w-full mb-1"></div>
-                        <div class="h-4 bg-gray-300 rounded w-1/2"></div>
-                    </div>
-                </div>
-                <div class="skeleton-card bg-white rounded-lg shadow-lg overflow-hidden animate-pulse">
-                    <div class="w-full h-48 bg-gray-300"></div>
-                    <div class="p-6">
-                        <div class="h-6 bg-gray-300 rounded w-3/4 mb-2"></div>
-                        <div class="h-4 bg-gray-300 rounded w-full mb-1"></div>
-                        <div class="h-4 bg-gray-300 rounded w-full mb-1"></div>
-                        <div class="h-4 bg-gray-300 rounded w-1/2"></div>
-                    </div>
-                </div>
-                <div class="skeleton-card bg-white rounded-lg shadow-lg overflow-hidden animate-pulse">
-                    <div class="w-full h-48 bg-gray-300"></div>
-                    <div class="p-6">
-                        <div class="h-6 bg-gray-300 rounded w-3/4 mb-2"></div>
-                        <div class="h-4 bg-gray-300 rounded w-full mb-1"></div>
-                        <div class="h-4 bg-gray-300 rounded w-full mb-1"></div>
-                        <div class="h-4 bg-gray-300 rounded w-1/2"></div>
-                    </div>
+        <!-- Blog de Noticias -->
+        <section id="noticias" class="py-12 bg-white">
+            <div class="container mx-auto px-6">
+                <h2 class="text-3xl font-bold text-center text-gray-800 mb-8">Últimas Noticias</h2>
+                <div id="news-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Skeletons de carga -->
+                    <div class="news-skeleton bg-gray-200 rounded-lg shadow-lg h-96"></div>
+                    <div class="news-skeleton bg-gray-200 rounded-lg shadow-lg h-96"></div>
+                    <div class="news-skeleton bg-gray-200 rounded-lg shadow-lg h-96"></div>
                 </div>
             </div>
-        </div>
-    </section>
-
-    <!-- News Modal -->
-    <div id="news-modal" class="fixed inset-0 bg-black bg-opacity-70 z-50 flex items-center justify-center p-4 hidden">
-        <div class="bg-white w-full max-w-4xl max-h-[90vh] rounded-lg shadow-xl flex flex-col">
-            <div class="p-4 flex justify-between items-center border-b">
-                <h3 id="modal-title" class="text-2xl font-bold"></h3>
-                <button id="close-modal-btn" class="text-gray-500 hover:text-gray-800 text-3xl font-bold">&times;</button>
+        </section>
+        
+        <!-- Recursos -->
+        <section id="recursos" class="py-12">
+            <div class="container mx-auto px-6">
+                <h2 class="text-3xl font-bold text-center text-gray-800 mb-8">Recursos</h2>
+                <p class="text-center text-gray-600">Contenido para la sección de Recursos...</p>
             </div>
-            <div class="p-6 overflow-y-auto">
-                <div id="modal-content" class="max-w-none ql-editor"></div>
-                <div id="modal-carousel-container" class="mt-6">
-                    <div class="swiper">
-                        <div class="swiper-wrapper"></div>
-                        <div class="swiper-button-prev"></div>
-                        <div class="swiper-button-next"></div>
-                    </div>
-                </div>
+        </section>
+
+        <!-- Cuidado de los frágiles -->
+        <section id="fragiles" class="py-12 bg-white">
+            <div class="container mx-auto px-6">
+                <h2 class="text-3xl font-bold text-center text-gray-800 mb-8">Cuidado de los Frágiles</h2>
+                <p class="text-center text-gray-600">Contenido para la sección de Cuidado de los Frágiles...</p>
             </div>
-        </div>
-    </div>
-
-
-    <!-- Videos Destacados -->
-    <section id="videos" class="bg-gray-100 py-16">
-        <div class="container mx-auto px-6">
-            <h2 class="text-3xl font-bold text-center mb-10">Videos Destacados</h2>
-            <div class="grid md:grid-cols-2 gap-8">
-                <div class="aspect-w-16 aspect-h-9">
-                    <iframe class="rounded-lg shadow-lg" src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                </div>
-                <div class="aspect-w-16 aspect-h-9">
-                    <iframe class="rounded-lg shadow-lg" src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                </div>
+        </section>
+        
+        <!-- Nuestro Obispo -->
+        <section id="obispo" class="py-12">
+            <div class="container mx-auto px-6">
+                <h2 class="text-3xl font-bold text-center text-gray-800 mb-8">Nuestro Obispo</h2>
+                 <p class="text-center text-gray-600">Contenido para la sección de Nuestro Obispo...</p>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Nuestra Historia -->
-    <section id="historia" class="py-16">
-        <div class="container mx-auto px-6">
-            <h2 class="text-3xl font-bold text-center mb-10">Nuestra Historia</h2>
-            <div class="flex flex-col md:flex-row items-center gap-10">
-                <div class="md:w-1/2">
-                    <img src="https://placehold.co/600x400/CCCCCC/FFFFFF?text=Imagen+Histórica" alt="Historia de la Diócesis" class="rounded-lg shadow-lg">
-                </div>
-                <div class="md:w-1/2">
-                    <p class="mb-4">La Diócesis de Santo Tomé fue erigida el 3 de julio de 1979 por el Papa Juan Pablo II. Su primer obispo fue Monseñor Carlos Esteban Cremata.</p>
-                    <p>Comprende un vasto territorio en la provincia de Corrientes, sirviendo a numerosas comunidades con una rica historia de fe y devoción. Desde sus inicios, ha sido un faro de esperanza y un centro de actividad pastoral para la región.</p>
-                </div>
+        <!-- Decretos -->
+        <section id="decretos" class="py-12 bg-white">
+            <div class="container mx-auto px-6">
+                <h2 class="text-3xl font-bold text-center text-gray-800 mb-8">Decretos</h2>
+                <p class="text-center text-gray-600">Contenido para la sección de Decretos...</p>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Recursos -->
-    <section id="recursos" class="bg-gray-100 py-16">
-        <div class="container mx-auto px-6 text-center">
-            <h2 class="text-3xl font-bold text-center mb-10">Recursos</h2>
-            <p>Aquí encontrarás recursos pastorales, documentos y más.</p>
-        </div>
-    </section>
+        <!-- Año Jubilar -->
+        <section id="jubilar" class="py-12">
+            <div class="container mx-auto px-6">
+                <h2 class="text-3xl font-bold text-center text-gray-800 mb-8">Año Jubilar</h2>
+                <p class="text-center text-gray-600">Contenido para la sección de Año Jubilar...</p>
+            </div>
+        </section>
 
-    <!-- Cuidado de los frágiles -->
-    <section id="fragiles" class="py-16">
-        <div class="container mx-auto px-6 text-center">
-            <h2 class="text-3xl font-bold text-center mb-10">Cuidado de los frágiles</h2>
-            <p>Información sobre nuestras iniciativas y programas de caridad.</p>
-        </div>
-    </section>
-
-    <!-- Nuestro Obispo -->
-    <section id="obispo" class="bg-gray-100 py-16">
-        <div class="container mx-auto px-6 text-center">
-            <h2 class="text-3xl font-bold text-center mb-10">Nuestro Obispo</h2>
-            <p>Conoce más sobre nuestro obispo, su ministerio y sus escritos.</p>
-        </div>
-    </section>
-
-    <!-- Decretos -->
-    <section id="decretos" class="py-16">
-        <div class="container mx-auto px-6 text-center">
-            <h2 class="text-3xl font-bold text-center mb-10">Decretos</h2>
-            <p>Accede a los decretos y documentos oficiales de la diócesis.</p>
-        </div>
-    </section>
-
-    <!-- Año Jubilar -->
-    <section id="jubilar" class="bg-gray-100 py-16">
-        <div class="container mx-auto px-6 text-center">
-            <h2 class="text-3xl font-bold text-center mb-10">Año Jubilar</h2>
-            <p>Información y calendario de eventos para el Año Jubilar.</p>
-        </div>
-    </section>
-
-
-    <!-- Contacto y Mapa -->
-    <section id="contacto" class="py-16">
-       <div class="container mx-auto px-6">
-            <h2 class="text-3xl font-bold text-center mb-10">Contacto</h2>
-            <div class="flex flex-col md:flex-row gap-10">
-                <div class="md:w-1/2 bg-white p-8 rounded-lg shadow-lg">
-                    <h3 class="text-2xl font-semibold mb-4">Envíanos un mensaje</h3>
-                    <form id="contact-form">
-                         <div class="mb-4">
-                            <label for="name" class="block text-gray-700 font-semibold mb-2">Nombre</label>
-                            <input type="text" id="name" name="name" class="w-full px-3 py-2 border border-gray-300 rounded-lg" required>
+        <!-- Contacto y Mapa -->
+        <section id="contacto" class="py-12 bg-gray-200">
+            <div class="container mx-auto px-6">
+                <h2 class="text-3xl font-bold text-center text-gray-800 mb-8">Contacto</h2>
+                <div class="flex flex-wrap -mx-4">
+                    <div class="w-full lg:w-1/2 px-4 mb-8 lg:mb-0">
+                        <div class="bg-white p-6 rounded-lg shadow-lg">
+                           <h3 class="text-xl font-bold mb-4">Envíanos un mensaje</h3>
+                            <form id="contact-form">
+                                <div class="mb-4">
+                                    <label for="contact-name" class="block text-gray-700">Nombre</label>
+                                    <input type="text" id="contact-name" class="w-full mt-2 p-2 border rounded-lg" required>
+                                </div>
+                                <div class="mb-4">
+                                    <label for="contact-email" class="block text-gray-700">Email</label>
+                                    <input type="email" id="contact-email" class="w-full mt-2 p-2 border rounded-lg" required>
+                                </div>
+                                <div class="mb-4">
+                                    <label for="contact-message" class="block text-gray-700">Mensaje</label>
+                                    <textarea id="contact-message" rows="4" class="w-full mt-2 p-2 border rounded-lg" required></textarea>
+                                </div>
+                                <button type="submit" class="w-full bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700">Enviar</button>
+                            </form>
                         </div>
-                        <div class="mb-4">
-                            <label for="contact-email" class="block text-gray-700 font-semibold mb-2">Email</label>
-                            <input type="email" id="contact-email" name="email" class="w-full px-3 py-2 border border-gray-300 rounded-lg" required>
+                    </div>
+                    <div class="w-full lg:w-1/2 px-4">
+                        <div class="bg-white p-6 rounded-lg shadow-lg h-full">
+                            <h3 class="text-xl font-bold mb-4">Nuestra Ubicación</h3>
+                            <iframe src="https://www.google.com/maps/embed?pb=!1m18!m12!1m3!1d3504.604153920977!2d-56.0355446852958!3d-28.5815669824497!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9454f9644f174241%3A0x6bbf69b4c06b4a3c!2sCatedral%20Inmaculada%20Concepci%C3%B3n!5e0!3m2!1ses-419!2sar!4v1672876800000!5m2!1ses-419!2sar" width="100%" height="350" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
                         </div>
-                        <div class="mb-4">
-                            <label for="message" class="block text-gray-700 font-semibold mb-2">Mensaje</label>
-                            <textarea id="message" name="message" rows="4" class="w-full px-3 py-2 border border-gray-300 rounded-lg" required></textarea>
-                        </div>
-                        <button type="submit" class="w-full bg-blue-600 text-white font-bold py-3 rounded-lg hover:bg-blue-700 transition">Enviar Mensaje</button>
-                    </form>
-                    <p id="contact-success" class="text-green-600 mt-4 hidden">¡Mensaje enviado con éxito!</p>
-                </div>
-                <div class="md:w-1/2">
-                     <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3493.633857643444!2d-56.04639402449175!3d-28.879483175553027!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94508e7512a86c69%3A0xdb659c2354c0341d!2sCatedral%20Inmaculada%20Concepci%C3%B3n!5e0!3m2!1ses-419!2sar!4v1724960350436!5m2!1ses-419!2sar" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" class="rounded-lg shadow-lg"></iframe>
+                    </div>
                 </div>
             </div>
-       </div>
-    </section>
+        </section>
+        
+        <!-- Donar -->
+        <section id="donar" class="py-12 bg-white">
+            <div class="container mx-auto px-6">
+                <h2 class="text-3xl font-bold text-center text-gray-800 mb-8">Doná</h2>
+                <p class="text-center text-gray-600">Contenido para la sección de Donaciones...</p>
+            </div>
+        </section>
+    </main>
 
-    <!-- Doná -->
-    <section id="dona" class="bg-gray-100 py-16">
-        <div class="container mx-auto px-6 text-center">
-            <h2 class="text-3xl font-bold text-center mb-10">Apoya nuestra Misión</h2>
-            <p class="max-w-2xl mx-auto mb-8">Tu donación nos ayuda a continuar nuestra labor pastoral y social en toda la diócesis. ¡Gracias por tu generosidad!</p>
-            <a href="#" class="inline-block text-white font-bold py-3 px-8 rounded-lg bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700 transition shadow-lg text-lg">Hacer una Donación</a>
-        </div>
-    </section>
-
-    <!-- Footer -->
     <footer class="bg-gray-800 text-white py-8">
         <div class="container mx-auto px-6 text-center">
-            <p>&copy; 2025 Diócesis de Santo Tomé. Todos los derechos reservados.</p>
-            <p class="text-sm text-gray-400 mt-2">Desarrollado con ❤️ para nuestra comunidad.</p>
+            <p>&copy; 2024 Diócesis de Santo Tomé. Todos los derechos reservados.</p>
         </div>
     </footer>
-
-    <!-- Swiper.js -->
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     
     <!-- Firebase -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getFirestore, collection, getDocs, doc, getDoc, addDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, collection, getDocs, query, orderBy, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyCIC457rky1NFQCas3uWFfIDVRBHfdbEAQ",
             authDomain: "diocesisdesantotome.firebaseapp.com",
             projectId: "diocesisdesantotome",
-            storageBucket: "diocesisdesantotome.appspot.com",
+            storageBucket: "diocesisdesantotome.firebasestorage.app",
             messagingSenderId: "313851932898",
-            appId: "1:313851932898:web:0b7e65d0da8d09d762aebb",
-            measurementId: "G-DKT3J181CT"
+            appId: "1:313851932898:web:0b7e65d0da8d09d762aebb"
         };
-
+        
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // Mobile Menu Toggle
-        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        // --- Mobile Menu Toggle ---
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
         const mobileMenu = document.getElementById('mobile-menu');
-        mobileMenuBtn.addEventListener('click', () => {
+        mobileMenuButton.addEventListener('click', () => {
             mobileMenu.classList.toggle('hidden');
         });
-        document.querySelectorAll('#mobile-menu a').forEach(link => {
-            link.addEventListener('click', () => {
-                mobileMenu.classList.add('hidden');
+
+        // --- News Loading ---
+        const newsContainer = document.getElementById('news-container');
+        
+        async function loadNews() {
+            const q = query(collection(db, "noticias"), orderBy("createdAt", "desc"));
+            const querySnapshot = await getDocs(q);
+            newsContainer.innerHTML = '';
+            
+            if (querySnapshot.empty) {
+                newsContainer.innerHTML = '<p class="text-center col-span-full">No hay noticias para mostrar.</p>';
+                return;
+            }
+
+            querySnapshot.forEach((doc) => {
+                const news = doc.data();
+                const newsCard = document.createElement('div');
+                newsCard.className = 'bg-white rounded-lg shadow-lg overflow-hidden flex flex-col';
+                newsCard.innerHTML = `
+                    <img src="${news.featuredImageUrl}" alt="${news.title}" class="w-full h-48 object-cover">
+                    <div class="p-6 flex-grow flex flex-col">
+                        <h3 class="text-xl font-bold mb-2 text-gray-800">${news.title}</h3>
+                        <div class="text-gray-600 mb-4 flex-grow">${(news.summary || '').replace(/<[^>]+>/g, '').substring(0, 100)}...</div>
+                        <a href="noticia.html?id=${doc.id}" target="_blank" class="mt-auto self-start text-blue-600 font-semibold hover:underline">Leer más &rarr;</a>
+                    </div>
+                `;
+                newsContainer.appendChild(newsCard);
             });
-        });
-
-
-        // Load News Posts
-        const blogPostsContainer = document.getElementById('blog-posts');
-        async function loadNoticias() {
-            try {
-                const querySnapshot = await getDocs(collection(db, "noticias"));
-                // Clear skeleton loaders
-                blogPostsContainer.innerHTML = ''; 
-                if (querySnapshot.empty) {
-                    blogPostsContainer.innerHTML = '<p class="text-center col-span-full">No hay noticias para mostrar.</p>';
-                    return;
-                }
-                querySnapshot.forEach((doc) => {
-                    const post = doc.data();
-                    const postCard = document.createElement('div');
-                    postCard.className = 'bg-white rounded-lg shadow-lg overflow-hidden transform hover:-translate-y-2 transition-transform duration-300';
-                    const summaryPreview = (post.summary || '').replace(/<[^>]+>/g, '').substring(0, 100);
-
-                    postCard.innerHTML = `
-                        <img src="${post.featuredImageUrl}" alt="${post.title}" class="w-full h-48 object-cover">
-                        <div class="p-6">
-                            <h3 class="text-xl font-bold mb-2">${post.title}</h3>
-                            <p class="text-gray-600 mb-4">${summaryPreview}...</p>
-                            <button data-id="${doc.id}" class="read-more-btn text-blue-600 font-semibold hover:underline">Leer más &rarr;</button>
-                        </div>
-                    `;
-                    blogPostsContainer.appendChild(postCard);
-                });
-            } catch (error) {
-                console.error("Error cargando noticias:", error);
-                blogPostsContainer.innerHTML = '<p class="text-center col-span-full text-red-500">Error al cargar las noticias. Intente más tarde.</p>';
-            }
         }
-
-        // Modal Logic
-        const newsModal = document.getElementById('news-modal');
-        const modalTitle = document.getElementById('modal-title');
-        const modalContent = document.getElementById('modal-content');
-        const closeModalBtn = document.getElementById('close-modal-btn');
-        const modalCarouselContainer = document.querySelector('#modal-carousel-container .swiper-wrapper');
-
-        let swiper;
-
-        async function openNewsModal(postId) {
-            try {
-                const docRef = doc(db, "noticias", postId);
-                const docSnap = await getDoc(docRef);
-
-                if (docSnap.exists()) {
-                    const post = docSnap.data();
-                    modalTitle.textContent = post.title;
-                    modalContent.innerHTML = post.summary;
-
-                    const allImages = [post.featuredImageUrl, ...(post.galleryImageUrls || [])];
-                    modalCarouselContainer.innerHTML = allImages.map(url => `
-                        <div class="swiper-slide bg-gray-200 flex items-center justify-center">
-                            <img src="${url}" class="w-full h-auto object-contain rounded-lg max-h-96">
-                        </div>
-                    `).join('');
-                    
-                    if (swiper) swiper.destroy(true, true);
-                    swiper = new Swiper('#modal-carousel-container .swiper', {
-                        navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
-                        loop: true,
-                    });
-                    
-                    newsModal.classList.remove('hidden');
-                } else {
-                    console.log("No such document!");
-                }
-            } catch (error) {
-                console.error("Error al abrir la noticia:", error);
-            }
-        }
-
-        function closeNewsModal() {
-            newsModal.classList.add('hidden');
-        }
-
-        blogPostsContainer.addEventListener('click', (e) => {
-            const readMoreBtn = e.target.closest('.read-more-btn');
-            if (readMoreBtn) {
-                const postId = readMoreBtn.dataset.id;
-                openNewsModal(postId);
-            }
-        });
-
-        closeModalBtn.addEventListener('click', closeNewsModal);
-        newsModal.addEventListener('click', (e) => {
-            if (e.target === newsModal) {
-                closeNewsModal();
-            }
-        });
-
-        // Contact Form Logic
+        
+        // --- Contact Form ---
         const contactForm = document.getElementById('contact-form');
-        const contactSuccessMsg = document.getElementById('contact-success');
         contactForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            const formData = {
-                name: contactForm.name.value,
-                email: contactForm.email.value,
-                message: contactForm.message.value,
-                sentAt: new Date()
-            };
+            const name = document.getElementById('contact-name').value;
+            const email = document.getElementById('contact-email').value;
+            const message = document.getElementById('contact-message').value;
+
             try {
-                await addDoc(collection(db, "mensajes_contacto"), formData);
+                await addDoc(collection(db, "mensajes_contacto"), {
+                    name, email, message, sentAt: serverTimestamp()
+                });
                 contactForm.reset();
-                contactSuccessMsg.classList.remove('hidden');
-                setTimeout(() => contactSuccessMsg.classList.add('hidden'), 5000);
+                alert('¡Mensaje enviado con éxito!');
             } catch (error) {
-                console.error("Error enviando mensaje: ", error);
-                alert("Hubo un error al enviar el mensaje. Por favor, intente de nuevo.");
+                console.error("Error al enviar el mensaje: ", error);
+                alert('Hubo un error al enviar el mensaje. Inténtalo de nuevo.');
             }
         });
 
-        // Initial Load
-        loadNoticias();
+        // --- Initial Load ---
+        document.addEventListener('DOMContentLoaded', loadNews);
     </script>
-
 </body>
 </html>
-
