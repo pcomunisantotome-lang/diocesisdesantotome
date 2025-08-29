@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administración</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Quill.js for Rich Text Editor -->
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        #editor { height: 250px; }
+        .ql-toolbar.ql-snow { border-radius: 0.5rem 0.5rem 0 0; }
+        .ql-container.ql-snow { border-radius: 0 0 0.5rem 0.5rem; }
+    </style>
+</head>
+<body class="bg-gray-100">
+
+    <!-- Login Section -->
+    <div id="login-section" class="min-h-screen flex items-center justify-center">
+        <div class="bg-white p-8 rounded-lg shadow-xl w-full max-w-md">
+            <div class="text-center mb-6">
+                 <img src="https://firebasestorage.googleapis.com/v0/b/diocesisdesantotome.firebasestorage.app/o/LOGOS%2Flogo%20iglesia%20samaritana.png?alt=media&token=56fd32c1-bb7d-4537-83f7-ace6662ff768" alt="Logo" class="mx-auto h-20 w-auto">
+                 <h2 class="text-2xl font-bold text-gray-800 mt-4">Acceso de Administrador</h2>
+                 <p class="text-gray-500">Inicia sesión para gestionar el contenido.</p>
+            </div>
+            <form id="login-form">
+                <div class="mb-4">
+                    <label for="email" class="block text-gray-700 font-semibold mb-2">Email</label>
+                    <input type="email" id="email" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                </div>
+                <div class="mb-6">
+                    <label for="password" class="block text-gray-700 font-semibold mb-2">Contraseña</label>
+                    <input type="password" id="password" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                </div>
+                <button type="submit" class="w-full bg-blue-600 text-white font-bold py-3 rounded-lg hover:bg-blue-700 transition">Iniciar Sesión</button>
+                <p id="login-error" class="text-red-500 text-center mt-4 hidden"></p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Admin Panel Section -->
+    <div id="admin-panel" class="hidden">
+        <header class="bg-white shadow-md">
+            <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+                <h1 class="text-2xl font-bold text-gray-800">Panel de Administración</h1>
+                <button id="logout-btn" class="bg-red-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-red-600 transition">Cerrar Sesión</button>
+            </div>
+        </header>
+
+        <main class="container mx-auto p-6">
+            <!-- News Management -->
+            <div class="bg-white p-8 rounded-lg shadow-xl">
+                <h2 class="text-2xl font-bold mb-6">Gestionar Noticias</h2>
+                <form id="news-form">
+                    <input type="hidden" id="news-id">
+                    <div class="mb-4">
+                        <label for="title" class="block text-gray-700 font-semibold mb-2">Título</label>
+                        <input type="text" id="title" class="w-full px-4 py-2 border border-gray-300 rounded-lg" required>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="block text-gray-700 font-semibold mb-2">Imágenes (la primera será la destacada)</label>
+                        <input type="file" id="image-files" class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" multiple accept="image/*">
+                        <div id="image-previews" class="mt-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4"></div>
+                    </div>
+
+                    <div class="mb-6">
+                        <label for="summary" class="block text-gray-700 font-semibold mb-2">Contenido / Resumen</label>
+                        <div id="editor"></div>
+                    </div>
+                    
+                    <div class="flex items-center gap-4">
+                        <button type="submit" class="bg-green-500 text-white font-bold py-3 px-6 rounded-lg hover:bg-green-600 transition">Guardar Noticia</button>
+                        <button type="button" id="cancel-edit-btn" class="bg-gray-500 text-white font-bold py-3 px-6 rounded-lg hover:bg-gray-600 transition hidden">Cancelar Edición</button>
+                    </div>
+                    <div id="upload-progress-container" class="w-full bg-gray-200 rounded-full h-2.5 mt-4 hidden">
+                        <div id="upload-progress-bar" class="bg-blue-600 h-2.5 rounded-full" style="width: 0%"></div>
+                    </div>
+                </form>
+
+                <hr class="my-8">
+
+                <h3 class="text-xl font-bold mb-4">Noticias Existentes</h3>
+                <div id="existing-news" class="space-y-4">
+                    <p>Cargando noticias...</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Quill.js -->
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+
+    <!-- Firebase -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, getDocs, addDoc, doc, updateDoc, deleteDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getStorage, ref, uploadBytesResumable, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-storage.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCIC457rky1NFQCas3uWFfIDVRBHfdbEAQ",
+            authDomain: "diocesisdesantotome.firebaseapp.com",
+            projectId: "diocesisdesantotome",
+            storageBucket: "diocesisdesantotome.appspot.com",
+            messagingSenderId: "313851932898",
+            appId: "1:3851932898:web:0b7e65d0da8d09d762aebb"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const storage = getStorage(app);
+
+        const loginSection = document.getElementById('login-section');
+        const adminPanel = document.getElementById('admin-panel');
+        const loginForm = document.getElementById('login-form');
+        const loginError = document.getElementById('login-error');
+        const logoutBtn = document.getElementById('logout-btn');
+
+        // Quill Editor
+        const quill = new Quill('#editor', {
+            theme: 'snow',
+            modules: {
+                toolbar: [
+                    [{ 'header': [1, 2, 3, false] }],
+                    ['bold', 'italic', 'underline'],
+                    [{'list': 'ordered'}, {'list': 'bullet'}],
+                    ['clean']
+                ]
+            }
+        });
+        
+        // Auth State
+        onAuthStateChanged(auth, user => {
+            if (user) {
+                loginSection.classList.add('hidden');
+                adminPanel.classList.remove('hidden');
+                loadNews();
+            } else {
+                loginSection.classList.remove('hidden');
+                adminPanel.classList.add('hidden');
+            }
+        });
+
+        // Login
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = loginForm.email.value;
+            const password = loginForm.password.value;
+            signInWithEmailAndPassword(auth, email, password)
+                .catch(error => {
+                    loginError.textContent = "Email o contraseña incorrectos.";
+                    loginError.classList.remove('hidden');
+                });
+        });
+
+        // Logout
+        logoutBtn.addEventListener('click', () => {
+            signOut(auth);
+        });
+
+        // News Form
+        const newsForm = document.getElementById('news-form');
+        const newsIdField = document.getElementById('news-id');
+        const cancelEditBtn = document.getElementById('cancel-edit-btn');
+
+        const imageFilesInput = document.getElementById('image-files');
+        const imagePreviewsContainer = document.getElementById('image-previews');
+        const progressContainer = document.getElementById('upload-progress-container');
+        const progressBar = document.getElementById('upload-progress-bar');
+        
+        let imageFiles = []; // To store File objects for upload
+        let existingImageUrls = []; // To store URLs when editing
+
+        imageFilesInput.addEventListener('change', (e) => {
+            handleFiles(e.target.files);
+        });
+        
+        function handleFiles(files) {
+            for (const file of files) {
+                if (!file.type.startsWith('image/')){ continue }
+                imageFiles.push(file);
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                   createPreviewElement(e.target.result, file.name, 'new');
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function createPreviewElement(src, name, type) {
+            const previewWrapper = document.createElement('div');
+            previewWrapper.className = 'relative group';
+
+            const img = document.createElement('img');
+            img.src = src;
+            img.className = 'w-full h-32 object-cover rounded-lg shadow-md';
+            previewWrapper.appendChild(img);
+            
+            const removeBtn = document.createElement('button');
+            removeBtn.innerHTML = '&times;';
+            removeBtn.className = 'absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center font-bold opacity-0 group-hover:opacity-100 transition-opacity';
+            removeBtn.onclick = () => {
+                if (type === 'new') {
+                    imageFiles = imageFiles.filter(f => f.name !== name);
+                } else { // 'existing'
+                    existingImageUrls = existingImageUrls.filter(url => url !== src);
+                }
+                previewWrapper.remove();
+            };
+            previewWrapper.appendChild(removeBtn);
+
+            imagePreviewsContainer.appendChild(previewWrapper);
+        }
+
+        // Reset Form
+        function resetForm() {
+            newsForm.reset();
+            newsIdField.value = '';
+            quill.root.innerHTML = '';
+            cancelEditBtn.classList.add('hidden');
+            imagePreviewsContainer.innerHTML = '';
+            imageFiles = [];
+            existingImageUrls = [];
+        }
+        
+        cancelEditBtn.addEventListener('click', resetForm);
+
+        // Upload and Save Logic
+        newsForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const title = newsForm.title.value;
+            const summary = quill.root.innerHTML;
+            const newsId = newsIdField.value;
+
+            if (!title || summary === '<p><br></p>') {
+                alert("Por favor, completa el título y el contenido.");
+                return;
+            }
+            if (imageFiles.length === 0 && existingImageUrls.length === 0) {
+                 alert("Por favor, sube al menos una imagen.");
+                return;
+            }
+
+            try {
+                // Upload new images first
+                const newImageUrls = await uploadImages(imageFiles);
+                const allImageUrls = [...existingImageUrls, ...newImageUrls];
+
+                const featuredImageUrl = allImageUrls[0] || '';
+                const galleryImageUrls = allImageUrls.slice(1);
+
+                const newsData = {
+                    title,
+                    summary,
+                    featuredImageUrl,
+                    galleryImageUrls
+                };
+                
+                if (newsId) { // Update existing news
+                    const docRef = doc(db, "noticias", newsId);
+                    await updateDoc(docRef, newsData);
+                    alert("Noticia actualizada con éxito");
+                } else { // Create new news
+                    await addDoc(collection(db, "noticias"), newsData);
+                    alert("Noticia creada con éxito");
+                }
+                resetForm();
+
+            } catch (error) {
+                console.error("Error al guardar la noticia:", error);
+                alert("Error al guardar la noticia.");
+            }
+        });
+
+        function uploadImages(files) {
+            progressContainer.classList.remove('hidden');
+            progressBar.style.width = '0%';
+
+            const uploadPromises = files.map(file => {
+                const storageRef = ref(storage, `noticias/${Date.now()}_${file.name}`);
+                const uploadTask = uploadBytesResumable(storageRef, file);
+
+                return new Promise((resolve, reject) => {
+                    uploadTask.on('state_changed', 
+                        (snapshot) => {
+                            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                            progressBar.style.width = progress + '%';
+                        }, 
+                        (error) => reject(error), 
+                        () => {
+                            getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                                resolve(downloadURL);
+                            });
+                        }
+                    );
+                });
+            });
+            
+            return Promise.all(uploadPromises).finally(() => {
+                setTimeout(() => progressContainer.classList.add('hidden'), 1000);
+            });
+        }
+
+        // Load News in Admin Panel
+        const existingNewsContainer = document.getElementById('existing-news');
+        function loadNews() {
+            const newsCollection = collection(db, "noticias");
+            onSnapshot(newsCollection, (snapshot) => {
+                if (snapshot.empty) {
+                    existingNewsContainer.innerHTML = '<p>No hay noticias creadas.</p>';
+                    return;
+                }
+                existingNewsContainer.innerHTML = '';
+                snapshot.forEach(doc => {
+                    const news = doc.data();
+                    const newsItem = document.createElement('div');
+                    newsItem.className = 'flex items-center justify-between bg-gray-50 p-4 rounded-lg';
+                    newsItem.innerHTML = `
+                        <div>
+                            <p class="font-bold">${news.title}</p>
+                            <p class="text-sm text-gray-500">${(news.summary || '').replace(/<[^>]+>/g, '').substring(0, 50)}...</p>
+                        </div>
+                        <div class="flex gap-2">
+                            <button data-id="${doc.id}" class="edit-btn bg-yellow-500 text-white py-1 px-3 rounded-lg text-sm hover:bg-yellow-600">Editar</button>
+                            <button data-id="${doc.id}" class="delete-btn bg-red-500 text-white py-1 px-3 rounded-lg text-sm hover:bg-red-600">Eliminar</button>
+                        </div>
+                    `;
+                    existingNewsContainer.appendChild(newsItem);
+                });
+            });
+        }
+        
+        // Edit and Delete
+        existingNewsContainer.addEventListener('click', (e) => {
+            const docId = e.target.dataset.id;
+            if (!docId) return;
+
+            if (e.target.classList.contains('delete-btn')) {
+                if (confirm('¿Estás seguro de que quieres eliminar esta noticia?')) {
+                    const docRef = doc(db, "noticias", docId);
+                    // TODO: Also delete images from storage
+                    deleteDoc(docRef);
+                }
+            }
+
+            if (e.target.classList.contains('edit-btn')) {
+                const newsItemDiv = e.target.closest('div.flex').previousElementSibling;
+                const title = newsItemDiv.querySelector('p.font-bold').textContent;
+                
+                // Find the full data from the snapshot (or fetch again)
+                const newsCollection = collection(db, "noticias");
+                getDocs(newsCollection).then(snapshot => {
+                    snapshot.forEach(doc => {
+                        if (doc.id === docId) {
+                            const data = doc.data();
+                            newsForm.title.value = data.title;
+                            newsIdField.value = docId;
+                            quill.root.innerHTML = data.summary;
+                            
+                            // Reset and populate image previews
+                            imagePreviewsContainer.innerHTML = '';
+                            imageFiles = [];
+                            existingImageUrls = [data.featuredImageUrl, ...(data.galleryImageUrls || [])].filter(Boolean);
+                            existingImageUrls.forEach(url => createPreviewElement(url, url, 'existing'));
+
+                            cancelEditBtn.classList.remove('hidden');
+                            window.scrollTo(0, 0);
+                        }
+                    });
+                });
+            }
+        });
+
+    </script>
+
+</body>
+</html>
+
