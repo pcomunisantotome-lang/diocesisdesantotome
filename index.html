@@ -16,7 +16,6 @@
         @keyframes pulse {
             50% { opacity: .5; }
         }
-        /* Estilos para el carrusel y el contenido enriquecido */
         .swiper-button-next, .swiper-button-prev { color: #ffffff; }
         .swiper-pagination-bullet-active { background: #ffffff; }
         .prose img { border-radius: 0.5rem; }
@@ -28,7 +27,7 @@
     <header class="bg-white shadow-md sticky top-0 z-50">
         <nav class="container mx-auto px-4 lg:px-6 py-2.5">
             <div class="flex flex-wrap justify-between items-center">
-                <a href="#" class="flex items-center">
+                <a href="#" id="logo-link" class="flex items-center">
                     <img src="https://firebasestorage.googleapis.com/v0/b/diocesisdesantotome.firebasestorage.app/o/LOGOS%2Flogo%20iglesia%20samaritana.png?alt=media&token=56fd32c1-bb7d-4537-83f7-ace6662ff768" class="mr-3 h-12" alt="Logo Diócesis" />
                     <div class="hidden sm:flex sm:flex-col">
                         <span class="text-xl font-semibold whitespace-nowrap text-gray-800">Diócesis de Santo Tomé</span>
@@ -36,7 +35,7 @@
                     </div>
                 </a>
                 <div class="flex items-center lg:order-2">
-                    <a href="#donar" class="text-white bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 focus:outline-none">Doná</a>
+                    <a href="#" id="menu-donar" class="text-white bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 focus:outline-none">Doná</a>
                     <button id="mobile-menu-button" type="button" class="inline-flex items-center p-2 ml-1 text-sm text-gray-500 rounded-lg lg:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200" aria-controls="mobile-menu" aria-expanded="false">
                         <span class="sr-only">Abrir menú principal</span>
                         <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"></path></svg>
@@ -44,30 +43,28 @@
                 </div>
                 <div class="hidden justify-between items-center w-full lg:flex lg:w-auto lg:order-1" id="mobile-menu">
                     <ul class="flex flex-col mt-4 font-medium lg:flex-row lg:space-x-8 lg:mt-0">
-                        <li><a href="#inicio" class="block py-2 pr-4 pl-3 text-gray-700 hover:text-blue-600 lg:p-0">Inicio</a></li>
-                        <li><a href="#noticias" class="block py-2 pr-4 pl-3 text-gray-700 hover:text-blue-600 lg:p-0">Noticias</a></li>
-                        <li><a href="#recursos" class="block py-2 pr-4 pl-3 text-gray-700 hover:text-blue-600 lg:p-0">Recursos</a></li>
-                        <li><a href="#fragiles" class="block py-2 pr-4 pl-3 text-gray-700 hover:text-blue-600 lg:p-0">Cuidado de los Frágiles</a></li>
-                        <li><a href="#obispo" class="block py-2 pr-4 pl-3 text-gray-700 hover:text-blue-600 lg:p-0">Nuestro Obispo</a></li>
-                        <li><a href="#decretos" class="block py-2 pr-4 pl-3 text-gray-700 hover:text-blue-600 lg:p-0">Decretos</a></li>
-                        <li><a href="#jubilar" class="block py-2 pr-4 pl-3 text-gray-700 hover:text-blue-600 lg:p-0">Año Jubilar</a></li>
-                        <li><a href="#contacto" class="block py-2 pr-4 pl-3 text-gray-700 hover:text-blue-600 lg:p-0">Contacto</a></li>
+                        <li><a href="#" id="menu-inicio" class="block py-2 pr-4 pl-3 text-gray-700 hover:text-blue-600 lg:p-0">Inicio</a></li>
+                        <li><a href="#" id="menu-recursos" class="block py-2 pr-4 pl-3 text-gray-700 hover:text-blue-600 lg:p-0">Recursos</a></li>
+                        <li><a href="#" id="menu-fragiles" class="block py-2 pr-4 pl-3 text-gray-700 hover:text-blue-600 lg:p-0">Cuidado de los Frágiles</a></li>
+                        <li><a href="#" id="menu-obispo" class="block py-2 pr-4 pl-3 text-gray-700 hover:text-blue-600 lg:p-0">Nuestro Obispo</a></li>
+                        <li><a href="#" id="menu-decretos" class="block py-2 pr-4 pl-3 text-gray-700 hover:text-blue-600 lg:p-0">Decretos</a></li>
+                        <li><a href="#" id="menu-jubilar" class="block py-2 pr-4 pl-3 text-gray-700 hover:text-blue-600 lg:p-0">Año Jubilar</a></li>
+                        <li><a href="#" id="menu-contacto" class="block py-2 pr-4 pl-3 text-gray-700 hover:text-blue-600 lg:p-0">Contacto</a></li>
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
     
-    <main>
+    <div id="main-content-container">
         <!-- Section Banner -->
-        <section id="inicio" class="w-full page-section">
+        <section id="inicio" class="w-full">
             <img src="https://firebasestorage.googleapis.com/v0/b/diocesisdesantotome.firebasestorage.app/o/LOGOS%2FEncabezado%20para%20Paginas.png?alt=media&token=38a267bb-78ba-49cb-a6b5-86d457b07473" alt="Banner Principal Diócesis de Santo Tomé" class="w-full h-auto object-cover">
         </section>
 
         <!-- Blog de Noticias -->
         <section id="noticias" class="py-12 bg-white">
             <div class="container mx-auto px-6">
-                
                 <!-- Vista de Noticia Individual (inicialmente oculta) -->
                 <div id="single-news-view" class="hidden"></div>
                 
@@ -85,42 +82,47 @@
                         Más Noticias
                     </a>
                 </div>
-
             </div>
         </section>
-        
-        <!-- Otras secciones -->
-        <section id="recursos" class="py-12 page-section"><div class="container mx-auto px-6"><h2 class="text-3xl font-bold text-center text-gray-800 mb-8">Recursos</h2><p class="text-center text-gray-600">Contenido para la sección de Recursos...</p></div></section>
-        <section id="fragiles" class="py-12 bg-white page-section"><div class="container mx-auto px-6"><h2 class="text-3xl font-bold text-center text-gray-800 mb-8">Cuidado de los Frágiles</h2><p class="text-center text-gray-600">Contenido para la sección de Cuidado de los Frágiles...</p></div></section>
-        <section id="obispo" class="py-12 page-section"><div class="container mx-auto px-6"><h2 class="text-3xl font-bold text-center text-gray-800 mb-8">Nuestro Obispo</h2><p class="text-center text-gray-600">Contenido para la sección de Nuestro Obispo...</p></div></section>
-        <section id="decretos" class="py-12 bg-white page-section"><div class="container mx-auto px-6"><h2 class="text-3xl font-bold text-center text-gray-800 mb-8">Decretos</h2><p class="text-center text-gray-600">Contenido para la sección de Decretos...</p></div></section>
-        <section id="jubilar" class="py-12 page-section"><div class="container mx-auto px-6"><h2 class="text-3xl font-bold text-center text-gray-800 mb-8">Año Jubilar</h2><p class="text-center text-gray-600">Contenido para la sección de Año Jubilar...</p></div></section>
-        <section id="contacto" class="py-12 bg-gray-200 page-section">
-             <div class="container mx-auto px-6">
-                <h2 class="text-3xl font-bold text-center text-gray-800 mb-8">Contacto</h2>
-                <div class="flex flex-wrap -mx-4">
-                    <div class="w-full lg:w-1/2 px-4 mb-8 lg:mb-0">
-                        <div class="bg-white p-6 rounded-lg shadow-lg">
-                           <h3 class="text-xl font-bold mb-4">Envíanos un mensaje</h3>
-                            <form id="contact-form">
-                                <div class="mb-4"><label for="contact-name" class="block text-gray-700">Nombre</label><input type="text" id="contact-name" class="w-full mt-2 p-2 border rounded-lg" required></div>
-                                <div class="mb-4"><label for="contact-email" class="block text-gray-700">Email</label><input type="email" id="contact-email" class="w-full mt-2 p-2 border rounded-lg" required></div>
-                                <div class="mb-4"><label for="contact-message" class="block text-gray-700">Mensaje</label><textarea id="contact-message" rows="4" class="w-full mt-2 p-2 border rounded-lg" required></textarea></div>
-                                <button type="submit" class="w-full bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700">Enviar</button>
-                            </form>
-                        </div>
-                    </div>
-                    <div class="w-full lg:w-1/2 px-4">
-                        <div class="bg-white p-6 rounded-lg shadow-lg h-full">
-                            <h3 class="text-xl font-bold mb-4">Nuestra Ubicación</h3>
-                            <iframe src="https://www.google.com/maps/embed?pb=!1m18!m12!1m3!1d3504.604153920977!2d-56.0355446852958!3d-28.5815669824497!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9454f9644f174241%3A0x6bbf69b4c06b4a3c!2sCatedral%20Inmaculada%20Concepci%C3%B3n!5e0!3m2!1ses-419!2sar!4v1672876800000!5m2!1ses-419!2sar" width="100%" height="350" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-                        </div>
-                    </div>
+    </div>
+
+    <!-- Secciones limpias (inicialmente ocultas) -->
+    <section id="recursos" class="py-12 hidden clean-section">
+         <div class="container mx-auto px-6">
+            <button class="back-to-main-btn mb-6 text-blue-600 font-semibold hover:underline">&larr; Volver al Inicio</button>
+            <h2 class="text-3xl font-bold text-center text-gray-800 mb-10">Recursos Pastorales</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                <div class="bg-white rounded-lg shadow-lg p-8 flex flex-col items-center text-center"><h3 class="text-2xl font-bold text-gray-800 mb-4">Subsidios Pastorales</h3><p class="text-gray-600 mb-6">Material de apoyo para agentes de pastoral y comunidades.</p><a href="#" download class="w-full bg-blue-600 text-white font-semibold py-3 px-8 rounded-lg hover:bg-blue-700 transition">Descargar</a></div>
+                <div class="bg-white rounded-lg shadow-lg p-8 flex flex-col items-center text-center"><h3 class="text-2xl font-bold text-gray-800 mb-4">Guiones Diocesanos</h3><p class="text-gray-600 mb-6">Guiones para celebraciones, encuentros y momentos de oración.</p><a href="#" download class="w-full bg-green-600 text-white font-semibold py-3 px-8 rounded-lg hover:bg-green-700 transition">Descargar</a></div>
+            </div>
+        </div>
+    </section>
+
+    <section id="fragiles" class="py-12 bg-white hidden clean-section"><div class="container mx-auto px-6"><button class="back-to-main-btn mb-6 text-blue-600 font-semibold hover:underline">&larr; Volver al Inicio</button><h2 class="text-3xl font-bold text-center text-gray-800 mb-8">Cuidado de los Frágiles</h2><p class="text-center text-gray-600">Contenido para la sección de Cuidado de los Frágiles...</p></div></section>
+    <section id="obispo" class="py-12 hidden clean-section"><div class="container mx-auto px-6"><button class="back-to-main-btn mb-6 text-blue-600 font-semibold hover:underline">&larr; Volver al Inicio</button><h2 class="text-3xl font-bold text-center text-gray-800 mb-8">Nuestro Obispo</h2><p class="text-center text-gray-600">Contenido para la sección de Nuestro Obispo...</p></div></section>
+    <section id="decretos" class="py-12 bg-white hidden clean-section"><div class="container mx-auto px-6"><button class="back-to-main-btn mb-6 text-blue-600 font-semibold hover:underline">&larr; Volver al Inicio</button><h2 class="text-3xl font-bold text-center text-gray-800 mb-8">Decretos</h2><p class="text-center text-gray-600">Contenido para la sección de Decretos...</p></div></section>
+    <section id="jubilar" class="py-12 hidden clean-section"><div class="container mx-auto px-6"><button class="back-to-main-btn mb-6 text-blue-600 font-semibold hover:underline">&larr; Volver al Inicio</button><h2 class="text-3xl font-bold text-center text-gray-800 mb-8">Año Jubilar</h2><p class="text-center text-gray-600">Contenido para la sección de Año Jubilar...</p></div></section>
+    <section id="contacto" class="py-12 bg-gray-200 hidden clean-section">
+         <div class="container mx-auto px-6">
+            <button class="back-to-main-btn mb-6 text-blue-600 font-semibold hover:underline">&larr; Volver al Inicio</button>
+            <h2 class="text-3xl font-bold text-center text-gray-800 mb-8">Contacto</h2>
+            <div class="flex flex-wrap -mx-4 max-w-4xl mx-auto">
+                <div class="w-full lg:w-1/2 px-4 mb-8 lg:mb-0">
+                    <div class="bg-white p-6 rounded-lg shadow-lg"><h3 class="text-xl font-bold mb-4">Envíanos un mensaje</h3><form id="contact-form"><div class="mb-4"><label for="contact-name" class="block text-gray-700">Nombre</label><input type="text" id="contact-name" class="w-full mt-2 p-2 border rounded-lg" required></div><div class="mb-4"><label for="contact-email" class="block text-gray-700">Email</label><input type="email" id="contact-email" class="w-full mt-2 p-2 border rounded-lg" required></div><div class="mb-4"><label for="contact-message" class="block text-gray-700">Mensaje</label><textarea id="contact-message" rows="4" class="w-full mt-2 p-2 border rounded-lg" required></textarea></div><button type="submit" class="w-full bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700">Enviar</button></form></div>
+                </div>
+                <div class="w-full lg:w-1/2 px-4">
+                    <div class="bg-white p-6 rounded-lg shadow-lg h-full"><h3 class="text-xl font-bold mb-4">Nuestra Ubicación</h3><iframe src="https://www.google.com/maps/embed?pb=!1m18!m12!m1m3!1d3504.604153920977!2d-56.0355446852958!3d-28.5815669824497!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9454f9644f174241%3A0x6bbf69b4c06b4a3c!2sCatedral%20Inmaculada%20Concepci%C3%B3n!5e0!3m2!1ses-419!2sar!4v1672876800000!5m2!1ses-419!2sar" width="100%" height="350" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></div>
                 </div>
             </div>
-        </section>
-        <section id="donar" class="py-12 bg-white page-section"><div class="container mx-auto px-6"><h2 class="text-3xl font-bold text-center text-gray-800 mb-8">Doná</h2><p class="text-center text-gray-600">Contenido para la sección de Donaciones...</p></div></section>
-    </main>
+        </div>
+    </section>
+    <section id="donar" class="py-12 bg-white hidden clean-section">
+        <div class="container mx-auto px-6">
+            <button class="back-to-main-btn mb-6 text-blue-600 font-semibold hover:underline">&larr; Volver al Inicio</button>
+            <h2 class="text-3xl font-bold text-center text-gray-800 mb-8">Doná</h2>
+            <p class="text-center text-gray-600">Contenido para la sección de Donaciones...</p>
+        </div>
+    </section>
 
     <footer class="bg-gray-800 text-white py-8">
         <div class="container mx-auto px-6 text-center">
@@ -145,10 +147,12 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
+        const mainContentContainer = document.getElementById('main-content-container');
+        const cleanSections = document.querySelectorAll('.clean-section');
         const newsGridContainer = document.getElementById('news-grid-container');
         const singleNewsView = document.getElementById('single-news-view');
         const moreNewsContainer = document.getElementById('more-news-container');
-        const pageSections = document.querySelectorAll('.page-section');
+        const newsSection = document.getElementById('noticias');
         const pageFooter = document.querySelector('footer');
 
         // --- Cargar la grilla de noticias ---
@@ -160,7 +164,7 @@
                 
                 if (querySnapshot.empty) {
                     newsGridContainer.innerHTML = '<p class="text-center col-span-full">No hay noticias para mostrar.</p>';
-                    moreNewsContainer.classList.add('hidden'); // Ocultar si no hay noticias
+                    moreNewsContainer.classList.add('hidden'); 
                     return;
                 }
 
@@ -186,17 +190,36 @@
                 newsGridContainer.innerHTML = `<div class="col-span-full text-center text-red-600">Error al cargar noticias.</div>`;
             }
         }
+        
+        function showMainView() {
+            mainContentContainer.classList.remove('hidden');
+            pageFooter.classList.remove('hidden');
+            cleanSections.forEach(section => section.classList.add('hidden'));
+            singleNewsView.classList.add('hidden');
+            newsGridContainer.classList.remove('hidden');
+            moreNewsContainer.classList.remove('hidden');
+            newsSection.classList.remove('hidden');
+            window.scrollTo(0, 0);
+        }
 
-        // --- Mostrar una noticia individual ---
+        function showCleanSection(sectionId) {
+            mainContentContainer.classList.add('hidden');
+            pageFooter.classList.add('hidden');
+            cleanSections.forEach(section => section.classList.add('hidden'));
+            document.getElementById(sectionId).classList.remove('hidden');
+            window.scrollTo(0, 0);
+        }
+        
         async function showSingleNews(newsId) {
-            singleNewsView.innerHTML = '<p class="text-center">Cargando noticia...</p>';
+            mainContentContainer.classList.add('hidden');
+            pageFooter.classList.add('hidden');
+            cleanSections.forEach(section => section.classList.add('hidden'));
+            
+            newsSection.classList.remove('hidden');
             newsGridContainer.classList.add('hidden');
             moreNewsContainer.classList.add('hidden');
             singleNewsView.classList.remove('hidden');
-
-            // Ocultar las otras secciones
-            pageSections.forEach(section => section.classList.add('hidden'));
-            pageFooter.classList.add('hidden');
+            singleNewsView.innerHTML = '<p class="text-center">Cargando noticia...</p>';
 
             try {
                 const docRef = doc(db, "noticias", newsId);
@@ -204,7 +227,7 @@
 
                 if (docSnap.exists()) {
                     const news = docSnap.data();
-                    const allImages = [news.featuredImageUrl, ...(news.galleryImageUrls || [])].filter(Boolean);
+                    const allImages = [news.featuredImageUrl, ...(news.galleryUrls || [])].filter(Boolean);
                     
                     singleNewsView.innerHTML = `
                         <article class="bg-white p-6 md:p-8 rounded-lg shadow-xl max-w-4xl mx-auto">
@@ -228,9 +251,9 @@
                         navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
                     });
                     
-                    document.getElementById('back-to-grid-btn').addEventListener('click', showNewsGrid);
+                    document.getElementById('back-to-grid-btn').addEventListener('click', showMainView);
                 } else {
-                    singleNewsView.innerHTML = '<p class="text-center text-red-600">No se encontró la noticia.</p>';
+                     singleNewsView.innerHTML = '<p class="text-center text-red-600">No se encontró la noticia.</p>';
                 }
             } catch (error) {
                 console.error("Error al cargar noticia individual:", error);
@@ -238,27 +261,44 @@
             }
         }
 
-        // --- Mostrar la grilla de noticias ---
-        function showNewsGrid() {
-            singleNewsView.classList.add('hidden');
-            newsGridContainer.classList.remove('hidden');
-            moreNewsContainer.classList.remove('hidden');
-            singleNewsView.innerHTML = '';
-            
-            // Mostrar las otras secciones
-            pageSections.forEach(section => section.classList.remove('hidden'));
-            pageFooter.classList.remove('hidden');
-        }
-
-        // --- Event Delegation para los botones "Leer más" ---
         newsGridContainer.addEventListener('click', (e) => {
             if (e.target && e.target.classList.contains('read-more-btn')) {
                 const newsId = e.target.dataset.id;
                 showSingleNews(newsId);
             }
         });
+        
+        // --- Manejadores del Menú ---
+        const menuActions = {
+            'menu-inicio': showMainView,
+            'logo-link': showMainView,
+            'menu-recursos': () => showCleanSection('recursos'),
+            'menu-fragiles': () => showCleanSection('fragiles'),
+            'menu-obispo': () => showCleanSection('obispo'),
+            'menu-decretos': () => showCleanSection('decretos'),
+            'menu-jubilar': () => showCleanSection('jubilar'),
+            'menu-contacto': () => showCleanSection('contacto'),
+            'menu-donar': () => showCleanSection('donar'),
+        };
 
-        // --- Manejo del menú móvil y carga inicial ---
+        Object.keys(menuActions).forEach(id => {
+            const element = document.getElementById(id);
+            if(element) {
+                element.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    menuActions[id]();
+                    // Ocultar menú móvil después del clic
+                    if (!document.getElementById('mobile-menu').classList.contains('hidden')) {
+                         document.getElementById('mobile-menu').classList.add('hidden');
+                    }
+                });
+            }
+        });
+
+        document.querySelectorAll('.back-to-main-btn').forEach(button => {
+            button.addEventListener('click', showMainView);
+        });
+
         document.getElementById('mobile-menu-button').addEventListener('click', () => {
             document.getElementById('mobile-menu').classList.toggle('hidden');
         });
@@ -284,3 +324,4 @@
     </script>
 </body>
 </html>
+
