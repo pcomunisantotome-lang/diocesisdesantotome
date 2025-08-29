@@ -7,6 +7,7 @@
     <link rel="icon" href="https://firebasestorage.googleapis.com/v0/b/diocesisdesantotome.firebasestorage.app/o/LOGOS%2Flogo%20iglesia%20samaritana.png?alt=media&token=56fd32c1-bb7d-4537-83f7-ace6662ff768" type="image/png">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
     <style>
         body { font-family: 'Inter', sans-serif; scroll-behavior: smooth; }
         .news-skeleton {
@@ -15,6 +16,10 @@
         @keyframes pulse {
             50% { opacity: .5; }
         }
+        /* Estilos para el carrusel y el contenido enriquecido */
+        .swiper-button-next, .swiper-button-prev { color: #ffffff; }
+        .swiper-pagination-bullet-active { background: #ffffff; }
+        .prose img { border-radius: 0.5rem; }
     </style>
 </head>
 <body class="bg-gray-50">
@@ -55,84 +60,52 @@
     
     <main>
         <!-- Section Banner -->
-        <section id="inicio" class="w-full">
+        <section id="inicio" class="w-full page-section">
             <img src="https://firebasestorage.googleapis.com/v0/b/diocesisdesantotome.firebasestorage.app/o/LOGOS%2FEncabezado%20para%20Paginas.png?alt=media&token=38a267bb-78ba-49cb-a6b5-86d457b07473" alt="Banner Principal Diócesis de Santo Tomé" class="w-full h-auto object-cover">
         </section>
 
         <!-- Blog de Noticias -->
         <section id="noticias" class="py-12 bg-white">
             <div class="container mx-auto px-6">
-                <h2 class="text-3xl font-bold text-center text-gray-800 mb-8">Últimas Noticias</h2>
-                <div id="news-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                
+                <!-- Vista de Noticia Individual (inicialmente oculta) -->
+                <div id="single-news-view" class="hidden"></div>
+                
+                <!-- Contenedor de la Grilla de Noticias -->
+                <div id="news-grid-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     <!-- Skeletons de carga -->
                     <div class="news-skeleton bg-gray-200 rounded-lg shadow-lg h-96"></div>
                     <div class="news-skeleton bg-gray-200 rounded-lg shadow-lg h-96"></div>
                     <div class="news-skeleton bg-gray-200 rounded-lg shadow-lg h-96"></div>
                 </div>
+
+                <!-- Botón "Más Noticias" -->
+                <div id="more-news-container" class="text-center mt-12">
+                    <a href="#noticias" class="bg-blue-600 text-white font-semibold py-3 px-8 rounded-lg hover:bg-blue-700 transition duration-300 ease-in-out">
+                        Más Noticias
+                    </a>
+                </div>
+
             </div>
         </section>
         
-        <!-- Recursos -->
-        <section id="recursos" class="py-12">
-            <div class="container mx-auto px-6">
-                <h2 class="text-3xl font-bold text-center text-gray-800 mb-8">Recursos</h2>
-                <p class="text-center text-gray-600">Contenido para la sección de Recursos...</p>
-            </div>
-        </section>
-
-        <!-- Cuidado de los frágiles -->
-        <section id="fragiles" class="py-12 bg-white">
-            <div class="container mx-auto px-6">
-                <h2 class="text-3xl font-bold text-center text-gray-800 mb-8">Cuidado de los Frágiles</h2>
-                <p class="text-center text-gray-600">Contenido para la sección de Cuidado de los Frágiles...</p>
-            </div>
-        </section>
-        
-        <!-- Nuestro Obispo -->
-        <section id="obispo" class="py-12">
-            <div class="container mx-auto px-6">
-                <h2 class="text-3xl font-bold text-center text-gray-800 mb-8">Nuestro Obispo</h2>
-                 <p class="text-center text-gray-600">Contenido para la sección de Nuestro Obispo...</p>
-            </div>
-        </section>
-
-        <!-- Decretos -->
-        <section id="decretos" class="py-12 bg-white">
-            <div class="container mx-auto px-6">
-                <h2 class="text-3xl font-bold text-center text-gray-800 mb-8">Decretos</h2>
-                <p class="text-center text-gray-600">Contenido para la sección de Decretos...</p>
-            </div>
-        </section>
-
-        <!-- Año Jubilar -->
-        <section id="jubilar" class="py-12">
-            <div class="container mx-auto px-6">
-                <h2 class="text-3xl font-bold text-center text-gray-800 mb-8">Año Jubilar</h2>
-                <p class="text-center text-gray-600">Contenido para la sección de Año Jubilar...</p>
-            </div>
-        </section>
-
-        <!-- Contacto y Mapa -->
-        <section id="contacto" class="py-12 bg-gray-200">
-            <div class="container mx-auto px-6">
+        <!-- Otras secciones -->
+        <section id="recursos" class="py-12 page-section"><div class="container mx-auto px-6"><h2 class="text-3xl font-bold text-center text-gray-800 mb-8">Recursos</h2><p class="text-center text-gray-600">Contenido para la sección de Recursos...</p></div></section>
+        <section id="fragiles" class="py-12 bg-white page-section"><div class="container mx-auto px-6"><h2 class="text-3xl font-bold text-center text-gray-800 mb-8">Cuidado de los Frágiles</h2><p class="text-center text-gray-600">Contenido para la sección de Cuidado de los Frágiles...</p></div></section>
+        <section id="obispo" class="py-12 page-section"><div class="container mx-auto px-6"><h2 class="text-3xl font-bold text-center text-gray-800 mb-8">Nuestro Obispo</h2><p class="text-center text-gray-600">Contenido para la sección de Nuestro Obispo...</p></div></section>
+        <section id="decretos" class="py-12 bg-white page-section"><div class="container mx-auto px-6"><h2 class="text-3xl font-bold text-center text-gray-800 mb-8">Decretos</h2><p class="text-center text-gray-600">Contenido para la sección de Decretos...</p></div></section>
+        <section id="jubilar" class="py-12 page-section"><div class="container mx-auto px-6"><h2 class="text-3xl font-bold text-center text-gray-800 mb-8">Año Jubilar</h2><p class="text-center text-gray-600">Contenido para la sección de Año Jubilar...</p></div></section>
+        <section id="contacto" class="py-12 bg-gray-200 page-section">
+             <div class="container mx-auto px-6">
                 <h2 class="text-3xl font-bold text-center text-gray-800 mb-8">Contacto</h2>
                 <div class="flex flex-wrap -mx-4">
                     <div class="w-full lg:w-1/2 px-4 mb-8 lg:mb-0">
                         <div class="bg-white p-6 rounded-lg shadow-lg">
                            <h3 class="text-xl font-bold mb-4">Envíanos un mensaje</h3>
                             <form id="contact-form">
-                                <div class="mb-4">
-                                    <label for="contact-name" class="block text-gray-700">Nombre</label>
-                                    <input type="text" id="contact-name" class="w-full mt-2 p-2 border rounded-lg" required>
-                                </div>
-                                <div class="mb-4">
-                                    <label for="contact-email" class="block text-gray-700">Email</label>
-                                    <input type="email" id="contact-email" class="w-full mt-2 p-2 border rounded-lg" required>
-                                </div>
-                                <div class="mb-4">
-                                    <label for="contact-message" class="block text-gray-700">Mensaje</label>
-                                    <textarea id="contact-message" rows="4" class="w-full mt-2 p-2 border rounded-lg" required></textarea>
-                                </div>
+                                <div class="mb-4"><label for="contact-name" class="block text-gray-700">Nombre</label><input type="text" id="contact-name" class="w-full mt-2 p-2 border rounded-lg" required></div>
+                                <div class="mb-4"><label for="contact-email" class="block text-gray-700">Email</label><input type="email" id="contact-email" class="w-full mt-2 p-2 border rounded-lg" required></div>
+                                <div class="mb-4"><label for="contact-message" class="block text-gray-700">Mensaje</label><textarea id="contact-message" rows="4" class="w-full mt-2 p-2 border rounded-lg" required></textarea></div>
                                 <button type="submit" class="w-full bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700">Enviar</button>
                             </form>
                         </div>
@@ -146,14 +119,7 @@
                 </div>
             </div>
         </section>
-        
-        <!-- Donar -->
-        <section id="donar" class="py-12 bg-white">
-            <div class="container mx-auto px-6">
-                <h2 class="text-3xl font-bold text-center text-gray-800 mb-8">Doná</h2>
-                <p class="text-center text-gray-600">Contenido para la sección de Donaciones...</p>
-            </div>
-        </section>
+        <section id="donar" class="py-12 bg-white page-section"><div class="container mx-auto px-6"><h2 class="text-3xl font-bold text-center text-gray-800 mb-8">Doná</h2><p class="text-center text-gray-600">Contenido para la sección de Donaciones...</p></div></section>
     </main>
 
     <footer class="bg-gray-800 text-white py-8">
@@ -162,10 +128,10 @@
         </div>
     </footer>
     
-    <!-- Firebase -->
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getFirestore, collection, getDocs, query, orderBy, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, collection, getDocs, doc, getDoc, query, orderBy, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyCIC457rky1NFQCas3uWFfIDVRBHfdbEAQ",
@@ -179,64 +145,142 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // --- Mobile Menu Toggle ---
-        const mobileMenuButton = document.getElementById('mobile-menu-button');
-        const mobileMenu = document.getElementById('mobile-menu');
-        mobileMenuButton.addEventListener('click', () => {
-            mobileMenu.classList.toggle('hidden');
-        });
+        const newsGridContainer = document.getElementById('news-grid-container');
+        const singleNewsView = document.getElementById('single-news-view');
+        const moreNewsContainer = document.getElementById('more-news-container');
+        const pageSections = document.querySelectorAll('.page-section');
+        const pageFooter = document.querySelector('footer');
 
-        // --- News Loading ---
-        const newsContainer = document.getElementById('news-container');
-        
-        async function loadNews() {
-            const q = query(collection(db, "noticias"), orderBy("createdAt", "desc"));
-            const querySnapshot = await getDocs(q);
-            newsContainer.innerHTML = '';
-            
-            if (querySnapshot.empty) {
-                newsContainer.innerHTML = '<p class="text-center col-span-full">No hay noticias para mostrar.</p>';
-                return;
+        // --- Cargar la grilla de noticias ---
+        async function loadNewsGrid() {
+            try {
+                const q = query(collection(db, "noticias"), orderBy("createdAt", "desc"));
+                const querySnapshot = await getDocs(q);
+                newsGridContainer.innerHTML = '';
+                
+                if (querySnapshot.empty) {
+                    newsGridContainer.innerHTML = '<p class="text-center col-span-full">No hay noticias para mostrar.</p>';
+                    moreNewsContainer.classList.add('hidden'); // Ocultar si no hay noticias
+                    return;
+                }
+
+                querySnapshot.forEach((doc) => {
+                    const news = doc.data();
+                    const placeholderImg = 'https://placehold.co/600x400/e2e8f0/e2e8f0?text=...';
+                    const imageUrl = news.featuredImageUrl || placeholderImg;
+
+                    const newsCard = document.createElement('div');
+                    newsCard.className = 'bg-white rounded-lg shadow-lg overflow-hidden flex flex-col';
+                    newsCard.innerHTML = `
+                        <img src="${imageUrl}" alt="${news.title || ''}" class="w-full h-48 object-cover" onerror="this.onerror=null;this.src='${placeholderImg}';">
+                        <div class="p-6 flex-grow flex flex-col">
+                            <h3 class="text-xl font-bold mb-2 text-gray-800">${news.title || ''}</h3>
+                            <div class="text-gray-600 mb-4 flex-grow">${(news.summary || '').replace(/<[^>]+>/g, '').substring(0, 100)}...</div>
+                            <button data-id="${doc.id}" class="read-more-btn mt-auto self-start text-blue-600 font-semibold hover:underline">Leer más &rarr;</button>
+                        </div>
+                    `;
+                    newsGridContainer.appendChild(newsCard);
+                });
+            } catch (error) {
+                console.error("Error al cargar noticias:", error);
+                newsGridContainer.innerHTML = `<div class="col-span-full text-center text-red-600">Error al cargar noticias.</div>`;
             }
-
-            querySnapshot.forEach((doc) => {
-                const news = doc.data();
-                const newsCard = document.createElement('div');
-                newsCard.className = 'bg-white rounded-lg shadow-lg overflow-hidden flex flex-col';
-                newsCard.innerHTML = `
-                    <img src="${news.featuredImageUrl}" alt="${news.title}" class="w-full h-48 object-cover">
-                    <div class="p-6 flex-grow flex flex-col">
-                        <h3 class="text-xl font-bold mb-2 text-gray-800">${news.title}</h3>
-                        <div class="text-gray-600 mb-4 flex-grow">${(news.summary || '').replace(/<[^>]+>/g, '').substring(0, 100)}...</div>
-                        <a href="noticia.html?id=${doc.id}" target="_blank" class="mt-auto self-start text-blue-600 font-semibold hover:underline">Leer más &rarr;</a>
-                    </div>
-                `;
-                newsContainer.appendChild(newsCard);
-            });
         }
-        
-        // --- Contact Form ---
-        const contactForm = document.getElementById('contact-form');
-        contactForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const name = document.getElementById('contact-name').value;
-            const email = document.getElementById('contact-email').value;
-            const message = document.getElementById('contact-message').value;
+
+        // --- Mostrar una noticia individual ---
+        async function showSingleNews(newsId) {
+            singleNewsView.innerHTML = '<p class="text-center">Cargando noticia...</p>';
+            newsGridContainer.classList.add('hidden');
+            moreNewsContainer.classList.add('hidden');
+            singleNewsView.classList.remove('hidden');
+
+            // Ocultar las otras secciones
+            pageSections.forEach(section => section.classList.add('hidden'));
+            pageFooter.classList.add('hidden');
 
             try {
-                await addDoc(collection(db, "mensajes_contacto"), {
-                    name, email, message, sentAt: serverTimestamp()
-                });
-                contactForm.reset();
-                alert('¡Mensaje enviado con éxito!');
+                const docRef = doc(db, "noticias", newsId);
+                const docSnap = await getDoc(docRef);
+
+                if (docSnap.exists()) {
+                    const news = docSnap.data();
+                    const allImages = [news.featuredImageUrl, ...(news.galleryImageUrls || [])].filter(Boolean);
+                    
+                    singleNewsView.innerHTML = `
+                        <article class="bg-white p-6 md:p-8 rounded-lg shadow-xl max-w-4xl mx-auto">
+                            <button id="back-to-grid-btn" class="mb-6 text-blue-600 font-semibold hover:underline">&larr; Volver a Noticias</button>
+                            <h1 class="text-3xl md:text-4xl font-bold mb-4 text-gray-800">${news.title}</h1>
+                            <div class="swiper-container my-6 rounded-lg overflow-hidden bg-gray-200">
+                                <div class="swiper-wrapper">
+                                    ${allImages.map(url => `<div class="swiper-slide"><img src="${url}" class="w-full h-64 md:h-96 object-cover"></div>`).join('')}
+                                </div>
+                                <div class="swiper-pagination"></div>
+                                <div class="swiper-button-next"></div>
+                                <div class="swiper-button-prev"></div>
+                            </div>
+                            <div class="prose max-w-none lg:prose-lg">${news.summary}</div>
+                        </article>
+                    `;
+                    
+                    new Swiper('.swiper-container', {
+                        loop: allImages.length > 1,
+                        pagination: { el: '.swiper-pagination', clickable: true },
+                        navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
+                    });
+                    
+                    document.getElementById('back-to-grid-btn').addEventListener('click', showNewsGrid);
+                } else {
+                    singleNewsView.innerHTML = '<p class="text-center text-red-600">No se encontró la noticia.</p>';
+                }
             } catch (error) {
-                console.error("Error al enviar el mensaje: ", error);
-                alert('Hubo un error al enviar el mensaje. Inténtalo de nuevo.');
+                console.error("Error al cargar noticia individual:", error);
+                singleNewsView.innerHTML = '<p class="text-center text-red-600">Error al cargar la noticia.</p>';
+            }
+        }
+
+        // --- Mostrar la grilla de noticias ---
+        function showNewsGrid() {
+            singleNewsView.classList.add('hidden');
+            newsGridContainer.classList.remove('hidden');
+            moreNewsContainer.classList.remove('hidden');
+            singleNewsView.innerHTML = '';
+            
+            // Mostrar las otras secciones
+            pageSections.forEach(section => section.classList.remove('hidden'));
+            pageFooter.classList.remove('hidden');
+        }
+
+        // --- Event Delegation para los botones "Leer más" ---
+        newsGridContainer.addEventListener('click', (e) => {
+            if (e.target && e.target.classList.contains('read-more-btn')) {
+                const newsId = e.target.dataset.id;
+                showSingleNews(newsId);
             }
         });
 
-        // --- Initial Load ---
-        document.addEventListener('DOMContentLoaded', loadNews);
+        // --- Manejo del menú móvil y carga inicial ---
+        document.getElementById('mobile-menu-button').addEventListener('click', () => {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        });
+        
+        document.getElementById('contact-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const form = e.target;
+            try {
+                await addDoc(collection(db, "mensajes_contacto"), { 
+                    name: form['contact-name'].value, 
+                    email: form['contact-email'].value, 
+                    message: form['contact-message'].value, 
+                    sentAt: serverTimestamp() 
+                });
+                form.reset();
+                alert('¡Mensaje enviado!');
+            } catch (error) {
+                alert('Error al enviar el mensaje.');
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', loadNewsGrid);
     </script>
 </body>
 </html>
