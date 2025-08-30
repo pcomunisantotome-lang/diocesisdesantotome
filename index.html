@@ -98,6 +98,58 @@
                 </div>
             </div>
         </section>
+
+        <section id="videos-destacados" class="py-12 bg-gray-50">
+             <div class="container mx-auto px-6">
+                <h2 class="text-3xl font-bold text-center text-gray-800 mb-8">Videos Destacados</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+                    <!-- Video 1 -->
+                    <div class="bg-white rounded-lg shadow-lg overflow-hidden transform hover:-translate-y-2 transition-transform duration-300">
+                        <div class="aspect-video">
+                            <iframe class="w-full h-full" src="https://www.youtube.com/embed/hqap8lSWE80" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        </div>
+                    </div>
+                    <!-- Video 2 -->
+                    <div class="bg-white rounded-lg shadow-lg overflow-hidden transform hover:-translate-y-2 transition-transform duration-300">
+                         <div class="aspect-video">
+                            <iframe class="w-full h-full" src="https://www.youtube.com/embed/cw9mf9BwxtM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="nuestra-historia" class="py-12 bg-white">
+            <div class="container mx-auto px-6">
+                <h2 class="text-3xl font-bold text-center text-gray-800 mb-12">Nuestra Historia</h2>
+                <div class="flex flex-col lg:flex-row items-center gap-8 lg:gap-12">
+                    <!-- Text Content -->
+                    <div class="lg:w-1/2 text-gray-700 prose prose-lg max-w-none">
+                        <p>Fue creada el 6 de julio de 1979 por la bula <em>Romani est Pontificis</em> de Juan Pablo II. Su primer Obispo fue Carlos Esteban Cremata, designado el mismo día de la erección de la diócesis, que tomó posesión el 6 de octubre de 1979.</p>
+                        <h3 class="font-bold text-xl mt-6">Extensión</h3>
+                        <p>Comprende en la provincia de Corrientes los departamentos de General Alvear, Ituzaingó, Paso de los Libres, San Martín y Santo Tomé.</p>
+                        <p>La diócesis tiene una superficie de 29.011 km², albergando a una población aproximada de 161.667 habitantes. Cuenta con 12 parroquias, iglesias o capillas, sacerdotes diocesanos, religiosas, monjas, seminaristas mayores, 1 monasterio femenino, casas de religiosas y 7 centros educativos. La Catedral es la Iglesia Inmaculada Concepción de la Ciudad de Santo Tomé.</p>
+                        <h3 class="font-bold text-xl mt-6">Santos Patronos</h3>
+                        <ul class="list-disc pl-5">
+                            <li>Nuestra Señora de Itatí (9 de julio)</li>
+                            <li>Santo Tomás Apóstol (3 de julio)</li>
+                        </ul>
+                    </div>
+                    <!-- Image Carousel -->
+                    <div class="lg:w-1/2 w-full">
+                        <div class="swiper-container history-swiper rounded-lg shadow-xl overflow-hidden">
+                            <div class="swiper-wrapper">
+                                <div class="swiper-slide"><img src="https://firebasestorage.googleapis.com/v0/b/diocesisdesantotome.firebasestorage.app/o/nuestra%20historia%2FFB_IMG_1756239240965.jpg?alt=media&token=8de4724d-2799-43a3-b3e0-6fd052b0b9f2" class="w-full h-96 object-cover" alt="Foto histórica 1"></div>
+                                <div class="swiper-slide"><img src="https://firebasestorage.googleapis.com/v0/b/diocesisdesantotome.firebasestorage.app/o/nuestra%20historia%2FIMG-20250823-WA0011.jpg?alt=media&token=083bf229-7d4c-46ef-b817-f3222eac3f79" class="w-full h-96 object-cover" alt="Foto histórica 2"></div>
+                                <div class="swiper-slide"><img src="https://firebasestorage.googleapis.com/v0/b/diocesisdesantotome.firebasestorage.app/o/nuestra%20historia%2FScreenshot_20250826_171447_Facebook(1).jpg?alt=media&token=bdefabed-76ea-4e56-97c3-c0b89e83de82" class="w-full h-96 object-cover" alt="Foto histórica 3"></div>
+                            </div>
+                            <div class="swiper-pagination"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
     </div>
 
     <!-- Secciones limpias (inicialmente ocultas) -->
@@ -146,7 +198,7 @@
                         <div class="bg-white p-6 rounded-lg shadow-lg"><h3 class="text-xl font-bold mb-4">Envíanos un mensaje</h3><form id="contact-form"><div class="mb-4"><label for="contact-name" class="block text-gray-700">Nombre</label><input type="text" id="contact-name" class="w-full mt-2 p-2 border rounded-lg" required></div><div class="mb-4"><label for="contact-email" class="block text-gray-700">Email</label><input type="email" id="contact-email" class="w-full mt-2 p-2 border rounded-lg" required></div><div class="mb-4"><label for="contact-message" class="block text-gray-700">Mensaje</label><textarea id="contact-message" rows="4" class="w-full mt-2 p-2 border rounded-lg" required></textarea></div><button type="submit" class="w-full bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700">Enviar</button></form></div>
                     </div>
                     <div class="w-full lg:w-1/2 px-4">
-                        <div class="bg-white p-6 rounded-lg shadow-lg h-full"><h3 class="text-xl font-bold mb-4">Nuestra Ubicación</h3><iframe src="https://www.google.com/maps/embed?pb=!1m18!m12!1m3!1d3504.604153920977!2d-56.0355446852958!3d-28.5815669824497!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9454f9644f174241%3A0x6bbf69b4c06b4a3c!2sCatedral%20Inmaculada%20Concepci%C3%B3n!5e0!3m2!1ses-419!2sar!4v1672876800000!5m2!1ses-419!2sar" width="100%" height="350" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></div>
+                        <div class="bg-white p-6 rounded-lg shadow-lg h-full"><h3 class="text-xl font-bold mb-4">Nuestra Ubicación</h3><iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3504.604153920977!2d-56.0355446852958!3d-28.5815669824497!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9454f9644f174241%3A0x6bbf69b4c06b4a3c!2sCatedral%20Inmaculada%20Concepci%C3%B3n!5e0!3m2!1ses-419!2sar!4v1672876800000!5m2!1ses-419!2sar" width="100%" height="350" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></div>
                     </div>
                 </div>
             </div>
@@ -160,9 +212,28 @@
         </section>
     </div>
 
-    <footer class="bg-gray-800 text-white py-8">
-        <div class="container mx-auto px-6 text-center">
-            <p>&copy; 2024 Diócesis de Santo Tomé. Todos los derechos reservados.</p>
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                <!-- Contact Info -->
+                <div class="text-center md:text-left">
+                    <h3 class="text-2xl font-bold mb-4">Obispado de Santo Tomé</h3>
+                    <div class="space-y-2 text-gray-400">
+                        <p><strong>Dirección:</strong> Mitré 930</p>
+                        <p><strong>Localidad:</strong> Santo Tomé</p>
+                        <p><strong>Provincia:</strong> Corrientes</p>
+                        <p class="mt-4"><strong>Teléfono:</strong> (03756) 42-0493</p>
+                        <p><strong>Email:</strong> obispado@obispadodesantotome.org.ar</p>
+                    </div>
+                </div>
+                <!-- Google Map -->
+                <div>
+                     <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3504.629334586227!2d-56.04250268529583!3d-28.58082998245006!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9454f9175704b2c1%3A0x7d6c5a528e515e0!2sMitre%20930%2C%20W3340%20Santo%20Tom%C3%A9%2C%20Corrientes!5e0!3m2!1ses-419!2sar!4v1672876800000!5m2!1ses-419!2sar" width="100%" height="250" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" class="rounded-lg shadow-lg"></iframe>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-6 text-center text-gray-500">
+                <p>&copy; 2025 Diócesis de Santo Tomé. Todos los derechos reservados.</p>
+            </div>
         </div>
     </footer>
     
@@ -406,7 +477,25 @@
         document.getElementById('close-scripts-modal-btn').addEventListener('click', () => scriptsModal.classList.add('hidden'));
 
 
-        document.addEventListener('DOMContentLoaded', populateNewsPreview);
+        document.addEventListener('DOMContentLoaded', () => {
+            populateNewsPreview();
+
+            new Swiper('.history-swiper', {
+                loop: true,
+                autoplay: {
+                    delay: 4000,
+                    disableOnInteraction: false,
+                },
+                pagination: {
+                    el: '.swiper-pagination',
+                    clickable: true,
+                },
+                effect: 'fade',
+                fadeEffect: {
+                    crossFade: true
+                },
+            });
+        });
 
     </script>
 </body>
