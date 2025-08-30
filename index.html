@@ -8,7 +8,8 @@
     <meta property="og:title" content="Diócesis de Santo Tomé">
     <meta property="og:description" content="Sitio web oficial de la Diócesis de Santo Tomé, Corrientes, Argentina.">
     <meta property="og:image" content="https://firebasestorage.googleapis.com/v0/b/diocesisdesantotome.firebasestorage.app/o/LOGOS%2Flogo%20iglesia%20samaritana.png?alt=media&token=56fd32c1-bb7d-4537-83f7-ace6662ff768">
-    <meta property="og:url" content="https://diocesisdesantotome.com"> <!-- Reemplaza esto con tu URL final -->
+    <!-- Reemplaza el content con la URL final de tu sitio web -->
+    <meta property="og:url" content="https://URL-DE-TU-SITIO-PUBLICADO.com">
     <meta property="og:type" content="website">
     <meta property="fb:app_id" content="YOUR_FACEBOOK_APP_ID" /> <!-- AÑADE TU ID AQUÍ -->
     
@@ -152,7 +153,7 @@
         </nav>
     </header>
     
-    <div id="main-content-container">
+    <main id="main-content-container">
         <section id="inicio-banner" class="relative w-full h-96 bg-cover bg-center banner-animated" style="background-image: url('https://firebasestorage.googleapis.com/v0/b/diocesisdesantotome.firebasestorage.app/o/LOGOS%2FEncabezado%20para%20Paginas.png?alt=media&token=38a267bb-78ba-4cb-a6b5-86d457b07473');">
             <div class="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-center items-center">
                 <div class="container mx-auto px-6 text-center text-white fade-in-content">
@@ -173,7 +174,7 @@
                     <div class="news-skeleton bg-gray-200 rounded-lg shadow-lg h-96"></div>
                 </div>
                 <div class="text-center mt-12">
-                    <a href="./noticias.html" class="bg-blue-600 text-white font-semibold py-3 px-8 rounded-lg hover:bg-blue-700 transition duration-300 ease-in-out">
+                    <a href="./noticias.html" class="bg-gradient-to-r from-blue-500 to-blue-600 text-white font-semibold py-3 px-8 rounded-lg hover:from-blue-600 hover:to-blue-700 transition duration-300 ease-in-out shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
                         Más Noticias
                     </a>
                 </div>
@@ -231,7 +232,7 @@
             </div>
         </section>
 
-    </div>
+    </main>
 
     <!-- Secciones limpias (inicialmente ocultas) -->
     <div id="clean-sections-container" class="hidden">
@@ -372,7 +373,7 @@
                         <div class="aspect-video">
                            <img src="${imageUrl}" alt="${news.title || ''}" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" onerror="this.onerror=null;this.src='${placeholderImg}';">
                         </div>
-                        <span class="absolute top-3 right-3 bg-blue-600 text-white text-xs font-semibold px-3 py-1.5 rounded-full">${news.category || 'General'}</span>
+                        <span class="absolute top-3 right-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white text-xs font-semibold px-3 py-1.5 rounded-full">${news.category || 'General'}</span>
                     </div>
                     <div class="p-6 flex-grow flex flex-col">
                         <h3 class="text-xl font-bold mb-3 text-gray-800 group-hover:text-blue-600 transition-colors">${news.title || 'Título no disponible'}</h3>
