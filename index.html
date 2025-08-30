@@ -4,13 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <!-- Metadatos para Redes Sociales (Open Graph) - Se actualizan dinámicamente -->
+    <!-- Metadatos para Redes Sociales (Open Graph) -->
     <meta property="og:title" content="Diócesis de Santo Tomé">
     <meta property="og:description" content="Sitio web oficial de la Diócesis de Santo Tomé, Corrientes, Argentina.">
     <meta property="og:image" content="https://firebasestorage.googleapis.com/v0/b/diocesisdesantotome.firebasestorage.app/o/LOGOS%2Flogo%20iglesia%20samaritana.png?alt=media&token=56fd32c1-bb7d-4537-83f7-ace6662ff768">
-    <!-- Reemplaza el content con la URL final de tu sitio web -->
-    <meta property="og:url" content="https://URL-DE-TU-SITIO-PUBLICADO.com">
+    <meta property="og:url" content="https://diocesisdesantotome.com"> <!-- Reemplaza esto con tu URL final -->
     <meta property="og:type" content="website">
+    <meta property="fb:app_id" content="YOUR_FACEBOOK_APP_ID" /> <!-- AÑADE TU ID AQUÍ -->
     
     <title>Diócesis de Santo Tomé</title>
     <link rel="icon" href="https://firebasestorage.googleapis.com/v0/b/diocesisdesantotome.firebasestorage.app/o/LOGOS%2Flogo%20iglesia%20samaritana.png?alt=media&token=56fd32c1-bb7d-4537-83f7-ace6662ff768" type="image/png">
@@ -55,7 +55,7 @@
     <header class="bg-white/95 backdrop-blur-sm shadow-md sticky top-0 z-50">
         <nav class="container mx-auto px-4 lg:px-6 py-2.5">
             <div class="flex flex-wrap justify-between items-center">
-                <a href="#" id="logo-link" class="flex items-center group">
+                <a href="./index.html" class="flex items-center group">
                     <img src="https://firebasestorage.googleapis.com/v0/b/diocesisdesantotome.firebasestorage.app/o/LOGOS%2Flogo%20iglesia%20samaritana.png?alt=media&token=56fd32c1-bb7d-4537-83f7-ace6662ff768" class="mr-3 h-12 transition-transform duration-300 group-hover:rotate-[10deg] group-hover:scale-110" alt="Logo Diócesis" />
                     <div class="hidden sm:flex sm:flex-col">
                         <span class="text-xl font-semibold whitespace-nowrap text-gray-800 transition-colors duration-300 group-hover:text-blue-600">Diócesis de Santo Tomé</span>
@@ -71,7 +71,7 @@
                 </div>
                 <div class="hidden justify-between items-center w-full lg:flex lg:w-auto lg:order-1" id="mobile-menu">
                      <ul class="flex flex-col mt-4 font-medium lg:flex-row lg:space-x-8 lg:mt-0">
-                        <li><a href="#" id="menu-inicio" class="block py-2 pr-4 pl-3 text-gray-700 hover:text-blue-600 lg:p-0">Inicio</a></li>
+                        <li><a href="./index.html" class="block py-2 pr-4 pl-3 text-gray-700 hover:text-blue-600 lg:p-0">Inicio</a></li>
                         <li><a href="./recursos.html" class="block py-2 pr-4 pl-3 text-gray-700 hover:text-blue-600 lg:p-0">Recursos</a></li>
                         <li class="relative">
                             <button type="button" data-dropdown-toggle="fragiles-dropdown" class="flex items-center py-2 pr-4 pl-3 text-gray-700 hover:text-blue-600 lg:p-0">
@@ -173,9 +173,9 @@
                     <div class="news-skeleton bg-gray-200 rounded-lg shadow-lg h-96"></div>
                 </div>
                 <div class="text-center mt-12">
-                    <button id="more-news-btn" class="bg-blue-600 text-white font-semibold py-3 px-8 rounded-lg hover:bg-blue-700 transition duration-300 ease-in-out">
+                    <a href="./noticias.html" class="bg-blue-600 text-white font-semibold py-3 px-8 rounded-lg hover:bg-blue-700 transition duration-300 ease-in-out">
                         Más Noticias
-                    </button>
+                    </a>
                 </div>
             </div>
         </section>
@@ -235,18 +235,6 @@
 
     <!-- Secciones limpias (inicialmente ocultas) -->
     <div id="clean-sections-container" class="hidden">
-        <section id="all-news-section" class="py-12 hidden clean-section">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <button class="back-to-main-btn mb-6 text-blue-600 font-semibold hover:underline">&larr; Volver al Inicio</button>
-                <h2 class="text-3xl font-bold text-center text-gray-800 mb-8">Todas las Noticias</h2>
-                <div id="all-news-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                     <!-- Las noticias se cargarán aquí -->
-                </div>
-                 <!-- Vista de Noticia Individual -->
-                <div id="single-news-view" class="hidden mt-8"></div>
-            </div>
-        </section>
-        
         <section id="obispo" class="py-12 bg-gray-50 hidden clean-section">
             <div class="container mx-auto px-6">
                 <button class="back-to-main-btn mb-6 text-blue-600 font-semibold hover:underline">&larr; Volver al Inicio</button>
@@ -366,9 +354,6 @@
         const cleanSectionsContainer = document.getElementById('clean-sections-container');
         const allCleanSections = document.querySelectorAll('.clean-section');
         const newsGridPreview = document.getElementById('news-grid-preview');
-        const allNewsGrid = document.getElementById('all-news-grid');
-        const singleNewsView = document.getElementById('single-news-view');
-        const pageFooter = document.querySelector('footer');
         const donateModal = document.getElementById('donate-modal');
         const donateModalContent = document.getElementById('donate-modal-content');
         const closeDonateModalBtn = document.getElementById('close-donate-modal-btn');
@@ -382,58 +367,23 @@
             const card = document.createElement('div');
             card.className = 'bg-white rounded-lg shadow-lg overflow-hidden flex flex-col group';
             card.innerHTML = `
-                <div class="relative overflow-hidden">
-                    <div class="aspect-video">
-                       <img src="${imageUrl}" alt="${news.title || ''}" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" onerror="this.onerror=null;this.src='${placeholderImg}';">
+                <a href="./noticia.html?id=${newsDoc.id}" class="block">
+                    <div class="relative overflow-hidden">
+                        <div class="aspect-video">
+                           <img src="${imageUrl}" alt="${news.title || ''}" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" onerror="this.onerror=null;this.src='${placeholderImg}';">
+                        </div>
+                        <span class="absolute top-3 right-3 bg-blue-600 text-white text-xs font-semibold px-3 py-1.5 rounded-full">${news.category || 'General'}</span>
                     </div>
-                    <span class="absolute top-3 right-3 bg-blue-600 text-white text-xs font-semibold px-3 py-1.5 rounded-full">${news.category || 'General'}</span>
-                </div>
-                <div class="p-6 flex-grow flex flex-col">
-                    <h3 class="text-xl font-bold mb-3 text-gray-800 group-hover:text-blue-600 transition-colors">${news.title || 'Título no disponible'}</h3>
-                    <div class="text-gray-600 mb-4 flex-grow leading-relaxed">${(news.summary || 'Resumen no disponible').replace(/<[^>]+>/g, '').substring(0, 120)}...</div>
-                    <button data-id="${newsDoc.id}" class="read-more-btn mt-auto self-start font-semibold text-blue-600 hover:text-blue-700">Leer más &rarr;</button>
-                </div>
+                    <div class="p-6 flex-grow flex flex-col">
+                        <h3 class="text-xl font-bold mb-3 text-gray-800 group-hover:text-blue-600 transition-colors">${news.title || 'Título no disponible'}</h3>
+                        <div class="text-gray-600 mb-4 flex-grow leading-relaxed">${(news.summary || 'Resumen no disponible').replace(/<[^>]+>/g, '').substring(0, 120)}...</div>
+                        <span class="mt-auto self-start font-semibold text-blue-600 hover:text-blue-700">Leer más &rarr;</span>
+                    </div>
+                </a>
             `;
             return card;
         };
         
-        function updateMetaTags(newsId, news) {
-            const siteUrl = window.location.href.split('?')[0];
-            const newsUrl = `${siteUrl}?noticia=${newsId}`;
-
-            document.title = `${news.title} | Diócesis de Santo Tomé`;
-            document.querySelector('meta[property="og:title"]').setAttribute('content', news.title);
-            document.querySelector('meta[property="og:description"]').setAttribute('content', (news.summary || '').replace(/<[^>]+>/g, '').substring(0, 155));
-            document.querySelector('meta[property="og:image"]').setAttribute('content', news.featuredImageUrl || 'https://firebasestorage.googleapis.com/v0/b/diocesisdesantotome.firebasestorage.app/o/LOGOS%2Flogo%20iglesia%20samaritana.png?alt=media&token=56fd32c1-bb7d-4537-83f7-ace6662ff768');
-            document.querySelector('meta[property="og:url"]').setAttribute('content', newsUrl);
-            
-            try {
-                if (window.location.protocol.startsWith('http')) {
-                    history.pushState({ newsId: newsId }, news.title, `?noticia=${newsId}`);
-                }
-            } catch (e) {
-                console.warn("pushState no es compatible en este entorno:", e);
-            }
-        }
-
-        function resetMetaTags() {
-            const defaultTitle = 'Diócesis de Santo Tomé';
-            document.title = defaultTitle;
-            document.querySelector('meta[property="og:title"]').setAttribute('content', defaultTitle);
-            document.querySelector('meta[property="og:description"]').setAttribute('content', 'Sitio web oficial de la Diócesis de Santo Tomé, Corrientes, Argentina.');
-            document.querySelector('meta[property="og:image"]').setAttribute('content', 'https://firebasestorage.googleapis.com/v0/b/diocesisdesantotome.firebasestorage.app/o/LOGOS%2Flogo%20iglesia%20samaritana.png?alt=media&token=56fd32c1-bb7d-4537-83f7-ace6662ff768');
-            const siteUrl = window.location.href.split('?')[0];
-            document.querySelector('meta[property="og:url"]').setAttribute('content', siteUrl);
-            
-            try {
-                 if (window.location.protocol.startsWith('http')) {
-                    history.pushState({}, defaultTitle, window.location.pathname);
-                }
-            } catch (e) {
-                console.warn("pushState no es compatible en este entorno:", e);
-            }
-        }
-
         async function loadAllNews() {
             if (allNewsData.length > 0) return;
             try {
@@ -442,7 +392,6 @@
                 allNewsData = querySnapshot.docs;
             } catch (error) {
                 console.error("Error al cargar todas las noticias:", error);
-                allNewsGrid.innerHTML = `<p class="col-span-full text-center text-red-600">Error al cargar las noticias.</p>`;
             }
         }
 
@@ -460,23 +409,10 @@
             });
         }
         
-        function populateAllNewsGrid() {
-            allNewsGrid.innerHTML = '';
-             if (allNewsData.length === 0) {
-                 allNewsGrid.innerHTML = '<p class="text-center col-span-full">No hay noticias para mostrar.</p>';
-                 return;
-            }
-            allNewsData.forEach(doc => {
-                allNewsGrid.appendChild(createNewsCard(doc));
-            });
-        }
-        
         function showMainView() {
             mainContentContainer.classList.remove('hidden');
             cleanSectionsContainer.classList.add('hidden');
-            pageFooter.classList.remove('hidden');
             window.scrollTo(0, 0);
-            resetMetaTags();
         }
 
         function showCleanSection(sectionId) {
@@ -484,85 +420,7 @@
             cleanSectionsContainer.classList.remove('hidden');
             allCleanSections.forEach(section => section.classList.add('hidden'));
             document.getElementById(sectionId).classList.remove('hidden');
-            pageFooter.classList.remove('hidden');
             window.scrollTo(0, 0);
-        }
-
-        async function showSingleNews(newsId) {
-            document.getElementById('all-news-grid').classList.add('hidden');
-            singleNewsView.classList.remove('hidden');
-            singleNewsView.innerHTML = '<p class="text-center">Cargando noticia...</p>';
-
-            try {
-                const docRef = doc(db, "noticias", newsId);
-                const docSnap = await getDoc(docRef);
-
-                if (docSnap.exists()) {
-                    const news = docSnap.data();
-                    updateMetaTags(newsId, news);
-                    const allImages = [news.featuredImageUrl, ...(news.galleryUrls || [])].filter(Boolean);
-                    
-                    singleNewsView.innerHTML = `
-                        <article class="bg-white p-6 md:p-8 rounded-lg shadow-xl max-w-4xl mx-auto">
-                            <button class="back-to-all-news-grid-btn mb-6 text-blue-600 font-semibold hover:underline">&larr; Volver a Todas las Noticias</button>
-                            <h1 class="text-3xl md:text-4xl font-bold text-gray-800">${news.title}</h1>
-                            <p class="mt-2 text-sm text-gray-500 font-semibold uppercase">${news.category || 'General'}</p>
-                            <div class="prose max-w-none lg:prose-lg mt-6">${news.summary}</div>
-                            <div class="swiper-container my-8 rounded-lg overflow-hidden bg-gray-200 h-96 md:h-[500px]">
-                                <div class="swiper-wrapper">
-                                    ${allImages.map(url => `<div class="swiper-slide"><img src="${url}" class="w-full h-full object-cover"></div>`).join('')}
-                                </div>
-                                <div class="swiper-pagination"></div>
-                                ${allImages.length > 1 ? '<div class="swiper-button-next"></div><div class="swiper-button-prev"></div>' : ''}
-                            </div>
-                            <!-- Share Buttons -->
-                            <div class="mt-8 pt-6 border-t border-gray-200">
-                                <h4 class="text-lg font-semibold text-gray-800 mb-4 text-center">Compartir esta noticia</h4>
-                                <div class="flex justify-center items-center space-x-4">
-                                    <button id="share-facebook-btn" class="flex items-center bg-[#1877F2] text-white font-bold py-2 px-4 rounded-lg hover:bg-[#166fe5] transition">
-                                        <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12Z" clip-rule="evenodd" /></svg>
-                                        Facebook
-                                    </button>
-                                    <button id="copy-link-btn" class="flex items-center bg-gray-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-gray-700 transition">
-                                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path></svg>
-                                        Copiar Enlace
-                                    </button>
-                                </div>
-                            </div>
-                        </article>
-                    `;
-                    
-                    new Swiper('.swiper-container', {
-                        loop: allImages.length > 1,
-                        pagination: { el: '.swiper-pagination', clickable: true },
-                        navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
-                    });
-
-                     const newsUrl = window.location.href;
-                    document.getElementById('share-facebook-btn').addEventListener('click', () => {
-                        const fbShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(newsUrl)}`;
-                        window.open(fbShareUrl, '_blank', 'width=600,height=400');
-                    });
-                    document.getElementById('copy-link-btn').addEventListener('click', (e) => {
-                        navigator.clipboard.writeText(newsUrl).then(() => {
-                            const btn = e.currentTarget;
-                            btn.textContent = '¡Enlace Copiado!';
-                            setTimeout(() => { btn.innerHTML = `<svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path></svg> Copiar Enlace`; }, 2000);
-                        });
-                    });
-                    
-                    document.querySelector('.back-to-all-news-grid-btn').addEventListener('click', () => {
-                        singleNewsView.classList.add('hidden');
-                        document.getElementById('all-news-grid').classList.remove('hidden');
-                        resetMetaTags();
-                    });
-                } else {
-                     singleNewsView.innerHTML = '<p class="text-center text-red-600">No se encontró la noticia.</p>';
-                }
-            } catch (error) {
-                console.error("Error al cargar noticia individual:", error);
-                singleNewsView.innerHTML = '<p class="text-center text-red-600">Error al cargar la noticia.</p>';
-            }
         }
 
         function openDonateModal() {
@@ -604,44 +462,21 @@
         });
 
         const mobileMenu = document.getElementById('mobile-menu');
-        document.getElementById('mobile-menu-button').addEventListener('click', () => {
+        document.getElementById('mobile-menu-button').addEventListener('click', (e) => {
+            e.stopPropagation();
             mobileMenu.classList.toggle('hidden');
         });
         mobileMenu.addEventListener('click', (e) => {
-            if (e.target.closest('A')) {
+            if (e.target.closest('a') || e.target.closest('button')) {
                 setTimeout(() => { mobileMenu.classList.add('hidden'); }, 150);
             }
         });
-
 
         document.querySelectorAll('.back-to-main-btn, #logo-link, #menu-inicio').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 e.preventDefault();
                 showMainView();
             });
-        });
-
-        document.getElementById('more-news-btn').addEventListener('click', () => {
-            populateAllNewsGrid();
-            showCleanSection('all-news-section');
-        });
-        
-        document.getElementById('all-news-grid').addEventListener('click', (e) => {
-             const readMoreBtn = e.target.closest('.read-more-btn');
-             if (readMoreBtn) {
-                const newsId = readMoreBtn.dataset.id;
-                showSingleNews(newsId);
-             }
-        });
-
-         document.getElementById('news-grid-preview').addEventListener('click', (e) => {
-             const readMoreBtn = e.target.closest('.read-more-btn');
-             if (readMoreBtn) {
-                const newsId = readMoreBtn.dataset.id;
-                populateAllNewsGrid();
-                showCleanSection('all-news-section');
-                showSingleNews(newsId);
-             }
         });
 
         const menuMapping = {
@@ -669,20 +504,8 @@
             }
         });
 
-        document.addEventListener('DOMContentLoaded', async () => {
-            const urlParams = new URLSearchParams(window.location.search);
-            const newsIdFromUrl = urlParams.get('noticia');
-
-            await loadAllNews();
-
-            if (newsIdFromUrl) {
-                showCleanSection('all-news-section');
-                populateAllNewsGrid();
-                showSingleNews(newsIdFromUrl);
-            } else {
-                populateNewsPreview();
-            }
-
+        document.addEventListener('DOMContentLoaded', () => {
+            populateNewsPreview();
             new Swiper('.history-swiper', {
                 loop: true,
                 autoplay: {
