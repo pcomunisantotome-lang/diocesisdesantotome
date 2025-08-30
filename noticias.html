@@ -31,13 +31,32 @@
     </header>
 
     <main class="py-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <h1 class="text-4xl font-bold text-center text-gray-800 mb-12">Todas las Noticias</h1>
-            <div id="all-news-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Skeletons -->
-                <div class="bg-gray-200 rounded-lg shadow-lg h-96 animate-pulse"></div>
-                <div class="bg-gray-200 rounded-lg shadow-lg h-96 animate-pulse"></div>
-                <div class="bg-gray-200 rounded-lg shadow-lg h-96 animate-pulse"></div>
+            <div id="all-news-list" class="space-y-8">
+                <!-- Skeletons for list view -->
+                <div class="bg-white rounded-lg shadow-lg p-4 flex space-x-4 animate-pulse">
+                    <div class="bg-gray-200 h-32 w-1/3 rounded-md"></div>
+                    <div class="flex-1 space-y-4 py-1">
+                        <div class="h-4 bg-gray-200 rounded w-3/4"></div>
+                        <div class="space-y-2">
+                            <div class="h-4 bg-gray-200 rounded"></div>
+                            <div class="h-4 bg-gray-200 rounded w-5/6"></div>
+                        </div>
+                        <div class="h-4 bg-gray-200 rounded w-1/4"></div>
+                    </div>
+                </div>
+                 <div class="bg-white rounded-lg shadow-lg p-4 flex space-x-4 animate-pulse">
+                    <div class="bg-gray-200 h-32 w-1/3 rounded-md"></div>
+                    <div class="flex-1 space-y-4 py-1">
+                        <div class="h-4 bg-gray-200 rounded w-3/4"></div>
+                        <div class="space-y-2">
+                            <div class="h-4 bg-gray-200 rounded"></div>
+                            <div class="h-4 bg-gray-200 rounded w-5/6"></div>
+                        </div>
+                        <div class="h-4 bg-gray-200 rounded w-1/4"></div>
+                    </div>
+                </div>
             </div>
         </div>
     </main>
@@ -64,47 +83,47 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        const allNewsGrid = document.getElementById('all-news-grid');
+        const allNewsList = document.getElementById('all-news-list');
 
-        const createNewsCard = (newsDoc) => {
+        const createNewsListItem = (newsDoc) => {
             const news = newsDoc.data();
-            const placeholderImg = 'https://placehold.co/600x400/e2e8f0/e2e8f0?text=...';
+            const placeholderImg = 'https://placehold.co/400x400/e2e8f0/e2e8f0?text=...';
             const imageUrl = news.featuredImageUrl || placeholderImg;
-            const card = document.createElement('div');
-            card.className = 'bg-white rounded-lg shadow-lg overflow-hidden flex flex-col group';
-            card.innerHTML = `
-                <a href="./noticia.html?id=${newsDoc.id}" class="block">
-                    <div class="relative overflow-hidden">
-                        <div class="aspect-video">
-                           <img src="${imageUrl}" alt="${news.title || ''}" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" onerror="this.onerror=null;this.src='${placeholderImg}';">
-                        </div>
-                        <span class="absolute top-3 right-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white text-xs font-semibold px-3 py-1.5 rounded-full">${news.category || 'General'}</span>
-                    </div>
-                    <div class="p-6 flex-grow flex flex-col">
-                        <h3 class="text-xl font-bold mb-3 text-gray-800 group-hover:text-blue-600 transition-colors">${news.title || 'Título no disponible'}</h3>
-                        <div class="text-gray-600 mb-4 flex-grow leading-relaxed">${(news.summary || 'Resumen no disponible').replace(/<[^>]+>/g, '').substring(0, 120)}...</div>
-                        <span class="mt-auto self-start font-semibold text-blue-600 hover:text-blue-700">Leer más &rarr;</span>
+            const item = document.createElement('div');
+            item.className = 'bg-white rounded-lg shadow-lg overflow-hidden flex flex-col md:flex-row group transition-shadow hover:shadow-xl';
+            item.innerHTML = `
+                <a href="./noticia.html?id=${newsDoc.id}" class="block md:w-1/3 lg:w-1/4 flex-shrink-0">
+                    <div class="relative overflow-hidden aspect-square h-full">
+                       <img src="${imageUrl}" alt="${news.title || ''}" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" onerror="this.onerror=null;this.src='${placeholderImg}';">
+                       <span class="absolute top-3 right-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white text-xs font-semibold px-3 py-1.5 rounded-full">${news.category || 'General'}</span>
                     </div>
                 </a>
+                <div class="p-6 flex-grow flex flex-col">
+                    <a href="./noticia.html?id=${newsDoc.id}" class="block">
+                        <h3 class="text-xl font-bold mb-3 text-gray-800 group-hover:text-blue-600 transition-colors">${news.title || 'Título no disponible'}</h3>
+                    </a>
+                    <div class="text-gray-600 mb-4 flex-grow leading-relaxed">${(news.summary || 'Resumen no disponible').replace(/<[^>]+>/g, '').substring(0, 200)}...</div>
+                    <a href="./noticia.html?id=${newsDoc.id}" class="mt-auto self-start font-semibold text-blue-600 hover:text-blue-700">Leer más &rarr;</a>
+                </div>
             `;
-            return card;
+            return item;
         };
 
         async function loadAllNews() {
             try {
                 const q = query(collection(db, "noticias"), orderBy("createdAt", "desc"));
                 const querySnapshot = await getDocs(q);
-                allNewsGrid.innerHTML = '';
+                allNewsList.innerHTML = '';
                 if (querySnapshot.empty) {
-                    allNewsGrid.innerHTML = '<p class="col-span-full text-center">No hay noticias para mostrar.</p>';
+                    allNewsList.innerHTML = '<p class="text-center">No hay noticias para mostrar.</p>';
                     return;
                 }
                 querySnapshot.forEach(doc => {
-                    allNewsGrid.appendChild(createNewsCard(doc));
+                    allNewsList.appendChild(createNewsListItem(doc));
                 });
             } catch (error) {
                 console.error("Error al cargar las noticias:", error);
-                allNewsGrid.innerHTML = '<p class="col-span-full text-center text-red-600">Error al cargar noticias.</p>';
+                allNewsList.innerHTML = '<p class="text-center text-red-600">Error al cargar noticias.</p>';
             }
         }
 
