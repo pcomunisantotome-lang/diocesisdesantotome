@@ -118,7 +118,24 @@
                                 </ul>
                             </div>
                         </li>
-                        <li><a href="#" id="menu-jubilar" class="block py-2 pr-4 pl-3 text-gray-700 hover:text-blue-600 lg:p-0">Año Jubilar</a></li>
+                        <li class="relative">
+                            <button type="button" data-dropdown-toggle="jubilar-dropdown" class="flex items-center py-2 pr-4 pl-3 text-gray-700 hover:text-blue-600 lg:p-0">
+                                Año Jubilar
+                                <svg class="w-2.5 h-2.5 ml-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                                </svg>
+                            </button>
+                            <div id="jubilar-dropdown" class="dropdown-menu absolute z-10 hidden bg-white rounded-lg shadow-lg w-56 mt-2">
+                                <ul class="py-2 text-sm text-gray-700">
+                                    <li>
+                                        <a href="https://drive.google.com/uc?export=download&id=1uajUIYrYTDBjKriHL-Rzev5kAx0o2AEd" download class="block px-4 py-2 hover:bg-gray-100">Decreto Año Jubilar</a>
+                                    </li>
+                                    <li>
+                                        <a href="https://drive.google.com/uc?export=download&id=18NPy9Vg9QAsZiFqyu8IuipvxDyv_DOxQ" download class="block px-4 py-2 hover:bg-gray-100">Penitenciaría Apostólica</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
                         <li><a href="#footer-contact" class="block py-2 pr-4 pl-3 text-gray-700 hover:text-blue-600 lg:p-0">Contacto</a></li>
                     </ul>
                 </div>
@@ -279,8 +296,6 @@
                 </div>
             </div>
         </section>
-
-        <section id="jubilar" class="py-12 hidden clean-section"><div class="container mx-auto px-6"><button class="back-to-main-btn mb-6 text-blue-600 font-semibold hover:underline">&larr; Volver al Inicio</button><h2 class="text-3xl font-bold text-center text-gray-800 mb-8">Año Jubilar</h2><p class="text-center text-gray-600">Contenido para la sección de Año Jubilar...</p></div></section>
     </div>
 
     <footer id="footer-contact" class="bg-gray-900 text-white py-12">
@@ -641,8 +656,7 @@
 
         const menuMapping = {
             'menu-recursos': 'recursos', 
-            'menu-obispo-bio': 'obispo',
-            'menu-jubilar': 'jubilar'
+            'menu-obispo-bio': 'obispo'
         };
 
         for (const [btnId, sectionId] of Object.entries(menuMapping)) {
