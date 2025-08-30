@@ -41,6 +41,17 @@
         #donate-modal-content {
             transition: transform 0.3s ease-out, opacity 0.3s ease-out;
         }
+        
+        /* Animación del banner solo para pantallas grandes (desktop) */
+        @media (min-width: 768px) {
+            @keyframes zoom-in {
+                0% { background-size: 100%; }
+                100% { background-size: 110%; }
+            }
+            .banner-animated {
+                animation: zoom-in 20s ease-in-out infinite alternate;
+            }
+        }
     </style>
 </head>
 <body class="bg-gray-50">
@@ -138,6 +149,7 @@
                                 </ul>
                             </div>
                         </li>
+                         <li><a href="./parroquias.html" class="block py-2 pr-4 pl-3 text-gray-700 hover:text-blue-600 lg:p-0">Parroquias</a></li>
                         <li><a href="#footer-contact" class="block py-2 pr-4 pl-3 text-gray-700 hover:text-blue-600 lg:p-0">Contacto</a></li>
                     </ul>
                 </div>
@@ -146,8 +158,7 @@
     </header>
     
     <main id="main-content-container">
-        <section id="inicio-banner" class="relative w-full">
-            <img src="https://firebasestorage.googleapis.com/v0/b/diocesisdesantotome.firebasestorage.app/o/LOGOS%2FEncabezado%20para%20Paginas.png?alt=media&token=38a267bb-78ba-4cb-a6b5-86d457b07473" alt="Banner Principal Diócesis de Santo Tomé" class="w-full h-auto">
+        <section id="inicio-banner" class="relative w-full h-64 sm:h-80 lg:h-96 bg-cover bg-center banner-animated" style="background-image: url('https://firebasestorage.googleapis.com/v0/b/diocesisdesantotome.firebasestorage.app/o/LOGOS%2FEncabezado%20para%20Paginas.png?alt=media&token=38a267bb-78ba-4cb-a6b5-86d457b07473');">
             <div class="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-center items-center">
                 <div class="container mx-auto px-6 text-center text-white fade-in-content">
                     <img src="https://firebasestorage.googleapis.com/v0/b/diocesisdesantotome.firebasestorage.app/o/LOGOS%2Flogo%20iglesia%20samaritana.png?alt=media&token=56fd32c1-bb7d-4537-83f7-ace6662ff768" class="h-16 md:h-24 mb-4 mx-auto" alt="Logo Diócesis" />
