@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Metadatos para Redes Sociales (se llenan dinámicamente) -->
+    <meta property="og:title" content="Diócesis de Santo Tomé">
+    <meta property="og:description" content="Noticias y actualidad de la Diócesis de Santo Tomé.">
+    <meta property="og:image" content="https://firebasestorage.googleapis.com/v0/b/diocesisdesantotome.firebasestorage.app/o/LOGOS%2Flogo%20iglesia%20samaritana.png?alt=media&token=56fd32c1-bb7d-4537-83f7-ace6662ff768">
+    <meta property="og:url" content="">
+    <meta property="og:type" content="article">
+    
+    <title>Diócesis de Santo Tomé</title>
+    <link rel="icon" href="https://firebasestorage.googleapis.com/v0/b/diocesisdesantotome.firebasestorage.app/o/LOGOS%2Flogo%20iglesia%20samaritana.png?alt=media&token=56fd32c1-bb7d-4537-83f7-ace6662ff768" type="image/png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+    <style>
+         body { font-family: 'Inter', sans-serif; }
+        .swiper-button-next, .swiper-button-prev { color: #ffffff; }
+        .swiper-pagination-bullet-active { background: #ffffff; }
+        .prose img { border-radius: 0.5rem; }
+    </style>
+</head>
+<body class="bg-gray-50">
+
+    <header class="bg-white/95 backdrop-blur-sm shadow-md sticky top-0 z-50">
+        <nav class="container mx-auto px-4 lg:px-6 py-2.5">
+            <div class="flex flex-wrap justify-between items-center">
+                <a href="./index.html" class="flex items-center group">
+                    <img src="https://firebasestorage.googleapis.com/v0/b/diocesisdesantotome.firebasestorage.app/o/LOGOS%2Flogo%20iglesia%20samaritana.png?alt=media&token=56fd32c1-bb7d-4537-83f7-ace6662ff768" class="mr-3 h-12 transition-transform duration-300 group-hover:rotate-[10deg] group-hover:scale-110" alt="Logo Diócesis" />
+                    <div class="hidden sm:flex sm:flex-col">
+                        <span class="text-xl font-semibold whitespace-nowrap text-gray-800 transition-colors duration-300 group-hover:text-blue-600">Diócesis de Santo Tomé</span>
+                        <span class="text-sm font-light italic text-gray-500">Corrientes, Argentina</span>
+                    </div>
+                </a>
+                <div class="flex items-center lg:order-2">
+                    <a href="./noticias.html" class="text-gray-800 hover:bg-gray-50 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 focus:outline-none">Todas las Noticias</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main id="single-news-view" class="py-12">
+        <!-- Contenido de la noticia se carga aquí -->
+        <p class="text-center text-gray-600">Cargando noticia...</p>
+    </main>
+
+    <footer class="bg-gray-900 text-white py-8">
+        <div class="container mx-auto px-6 text-center">
+            <p>&copy; 2025 Diócesis de Santo Tomé. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+    
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCIC457rky1NFQCas3uWFfIDVRBHfdbEAQ",
+            authDomain: "diocesisdesantotome.firebaseapp.com",
+            projectId: "diocesisdesantotome",
+            storageBucket: "diocesisdesantotome.firebasestorage.app",
+            messagingSenderId: "313851932898",
+            appId: "1:313851932898:web:0b7e65d0da8d09d762aebb"
+        };
+        
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        const singleNewsView = document.getElementById('single-news-view');
+        
+        function updateMetaTags(news) {
+            document.title = `${news.title} | Diócesis de Santo Tomé`;
+            document.querySelector('meta[property="og:title"]').setAttribute('content', news.title);
+            document.querySelector('meta[property="og:description"]').setAttribute('content', (news.summary || '').replace(/<[^>]+>/g, '').substring(0, 155));
+            document.querySelector('meta[property="og:image"]').setAttribute('content', news.featuredImageUrl || 'https://firebasestorage.googleapis.com/v0/b/diocesisdesantotome.firebasestorage.app/o/LOGOS%2Flogo%20iglesia%20samaritana.png?alt=media&token=56fd32c1-bb7d-4537-83f7-ace6662ff768');
+            document.querySelector('meta[property="og:url"]').setAttribute('content', window.location.href);
+        }
+
+        async function showSingleNews(newsId) {
+            if (!newsId) {
+                singleNewsView.innerHTML = `<div class="text-center text-red-500 max-w-2xl mx-auto"><h2 class="text-2xl font-bold mb-2">Error de Carga</h2><p>No se encontró el identificador de la noticia en la URL. Asegúrate de llegar aquí haciendo clic en un enlace de "Leer más" desde la página principal o la de noticias.</p></div>`;
+                return;
+            }
+             singleNewsView.innerHTML = `<p class="text-center text-gray-600">Buscando noticia con ID: ${newsId}...</p>`;
+
+            try {
+                const docRef = doc(db, "noticias", newsId);
+                const docSnap = await getDoc(docRef);
+
+                if (docSnap.exists()) {
+                    const news = docSnap.data();
+                    updateMetaTags(news);
+                    const allImages = [news.featuredImageUrl, ...(news.galleryUrls || [])].filter(Boolean);
+                    
+                    singleNewsView.innerHTML = `
+                        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                        <article class="bg-white p-6 md:p-8 rounded-lg shadow-xl">
+                            <a href="./noticias.html" class="mb-6 inline-block text-blue-600 font-semibold hover:underline">&larr; Volver a Todas las Noticias</a>
+                            <h1 class="text-3xl md:text-4xl font-bold text-gray-800">${news.title}</h1>
+                            <p class="mt-2 text-sm text-gray-500 font-semibold uppercase">${news.category || 'General'}</p>
+                            <div class="prose max-w-none lg:prose-lg mt-6">${news.summary}</div>
+                            <div class="swiper-container my-8 rounded-lg overflow-hidden bg-gray-200 h-96 md:h-[500px]">
+                                <div class="swiper-wrapper">
+                                    ${allImages.map(url => `<div class="swiper-slide"><img src="${url}" class="w-full h-full object-cover"></div>`).join('')}
+                                </div>
+                                <div class="swiper-pagination"></div>
+                                ${allImages.length > 1 ? '<div class="swiper-button-next"></div><div class="swiper-button-prev"></div>' : ''}
+                            </div>
+                            <!-- Share Buttons -->
+                            <div class="mt-8 pt-6 border-t border-gray-200">
+                                <h4 class="text-lg font-semibold text-gray-800 mb-4 text-center">Compartir esta noticia</h4>
+                                <div class="flex justify-center items-center space-x-4">
+                                    <button id="share-facebook-btn" class="flex items-center bg-[#1877F2] text-white font-bold py-2 px-4 rounded-lg hover:bg-[#166fe5] transition">
+                                        <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12Z" clip-rule="evenodd" /></svg>
+                                        Facebook
+                                    </button>
+                                    <button id="copy-link-btn" class="flex items-center bg-gray-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-gray-700 transition">
+                                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path></svg>
+                                        Copiar Enlace
+                                    </button>
+                                </div>
+                            </div>
+                        </article>
+                        </div>
+                    `;
+                    
+                    new Swiper('.swiper-container', {
+                        loop: allImages.length > 1,
+                        pagination: { el: '.swiper-pagination', clickable: true },
+                        navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
+                    });
+
+                    const newsUrl = window.location.href;
+                    document.getElementById('share-facebook-btn').addEventListener('click', () => {
+                        const fbShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(newsUrl)}`;
+                        window.open(fbShareUrl, '_blank', 'width=600,height=400');
+                    });
+                    document.getElementById('copy-link-btn').addEventListener('click', (e) => {
+                        navigator.clipboard.writeText(newsUrl).then(() => {
+                            const btn = e.currentTarget;
+                            btn.textContent = '¡Enlace Copiado!';
+                            setTimeout(() => { btn.innerHTML = `<svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path></svg> Copiar Enlace`; }, 2000);
+                        });
+                    });
+                    
+                } else {
+                     singleNewsView.innerHTML = `<p class="text-center text-red-500">No se encontró una noticia con el ID "${newsId}".</p>`;
+                }
+            } catch (error) {
+                console.error("Error al cargar la noticia:", error);
+                singleNewsView.innerHTML = `<div class="text-center text-red-500 max-w-2xl mx-auto"><h2 class="text-2xl font-bold mb-2">Error de Carga</h2><p>${error.message}</p></div>`;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const newsIdFromUrl = urlParams.get('id');
+            showSingleNews(newsIdFromUrl);
+        });
+    </script>
+</body>
+</html>
