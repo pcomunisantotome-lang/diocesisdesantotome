@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Noticias - Diócesis de Santo Tomé</title>
-    <meta property="fb:app_id" content="YOUR_FACEBOOK_APP_ID" /> <!-- AÑADE TU ID AQUÍ -->
     <link rel="icon" href="https://firebasestorage.googleapis.com/v0/b/diocesisdesantotome.firebasestorage.app/o/LOGOS%2Flogo%20iglesia%20samaritana.png?alt=media&token=56fd32c1-bb7d-4537-83f7-ace6662ff768" type="image/png">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
@@ -79,7 +78,7 @@
                         <div class="aspect-video">
                            <img src="${imageUrl}" alt="${news.title || ''}" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" onerror="this.onerror=null;this.src='${placeholderImg}';">
                         </div>
-                        <span class="absolute top-3 right-3 bg-blue-600 text-white text-xs font-semibold px-3 py-1.5 rounded-full">${news.category || 'General'}</span>
+                        <span class="absolute top-3 right-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white text-xs font-semibold px-3 py-1.5 rounded-full">${news.category || 'General'}</span>
                     </div>
                     <div class="p-6 flex-grow flex flex-col">
                         <h3 class="text-xl font-bold mb-3 text-gray-800 group-hover:text-blue-600 transition-colors">${news.title || 'Título no disponible'}</h3>
