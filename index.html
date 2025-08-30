@@ -35,6 +35,10 @@
         .fade-in-content {
             animation: fade-in-up 1.5s ease-out forwards;
         }
+        
+        #donate-modal-content {
+            transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+        }
     </style>
 </head>
 <body class="bg-gray-50">
@@ -50,7 +54,7 @@
                     </div>
                 </a>
                 <div class="flex items-center lg:order-2">
-                    <a href="#" id="menu-donar" class="text-white bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 focus:outline-none">Doná</a>
+                    <button id="menu-donar" class="text-white bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 focus:outline-none">Doná</button>
                     <button id="mobile-menu-button" type="button" class="inline-flex items-center p-2 ml-1 text-sm text-gray-500 rounded-lg lg:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200" aria-controls="mobile-menu" aria-expanded="false">
                         <span class="sr-only">Abrir menú principal</span>
                         <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"></path></svg>
@@ -60,7 +64,24 @@
                      <ul class="flex flex-col mt-4 font-medium lg:flex-row lg:space-x-8 lg:mt-0">
                         <li><a href="#" id="menu-inicio" class="block py-2 pr-4 pl-3 text-gray-700 hover:text-blue-600 lg:p-0">Inicio</a></li>
                         <li><a href="#" id="menu-recursos" class="block py-2 pr-4 pl-3 text-gray-700 hover:text-blue-600 lg:p-0">Recursos</a></li>
-                        <li><a href="#" id="menu-fragiles" class="block py-2 pr-4 pl-3 text-gray-700 hover:text-blue-600 lg:p-0">Cuidado de los Frágiles</a></li>
+                        <li class="relative group">
+                            <a href="#" class="flex items-center py-2 pr-4 pl-3 text-gray-700 hover:text-blue-600 lg:p-0" onclick="return false;">
+                                Cuidado de los Frágiles
+                                <svg class="w-2.5 h-2.5 ml-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                                </svg>
+                            </a>
+                            <div class="absolute z-10 hidden group-hover:block bg-white rounded-lg shadow-lg w-48 mt-2">
+                                <ul class="py-2 text-sm text-gray-700">
+                                    <li>
+                                        <a href="https://drive.google.com/uc?export=download&id=1CRCS9XPy9_jGXBff4nccUzbpKBkFFMQI" download class="block px-4 py-2 hover:bg-gray-100">Normas de prevención</a>
+                                    </li>
+                                    <li>
+                                        <a href="https://drive.google.com/uc?export=download&id=1CpWKoW7tvmHOYCSI-jYZp0AI_gy0bzIj" download class="block px-4 py-2 hover:bg-gray-100">Recepción de informe</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
                         <li><a href="#" id="menu-obispo" class="block py-2 pr-4 pl-3 text-gray-700 hover:text-blue-600 lg:p-0">Nuestro Obispo</a></li>
                         <li><a href="#" id="menu-decretos" class="block py-2 pr-4 pl-3 text-gray-700 hover:text-blue-600 lg:p-0">Decretos</a></li>
                         <li><a href="#" id="menu-jubilar" class="block py-2 pr-4 pl-3 text-gray-700 hover:text-blue-600 lg:p-0">Año Jubilar</a></li>
@@ -185,17 +206,9 @@
             </div>
         </section>
 
-        <section id="fragiles" class="py-12 bg-white hidden clean-section"><div class="container mx-auto px-6"><button class="back-to-main-btn mb-6 text-blue-600 font-semibold hover:underline">&larr; Volver al Inicio</button><h2 class="text-3xl font-bold text-center text-gray-800 mb-8">Cuidado de los Frágiles</h2><p class="text-center text-gray-600">Contenido para la sección de Cuidado de los Frágiles...</p></div></section>
         <section id="obispo" class="py-12 hidden clean-section"><div class="container mx-auto px-6"><button class="back-to-main-btn mb-6 text-blue-600 font-semibold hover:underline">&larr; Volver al Inicio</button><h2 class="text-3xl font-bold text-center text-gray-800 mb-8">Nuestro Obispo</h2><p class="text-center text-gray-600">Contenido para la sección de Nuestro Obispo...</p></div></section>
         <section id="decretos" class="py-12 bg-white hidden clean-section"><div class="container mx-auto px-6"><button class="back-to-main-btn mb-6 text-blue-600 font-semibold hover:underline">&larr; Volver al Inicio</button><h2 class="text-3xl font-bold text-center text-gray-800 mb-8">Decretos</h2><p class="text-center text-gray-600">Contenido para la sección de Decretos...</p></div></section>
         <section id="jubilar" class="py-12 hidden clean-section"><div class="container mx-auto px-6"><button class="back-to-main-btn mb-6 text-blue-600 font-semibold hover:underline">&larr; Volver al Inicio</button><h2 class="text-3xl font-bold text-center text-gray-800 mb-8">Año Jubilar</h2><p class="text-center text-gray-600">Contenido para la sección de Año Jubilar...</p></div></section>
-        <section id="donar" class="py-12 bg-white hidden clean-section">
-            <div class="container mx-auto px-6">
-                <button class="back-to-main-btn mb-6 text-blue-600 font-semibold hover:underline">&larr; Volver al Inicio</button>
-                <h2 class="text-3xl font-bold text-center text-gray-800 mb-8">Doná</h2>
-                <p class="text-center text-gray-600">Contenido para la sección de Donaciones...</p>
-            </div>
-        </section>
     </div>
 
     <footer id="footer-contact" class="bg-gray-900 text-white py-12">
@@ -228,7 +241,7 @@
                 </div>
                 <!-- Google Map -->
                 <div>
-                     <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3504.629334586227!2d-56.04250268529583!3d-28.58082998245006!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9454f9175704b2c1%3A0x7d6c5a528e515e0!2sMitre%20930%2C%20W3340%20Santo%20Tom%C3%A9%2C%20Corrientes!5e0!3m2!1ses-419!2sar!4v1672876800000!5m2!1ses-419!2sar" width="100%" height="250" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" class="rounded-lg shadow-lg"></iframe>
+                     <iframe src="https://www.google.com/maps/embed?pb=!1m18!m12!1m3!1d3504.629334586227!2d-56.04250268529583!3d-28.58082998245006!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9454f9175704b2c1%3A0x7d6c5a528e515e0!2sMitre%20930%2C%20W3340%20Santo%20Tom%C3%A9%2C%20Corrientes!5e0!3m2!1ses-419!2sar!4v1672876800000!5m2!1ses-419!2sar" width="100%" height="250" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" class="rounded-lg shadow-lg"></iframe>
                 </div>
             </div>
             <div class="border-t border-gray-700 mt-8 pt-6 text-center text-gray-500">
@@ -248,6 +261,23 @@
                 <!-- La lista de guiones se cargará aquí -->
                 <p>Cargando guiones...</p>
             </div>
+        </div>
+    </div>
+    
+    <!-- Modal para Donaciones -->
+    <div id="donate-modal" class="fixed inset-0 bg-black bg-opacity-75 z-50 hidden flex items-center justify-center p-4 transition-opacity duration-300 opacity-0">
+        <div id="donate-modal-content" class="bg-white rounded-2xl shadow-xl w-full max-w-md mx-auto text-center p-6 relative transform transition-all duration-300 scale-95 opacity-0">
+            <button id="close-donate-modal-btn" class="absolute top-3 right-3 text-gray-400 hover:text-gray-800 transition">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">Colaborá con nuestra Misión</h2>
+            <div class="space-y-4">
+                <img src="https://firebasestorage.googleapis.com/v0/b/diocesisdesantotome.firebasestorage.app/o/dona%2FDONACIONES%20TAE%202023.png?alt=media&token=d60b87fb-cb55-45e4-a451-aaea2ed87382" alt="Información de Donación 1" class="rounded-lg shadow-md mx-auto w-full">
+                <img src="https://firebasestorage.googleapis.com/v0/b/diocesisdesantotome.firebasestorage.app/o/dona%2FDONACIONES%20TAE%202023%20(1).png?alt=media&token=41aa4d3d-f18a-424b-9f3b-5586c87ce107" alt="Información de Donación 2" class="rounded-lg shadow-md mx-auto w-full">
+            </div>
+            <a href="https://programafe.org/donar/diocesis" target="_blank" rel="noopener noreferrer" class="mt-8 inline-block w-full text-white font-bold py-3 px-8 rounded-lg bg-gradient-to-r from-red-600 to-red-800 hover:from-red-700 hover:to-red-900 transform hover:scale-105 transition-all duration-300 shadow-lg">
+                Doná por Programa Fe
+            </a>
         </div>
     </div>
 
@@ -278,6 +308,9 @@
         const pageFooter = document.querySelector('footer');
         const scriptsModal = document.getElementById('scripts-modal');
         const scriptsModalList = document.getElementById('scripts-modal-list');
+        const donateModal = document.getElementById('donate-modal');
+        const donateModalContent = document.getElementById('donate-modal-content');
+        const closeDonateModalBtn = document.getElementById('close-donate-modal-btn');
         
         let allNewsData = [];
 
@@ -426,6 +459,22 @@
             }
         }
         
+        function openDonateModal() {
+            donateModal.classList.remove('hidden');
+            setTimeout(() => {
+                donateModal.classList.remove('opacity-0');
+                donateModalContent.classList.remove('scale-95', 'opacity-0');
+            }, 10);
+        }
+
+        function closeDonateModal() {
+            donateModal.classList.add('opacity-0');
+            donateModalContent.classList.add('scale-95', 'opacity-0');
+            setTimeout(() => {
+                donateModal.classList.add('hidden');
+            }, 300);
+        }
+
         document.getElementById('mobile-menu-button').addEventListener('click', () => {
             document.getElementById('mobile-menu').classList.toggle('hidden');
         });
@@ -461,11 +510,9 @@
         });
 
         const menuMapping = {
-            'menu-recursos': 'recursos', 'menu-fragiles': 'fragiles',
+            'menu-recursos': 'recursos', 
             'menu-obispo': 'obispo', 'menu-decretos': 'decretos',
-            'menu-jubilar': 'jubilar', 
-            //'menu-contacto': 'contacto', 
-            'menu-donar': 'donar'
+            'menu-jubilar': 'jubilar'
         };
 
         for (const [btnId, sectionId] of Object.entries(menuMapping)) {
@@ -478,6 +525,16 @@
         document.getElementById('download-scripts-btn').addEventListener('click', openScriptsModal);
         document.getElementById('close-scripts-modal-btn').addEventListener('click', () => scriptsModal.classList.add('hidden'));
 
+        document.getElementById('menu-donar').addEventListener('click', (e) => {
+            e.preventDefault();
+            openDonateModal();
+        });
+        closeDonateModalBtn.addEventListener('click', closeDonateModal);
+        donateModal.addEventListener('click', (event) => {
+            if (event.target === donateModal) {
+                closeDonateModal();
+            }
+        });
 
         document.addEventListener('DOMContentLoaded', () => {
             populateNewsPreview();
@@ -502,3 +559,4 @@
     </script>
 </body>
 </html>
+
