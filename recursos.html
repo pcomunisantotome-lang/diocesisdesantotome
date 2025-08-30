@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recursos - Diócesis de Santo Tomé</title>
+    <link rel="icon" href="https://firebasestorage.googleapis.com/v0/b/diocesisdesantotome.firebasestorage.app/o/LOGOS%2Flogo%20iglesia%20samaritana.png?alt=media&token=56fd32c1-bb7d-4537-83f7-ace6662ff768" type="image/png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-gray-50">
+
+    <header class="bg-white/95 backdrop-blur-sm shadow-md sticky top-0 z-50">
+        <nav class="container mx-auto px-4 lg:px-6 py-2.5">
+            <div class="flex justify-between items-center">
+                <a href="./index.html" class="flex items-center group">
+                    <img src="https://firebasestorage.googleapis.com/v0/b/diocesisdesantotome.firebasestorage.app/o/LOGOS%2Flogo%20iglesia%20samaritana.png?alt=media&token=56fd32c1-bb7d-4537-83f7-ace6662ff768" class="mr-3 h-12 transition-transform duration-300 group-hover:rotate-[10deg] group-hover:scale-110" alt="Logo Diócesis" />
+                    <div class="hidden sm:flex sm:flex-col">
+                        <span class="text-xl font-semibold whitespace-nowrap text-gray-800 transition-colors duration-300 group-hover:text-blue-600">Diócesis de Santo Tomé</span>
+                        <span class="text-sm font-light italic text-gray-500">Corrientes, Argentina</span>
+                    </div>
+                </a>
+                <a href="./index.html" class="bg-blue-600 text-white font-semibold py-2 px-6 rounded-lg hover:bg-blue-700 transition">
+                    &larr; Volver al Inicio
+                </a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="py-12">
+        <div class="container mx-auto px-6">
+            <h1 class="text-4xl font-bold text-center text-gray-800 mb-12">Recursos Pastorales</h1>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                <div class="bg-white rounded-lg shadow-lg p-8 flex flex-col items-center text-center">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4">Subsidios Pastorales</h2>
+                    <p class="text-gray-600 mb-6 flex-grow">Material de apoyo para agentes de pastoral y comunidades.</p>
+                    <button id="open-subsidios-modal-btn" class="w-full mt-auto bg-blue-600 text-white font-semibold py-3 px-8 rounded-lg hover:bg-blue-700 transition">Ver Subsidios</button>
+                </div>
+                <div class="bg-white rounded-lg shadow-lg p-8 flex flex-col items-center text-center">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4">Guiones Diocesanos</h2>
+                    <p class="text-gray-600 mb-6 flex-grow">Guiones para celebraciones, encuentros y momentos de oración.</p>
+                    <button id="open-scripts-modal-btn" class="w-full mt-auto bg-green-600 text-white font-semibold py-3 px-8 rounded-lg hover:bg-green-700 transition">Ver Guiones</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal para Guiones Diocesanos -->
+    <div id="scripts-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] flex flex-col">
+            <div class="p-4 border-b flex justify-between items-center">
+                <h2 class="text-xl font-bold text-gray-800">Guiones Diocesanos</h2>
+                <button id="close-scripts-modal-btn" class="text-2xl font-bold text-gray-500 hover:text-gray-800">&times;</button>
+            </div>
+            <div id="scripts-modal-list" class="p-6 overflow-y-auto space-y-3">
+                <p>Cargando guiones...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para Subsidios Pastorales -->
+    <div id="subsidios-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-lg shadow-xl w-full max-w-4xl max-h-[90vh] flex flex-col">
+            <div class="p-4 border-b flex justify-between items-center">
+                <h2 class="text-xl font-bold text-gray-800">Subsidios Pastorales</h2>
+                <button id="close-subsidios-modal-btn" class="text-2xl font-bold text-gray-500 hover:text-gray-800">&times;</button>
+            </div>
+            <div class="p-6 overflow-y-auto">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Subsidio 2022 -->
+                    <div class="flex flex-col items-center text-center p-4 rounded-lg hover:shadow-md transition-shadow">
+                        <img src="https://firebasestorage.googleapis.com/v0/b/diocesisdesantotome.firebasestorage.app/o/Subsidios%20Pastorales%2Fsubsidio-2022.png?alt=media&token=66615e5d-e26a-404f-9aa0-7a14c6ad09bb" alt="Subsidio 2022" class="w-full h-auto rounded-lg shadow-sm mb-4">
+                        <h3 class="font-bold mb-2">Subsidio 2022</h3>
+                        <a href="https://drive.google.com/uc?export=download&id=1vc7jL7_NdFmfFGL_qR0Uq4tQuUr53iPW" download class="w-full mt-auto bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-700 transition">Descargar</a>
+                    </div>
+                    <!-- Subsidio 2023-2024 -->
+                    <div class="flex flex-col items-center text-center p-4 rounded-lg hover:shadow-md transition-shadow">
+                        <img src="https://firebasestorage.googleapis.com/v0/b/diocesisdesantotome.firebasestorage.app/o/Subsidios%20Pastorales%2Fsubsidio2023.png?alt=media&token=6a0dcb16-29dd-42df-b2b9-3e078d5f46ca" alt="Subsidio 2023-2024" class="w-full h-auto rounded-lg shadow-sm mb-4">
+                         <h3 class="font-bold mb-2">Subsidio 2023-2024</h3>
+                        <a href="https://drive.google.com/uc?export=download&id=1-SrIpaRJPrcivXNd6Q9T-nP6bLzfm2Z6" download class="w-full mt-auto bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-700 transition">Descargar</a>
+                    </div>
+                    <!-- Subsidio 2025 -->
+                    <div class="flex flex-col items-center text-center p-4 rounded-lg hover:shadow-md transition-shadow">
+                        <img src="https://firebasestorage.googleapis.com/v0/b/diocesisdesantotome.firebasestorage.app/o/Subsidios%20Pastorales%2FFOLLETO%20SUBSIDIO%202025%20(1).jpg?alt=media&token=8502703d-48af-4b84-a26f-ffb706b57940" alt="Subsidio 2025" class="w-full h-auto rounded-lg shadow-sm mb-4">
+                         <h3 class="font-bold mb-2">Subsidio 2025</h3>
+                        <a href="https://drive.google.com/uc?export=download&id=1lEtWl_xkuK_48xl67ClWojeFbczNjld2" download class="w-full mt-auto bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-700 transition">Descargar</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getFirestore, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCIC457rky1NFQCas3uWFfIDVRBHfdbEAQ",
+            authDomain: "diocesisdesantotome.firebaseapp.com",
+            projectId: "diocesisdesantotome",
+            storageBucket: "diocesisdesantotome.firebasestorage.app",
+            messagingSenderId: "313851932898",
+            appId: "1:313851932898:web:0b7e65d0da8d09d762aebb"
+        };
+        
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        const scriptsModal = document.getElementById('scripts-modal');
+        const scriptsModalList = document.getElementById('scripts-modal-list');
+        const subsidiosModal = document.getElementById('subsidios-modal');
+
+        async function openScriptsModal() {
+            scriptsModal.classList.remove('hidden');
+            scriptsModalList.innerHTML = '<p>Cargando guiones...</p>';
+            try {
+                const querySnapshot = await getDocs(query(collection(db, "scripts"), orderBy("createdAt", "desc")));
+                scriptsModalList.innerHTML = '';
+                if (querySnapshot.empty) {
+                    scriptsModalList.innerHTML = '<p>No hay guiones disponibles.</p>';
+                } else {
+                    querySnapshot.forEach(doc => {
+                        const script = doc.data();
+                        const link = document.createElement('a');
+                        link.href = script.downloadURL;
+                        link.target = "_blank";
+                        link.className = "block bg-gray-100 p-3 rounded-lg hover:bg-gray-200 transition";
+                        link.textContent = script.title;
+                        scriptsModalList.appendChild(link);
+                    });
+                }
+            } catch(e) {
+                scriptsModalList.innerHTML = '<p class="text-red-600">Error al cargar los guiones.</p>';
+            }
+        }
+
+        document.getElementById('open-scripts-modal-btn').addEventListener('click', openScriptsModal);
+        document.getElementById('close-scripts-modal-btn').addEventListener('click', () => scriptsModal.classList.add('hidden'));
+        
+        document.getElementById('open-subsidios-modal-btn').addEventListener('click', () => subsidiosModal.classList.remove('hidden'));
+        document.getElementById('close-subsidios-modal-btn').addEventListener('click', () => subsidiosModal.classList.add('hidden'));
+    </script>
+</body>
+</html>
+
