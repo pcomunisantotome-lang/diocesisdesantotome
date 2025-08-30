@@ -133,7 +133,7 @@
                             <h1 class="text-3xl md:text-4xl font-bold text-gray-800">${news.title}</h1>
                             <p class="mt-2 text-sm text-gray-500 font-semibold uppercase">${news.category || 'General'}</p>
                             <div class="prose max-w-none lg:prose-lg mt-6">${news.summary}</div>
-                            <div class="swiper-container my-8 rounded-lg overflow-hidden bg-gray-200 h-80 md:h-96">
+                            <div class="swiper-container my-8 rounded-lg overflow-hidden bg-gray-200 aspect-video">
                                 <div class="swiper-wrapper">
                                     ${allImages.map(url => `<div class="swiper-slide"><img src="${url}" class="w-full h-full object-cover cursor-pointer lightbox-trigger"></div>`).join('')}
                                 </div>
