@@ -22,6 +22,7 @@
         .swiper-button-next, .swiper-button-prev { color: #ffffff; }
         .swiper-pagination-bullet-active { background: #ffffff; }
         .prose img { border-radius: 0.5rem; }
+        .prose p { text-align: justify; }
     </style>
     <!-- Script de datos estructurados (JSON-LD) que se llenará dinámicamente -->
     <script type="application/ld+json" id="structured-data"></script>
@@ -56,6 +57,12 @@
         </div>
     </footer>
     
+    <!-- Lightbox Modal para ampliar imágenes -->
+    <div id="lightbox-modal" class="fixed inset-0 bg-black bg-opacity-80 z-[60] hidden flex items-center justify-center p-4">
+        <button id="close-lightbox-btn" class="absolute top-4 right-4 text-white text-5xl font-bold hover:text-gray-300">&times;</button>
+        <img id="lightbox-image" src="" class="max-w-full max-h-full rounded-lg">
+    </div>
+
     <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
@@ -74,17 +81,18 @@
         const db = getFirestore(app);
 
         const singleNewsView = document.getElementById('single-news-view');
+        const lightboxModal = document.getElementById('lightbox-modal');
+        const lightboxImage = document.getElementById('lightbox-image');
+        const closeLightboxBtn = document.getElementById('close-lightbox-btn');
         
         function updateMetaTags(news) {
             document.title = `${news.title} | Diócesis de Santo Tomé`;
-            // Meta tags OG para Facebook, etc.
             document.querySelector('meta[property="og:title"]').setAttribute('content', news.title);
             const description = (news.summary || '').replace(/<[^>]+>/g, '').substring(0, 160);
             document.querySelector('meta[property="og:description"]').setAttribute('content', description);
             document.querySelector('meta[property="og:image"]').setAttribute('content', news.featuredImageUrl || 'https://firebasestorage.googleapis.com/v0/b/diocesisdesantotome.firebasestorage.app/o/LOGOS%2Flogo%20iglesia%20samaritana.png?alt=media&token=56fd32c1-bb7d-4537-83f7-ace6662ff768');
             document.querySelector('meta[property="og:url"]').setAttribute('content', window.location.href);
 
-            // Datos estructurados JSON-LD para Google y otros rastreadores
             const structuredDataScript = document.getElementById('structured-data');
             const data = {
                 "@context": "https://schema.org",
@@ -104,9 +112,10 @@
 
         async function showSingleNews(newsId) {
             if (!newsId) {
-                singleNewsView.innerHTML = '<p class="text-center text-red-500">No se especificó una noticia para mostrar.</p>';
+                singleNewsView.innerHTML = `<div class="text-center text-red-500 max-w-2xl mx-auto"><h2 class="text-2xl font-bold mb-2">Error de Carga</h2><p>No se encontró el identificador de la noticia en la URL. Asegúrate de llegar aquí haciendo clic en un enlace de "Leer más".</p></div>`;
                 return;
             }
+             singleNewsView.innerHTML = `<p class="text-center text-gray-600">Buscando noticia con ID: ${newsId}...</p>`;
 
             try {
                 const docRef = doc(db, "noticias", newsId);
@@ -124,9 +133,9 @@
                             <h1 class="text-3xl md:text-4xl font-bold text-gray-800">${news.title}</h1>
                             <p class="mt-2 text-sm text-gray-500 font-semibold uppercase">${news.category || 'General'}</p>
                             <div class="prose max-w-none lg:prose-lg mt-6">${news.summary}</div>
-                            <div class="swiper-container my-8 rounded-lg overflow-hidden bg-gray-200 h-96 md:h-[500px]">
+                            <div class="swiper-container my-8 rounded-lg overflow-hidden bg-gray-200 h-80 md:h-96">
                                 <div class="swiper-wrapper">
-                                    ${allImages.map(url => `<div class="swiper-slide"><img src="${url}" class="w-full h-full object-cover"></div>`).join('')}
+                                    ${allImages.map(url => `<div class="swiper-slide"><img src="${url}" class="w-full h-full object-cover cursor-pointer lightbox-trigger"></div>`).join('')}
                                 </div>
                                 <div class="swiper-pagination"></div>
                                 ${allImages.length > 1 ? '<div class="swiper-button-next"></div><div class="swiper-button-prev"></div>' : ''}
@@ -155,6 +164,14 @@
                         navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
                     });
 
+                    // Lightbox functionality
+                    document.querySelectorAll('.lightbox-trigger').forEach(img => {
+                        img.addEventListener('click', () => {
+                            lightboxImage.src = img.src;
+                            lightboxModal.classList.remove('hidden');
+                        });
+                    });
+
                     const newsUrl = window.location.href;
                     document.getElementById('share-facebook-btn').addEventListener('click', () => {
                         const fbShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(newsUrl)}`;
@@ -176,6 +193,16 @@
                 singleNewsView.innerHTML = `<div class="text-center text-red-500 max-w-2xl mx-auto"><h2 class="text-2xl font-bold mb-2">Error de Carga</h2><p>${error.message}</p></div>`;
             }
         }
+
+        function closeLightbox() {
+            lightboxModal.classList.add('hidden');
+        }
+        closeLightboxBtn.addEventListener('click', closeLightbox);
+        lightboxModal.addEventListener('click', (e) => {
+            if (e.target === lightboxModal) {
+                closeLightbox();
+            }
+        });
 
         document.addEventListener('DOMContentLoaded', () => {
             const urlParams = new URLSearchParams(window.location.search);
