@@ -10,7 +10,7 @@
     <meta property="og:image" content="https://firebasestorage.googleapis.com/v0/b/diocesisdesantotome.firebasestorage.app/o/LOGOS%2Flogo%20iglesia%20samaritana.png?alt=media&token=56fd32c1-bb7d-4537-83f7-ace6662ff768">
     <meta property="og:url" content="">
     <meta property="og:type" content="article">
-    <meta property="fb:app_id" content="YOUR_FACEBOOK_APP_ID" /> <!-- AÑADE TU ID AQUÍ -->
+    <meta property="fb:app_id" content="1497738074977879" />
     
     <title>Diócesis de Santo Tomé</title>
     <link rel="icon" href="https://firebasestorage.googleapis.com/v0/b/diocesisdesantotome.firebasestorage.app/o/LOGOS%2Flogo%20iglesia%20samaritana.png?alt=media&token=56fd32c1-bb7d-4537-83f7-ace6662ff768" type="image/png">
@@ -87,12 +87,14 @@
         
         function updateMetaTags(news) {
             document.title = `${news.title} | Diócesis de Santo Tomé`;
+            // Meta tags OG para Facebook, etc.
             document.querySelector('meta[property="og:title"]').setAttribute('content', news.title);
             const description = (news.summary || '').replace(/<[^>]+>/g, '').substring(0, 160);
             document.querySelector('meta[property="og:description"]').setAttribute('content', description);
             document.querySelector('meta[property="og:image"]').setAttribute('content', news.featuredImageUrl || 'https://firebasestorage.googleapis.com/v0/b/diocesisdesantotome.firebasestorage.app/o/LOGOS%2Flogo%20iglesia%20samaritana.png?alt=media&token=56fd32c1-bb7d-4537-83f7-ace6662ff768');
             document.querySelector('meta[property="og:url"]').setAttribute('content', window.location.href);
 
+            // Datos estructurados JSON-LD para Google y otros rastreadores
             const structuredDataScript = document.getElementById('structured-data');
             const data = {
                 "@context": "https://schema.org",
