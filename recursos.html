@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Recursos - Diócesis de Santo Tomé</title>
+    <meta property="fb:app_id" content="YOUR_FACEBOOK_APP_ID" /> <!-- AÑADE TU ID AQUÍ -->
     <link rel="icon" href="https://firebasestorage.googleapis.com/v0/b/diocesisdesantotome.firebasestorage.app/o/LOGOS%2Flogo%20iglesia%20samaritana.png?alt=media&token=56fd32c1-bb7d-4537-83f7-ace6662ff768" type="image/png">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
@@ -15,7 +16,7 @@
 
     <header class="bg-white/95 backdrop-blur-sm shadow-md sticky top-0 z-50">
         <nav class="container mx-auto px-4 lg:px-6 py-2.5">
-            <div class="flex justify-between items-center">
+            <div class="flex flex-wrap justify-between items-center">
                 <a href="./index.html" class="flex items-center group">
                     <img src="https://firebasestorage.googleapis.com/v0/b/diocesisdesantotome.firebasestorage.app/o/LOGOS%2Flogo%20iglesia%20samaritana.png?alt=media&token=56fd32c1-bb7d-4537-83f7-ace6662ff768" class="mr-3 h-12 transition-transform duration-300 group-hover:rotate-[10deg] group-hover:scale-110" alt="Logo Diócesis" />
                     <div class="hidden sm:flex sm:flex-col">
@@ -23,9 +24,9 @@
                         <span class="text-sm font-light italic text-gray-500">Corrientes, Argentina</span>
                     </div>
                 </a>
-                <a href="./index.html" class="bg-blue-600 text-white font-semibold py-2 px-6 rounded-lg hover:bg-blue-700 transition">
-                    &larr; Volver al Inicio
-                </a>
+                 <div class="flex items-center lg:order-2">
+                    <a href="./index.html" class="text-gray-800 hover:bg-gray-50 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 focus:outline-none">Volver al Inicio</a>
+                </div>
             </div>
         </nav>
     </header>
@@ -35,18 +36,24 @@
             <h1 class="text-4xl font-bold text-center text-gray-800 mb-12">Recursos Pastorales</h1>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
                 <div class="bg-white rounded-lg shadow-lg p-8 flex flex-col items-center text-center">
-                    <h2 class="text-2xl font-bold text-gray-800 mb-4">Subsidios Pastorales</h2>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Subsidios Pastorales</h3>
                     <p class="text-gray-600 mb-6 flex-grow">Material de apoyo para agentes de pastoral y comunidades.</p>
                     <button id="open-subsidios-modal-btn" class="w-full mt-auto bg-blue-600 text-white font-semibold py-3 px-8 rounded-lg hover:bg-blue-700 transition">Ver Subsidios</button>
                 </div>
                 <div class="bg-white rounded-lg shadow-lg p-8 flex flex-col items-center text-center">
-                    <h2 class="text-2xl font-bold text-gray-800 mb-4">Guiones Diocesanos</h2>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Guiones Diocesanos</h3>
                     <p class="text-gray-600 mb-6 flex-grow">Guiones para celebraciones, encuentros y momentos de oración.</p>
-                    <button id="open-scripts-modal-btn" class="w-full mt-auto bg-green-600 text-white font-semibold py-3 px-8 rounded-lg hover:bg-green-700 transition">Ver Guiones</button>
+                    <button id="download-scripts-btn" class="w-full mt-auto bg-green-600 text-white font-semibold py-3 px-8 rounded-lg hover:bg-green-700 transition">Ver Guiones</button>
                 </div>
             </div>
         </div>
     </main>
+
+    <footer class="bg-gray-900 text-white py-8 mt-12">
+        <div class="container mx-auto px-6 text-center">
+            <p>&copy; 2025 Diócesis de Santo Tomé. Todos los derechos reservados.</p>
+        </div>
+    </footer>
 
     <!-- Modal para Guiones Diocesanos -->
     <div id="scripts-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
@@ -92,7 +99,7 @@
             </div>
         </div>
     </div>
-    
+
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getFirestore, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
@@ -108,10 +115,10 @@
         
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
-
+        
         const scriptsModal = document.getElementById('scripts-modal');
-        const scriptsModalList = document.getElementById('scripts-modal-list');
         const subsidiosModal = document.getElementById('subsidios-modal');
+        const scriptsModalList = document.getElementById('scripts-modal-list');
 
         async function openScriptsModal() {
             scriptsModal.classList.remove('hidden');
@@ -136,12 +143,13 @@
                 scriptsModalList.innerHTML = '<p class="text-red-600">Error al cargar los guiones.</p>';
             }
         }
-
-        document.getElementById('open-scripts-modal-btn').addEventListener('click', openScriptsModal);
-        document.getElementById('close-scripts-modal-btn').addEventListener('click', () => scriptsModal.classList.add('hidden'));
         
+        document.getElementById('download-scripts-btn').addEventListener('click', openScriptsModal);
+        document.getElementById('close-scripts-modal-btn').addEventListener('click', () => scriptsModal.classList.add('hidden'));
+
         document.getElementById('open-subsidios-modal-btn').addEventListener('click', () => subsidiosModal.classList.remove('hidden'));
         document.getElementById('close-subsidios-modal-btn').addEventListener('click', () => subsidiosModal.classList.add('hidden'));
+
     </script>
 </body>
 </html>
