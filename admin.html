@@ -10,96 +10,133 @@
         .notification {
             transition: opacity 0.5s, transform 0.5s;
         }
+        /* Estilo para el scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #64748b; }
     </style>
 </head>
-<body class="bg-gray-100">
+<body class="bg-slate-100">
 
     <!-- Pantalla de Login -->
-    <div id="login-container" class="min-h-screen flex items-center justify-center">
-        <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-sm">
-            <h2 class="text-2xl font-bold mb-6 text-center">Iniciar Sesión</h2>
+    <div id="login-container" class="min-h-screen flex items-center justify-center bg-gray-50">
+        <div class="bg-white p-8 rounded-2xl shadow-lg w-full max-w-sm border border-gray-200">
+            <img src="https://firebasestorage.googleapis.com/v0/b/diocesisdesantotome.firebasestorage.app/o/LOGOS%2Flogo%20iglesia%20samaritana.png?alt=media&token=56fd32c1-bb7d-4537-83f7-ace6662ff768" alt="Logo Diócesis" class="h-16 mx-auto mb-4">
+            <h2 class="text-2xl font-bold mb-6 text-center text-slate-800">Panel de Administración</h2>
             <form id="login-form">
                 <div class="mb-4">
-                    <label for="email" class="block text-gray-700">Email</label>
-                    <input type="email" id="email" class="w-full mt-2 p-2 border rounded-lg" required>
+                    <label for="email" class="block text-slate-600 text-sm font-medium">Email</label>
+                    <input type="email" id="email" class="w-full mt-1 p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" required>
                 </div>
                 <div class="mb-6">
-                    <label for="password" class="block text-gray-700">Contraseña</label>
-                    <input type="password" id="password" class="w-full mt-2 p-2 border rounded-lg" required>
+                    <label for="password" class="block text-slate-600 text-sm font-medium">Contraseña</label>
+                    <input type="password" id="password" class="w-full mt-1 p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" required>
                 </div>
-                <button type="submit" class="w-full bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700">Ingresar</button>
+                <button type="submit" class="w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 transition-colors duration-300">Ingresar</button>
             </form>
         </div>
     </div>
 
-    <!-- Panel de Administración (oculto por defecto) -->
+    <!-- Panel de Administración -->
     <div id="admin-panel" class="hidden">
-        <header class="bg-white shadow-md p-4 flex justify-between items-center">
-            <h1 class="text-xl font-bold">Panel de Administración</h1>
-            <button id="logout-btn" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600">Cerrar Sesión</button>
-        </header>
-        
-        <main class="container mx-auto p-6">
-            <div class="bg-white p-6 rounded-lg shadow-md">
-                <h2 class="text-2xl font-bold mb-4" id="form-title">Agregar Nueva Noticia</h2>
-                <form id="news-form">
-                    <input type="hidden" id="news-id">
-                    <div class="mb-4">
-                        <label for="news-title" class="block text-gray-700">Título</label>
-                        <input type="text" id="news-title" class="w-full mt-2 p-2 border rounded-lg" required>
-                    </div>
-                    <div class="mb-4">
-                        <label for="news-category" class="block text-gray-700">Categoría</label>
-                        <select id="news-category" class="w-full mt-2 p-2 border rounded-lg bg-white" required>
-                            <!-- Las categorías se cargarán dinámicamente aquí -->
-                        </select>
-                    </div>
-                    <div class="mb-4">
-                        <label for="news-summary" class="block text-gray-700">Contenido</label>
-                        <div id="editor" class="mt-2 bg-white"></div>
-                    </div>
-                    <div class="mb-4">
-                        <label class="block text-gray-700">Imágenes (la primera será la destacada)</label>
-                        <input type="file" id="news-images" class="w-full mt-2 p-2 border rounded-lg" multiple accept="image/*">
-                        <div id="image-previews" class="mt-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4"></div>
-                    </div>
-                    <div id="upload-progress-container" class="w-full bg-gray-200 rounded-full h-2.5 mb-4 hidden">
-                        <div id="upload-progress-bar" class="bg-blue-600 h-2.5 rounded-full" style="width: 0%"></div>
-                    </div>
-                    <div class="flex items-center space-x-4">
-                        <button type="submit" id="save-news-btn" class="bg-green-600 text-white font-bold py-2 px-6 rounded-lg hover:bg-green-700">Guardar Noticia</button>
-                        <button type="button" id="cancel-edit-btn" class="bg-gray-500 text-white font-bold py-2 px-6 rounded-lg hover:bg-gray-600 hidden">Cancelar Edición</button>
-                    </div>
-                </form>
-            </div>
-
-            <div class="bg-white p-6 rounded-lg shadow-md mt-8">
-                <h2 class="text-2xl font-bold mb-4">Noticias Existentes</h2>
-                <div id="existing-news" class="space-y-4">
-                    <p>Cargando noticias...</p>
+        <div class="flex h-screen bg-slate-100">
+            <!-- Sidebar -->
+            <aside class="w-64 bg-white shadow-lg flex flex-col">
+                <div class="p-4 border-b border-slate-200 flex items-center space-x-3">
+                    <img src="https://firebasestorage.googleapis.com/v0/b/diocesisdesantotome.firebasestorage.app/o/LOGOS%2Flogo%20iglesia%20samaritana.png?alt=media&token=56fd32c1-bb7d-4537-83f7-ace6662ff768" alt="Logo" class="h-10">
+                    <span class="text-slate-800 font-bold text-lg">Admin Panel</span>
                 </div>
-            </div>
-
-            <!-- NEW: Sección para Gestionar Categorías -->
-            <div class="bg-white p-6 rounded-lg shadow-md mt-8">
-                <h2 class="text-2xl font-bold mb-4">Gestionar Categorías</h2>
-                <form id="add-category-form" class="flex items-center space-x-2 mb-4">
-                    <input type="text" id="category-name" placeholder="Nombre de la nueva categoría" class="w-full p-2 border rounded-lg" required>
-                    <button type="submit" class="bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 whitespace-nowrap">Agregar Categoría</button>
-                </form>
-                <div id="category-list" class="space-y-2">
-                    <p>Cargando categorías...</p>
+                <nav class="flex-1 px-4 py-4 space-y-2">
+                    <a href="#" data-target="noticias" class="nav-link flex items-center px-4 py-2.5 text-sm font-medium text-white bg-blue-600 rounded-lg">
+                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3h2m-4 3H9m-4 4h2m-4 4h2m4-8h2m-4 4h2m-4 4h2m4-8h2m-4 4h2m-4 4h2m4-8h2"></path></svg>
+                        Noticias
+                    </a>
+                    <a href="#" data-target="guiones" class="nav-link flex items-center px-4 py-2.5 text-sm font-medium text-slate-600 hover:bg-slate-200 rounded-lg transition-colors">
+                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                        Guiones
+                    </a>
+                    <a href="#" data-target="categorias" class="nav-link flex items-center px-4 py-2.5 text-sm font-medium text-slate-600 hover:bg-slate-200 rounded-lg transition-colors">
+                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A2 2 0 013 8v5c0 .512.195 1.024.586 1.414l7 7a2 2 0 002.828 0l7-7a2 2 0 000-2.828l-7-7A2 2 0 0012 3H7z"></path></svg>
+                        Categorías
+                    </a>
+                </nav>
+                <div class="p-4 border-t border-slate-200">
+                    <button id="logout-btn" class="w-full flex items-center justify-center px-4 py-2.5 text-sm font-medium text-slate-600 hover:bg-red-100 hover:text-red-600 rounded-lg transition-colors">
+                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                        Cerrar Sesión
+                    </button>
                 </div>
-            </div>
-        </main>
+            </aside>
+
+            <!-- Main Content -->
+            <main class="flex-1 p-6 lg:p-8 overflow-y-auto">
+                <div id="noticias-section" class="admin-section">
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <h2 class="text-2xl font-bold mb-4" id="form-title">Agregar Nueva Noticia</h2>
+                        <form id="news-form">
+                            <input type="hidden" id="news-id">
+                            <div class="mb-4">
+                                <label for="news-title" class="block text-gray-700">Título</label>
+                                <input type="text" id="news-title" class="w-full mt-2 p-2 border rounded-lg" required>
+                            </div>
+                            <div class="mb-4">
+                                <label for="news-category" class="block text-gray-700">Categoría</label>
+                                <select id="news-category" class="w-full mt-2 p-2 border rounded-lg bg-white" required></select>
+                            </div>
+                            <div class="mb-4">
+                                <label class="block text-gray-700">Contenido</label>
+                                <div id="editor" class="mt-2 bg-white"></div>
+                            </div>
+                            <div class="mb-4">
+                                <label class="block text-gray-700">Imágenes (la primera será la destacada)</label>
+                                <input type="file" id="news-images" class="w-full mt-2 p-2 border rounded-lg" multiple accept="image/*">
+                                <div id="image-previews" class="mt-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4"></div>
+                            </div>
+                            <div class="flex items-center space-x-4">
+                                <button type="submit" id="save-news-btn" class="bg-green-600 text-white font-bold py-2 px-6 rounded-lg hover:bg-green-700">Guardar Noticia</button>
+                                <button type="button" id="cancel-edit-btn" class="bg-gray-500 text-white font-bold py-2 px-6 rounded-lg hover:bg-gray-600 hidden">Cancelar Edición</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-md mt-8">
+                        <h2 class="text-2xl font-bold mb-4">Noticias Existentes</h2>
+                        <div id="existing-news" class="space-y-4"><p>Cargando noticias...</p></div>
+                    </div>
+                </div>
+
+                <div id="guiones-section" class="admin-section hidden">
+                     <div class="bg-white p-6 rounded-lg shadow-md">
+                        <h2 class="text-2xl font-bold mb-4">Gestionar Guiones Diocesanos</h2>
+                        <form id="script-form" class="space-y-4">
+                            <div>
+                                <label for="script-file" class="block text-gray-700">Archivo (PDF, Word, etc.)</label>
+                                <input type="file" id="script-file" class="w-full mt-2 p-2 border rounded-lg" required>
+                            </div>
+                            <button type="submit" id="save-script-btn" class="w-full bg-purple-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-purple-700">Subir Guion</button>
+                        </form>
+                        <h3 class="text-xl font-bold mt-6 mb-4">Guiones Subidos</h3>
+                        <div id="script-list" class="space-y-2"><p>Cargando guiones...</p></div>
+                    </div>
+                </div>
+
+                <div id="categorias-section" class="admin-section hidden">
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <h2 class="text-2xl font-bold mb-4">Gestionar Categorías</h2>
+                        <form id="add-category-form" class="flex items-center space-x-2 mb-4">
+                            <input type="text" id="category-name" placeholder="Nombre de la nueva categoría" class="w-full p-2 border rounded-lg" required>
+                            <button type="submit" class="bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 whitespace-nowrap">Agregar Categoría</button>
+                        </form>
+                        <div id="category-list" class="space-y-2"><p>Cargando categorías...</p></div>
+                    </div>
+                </div>
+            </main>
+        </div>
     </div>
 
-    <!-- Contenedor de Notificaciones -->
     <div id="notification-container" class="fixed top-5 right-5 z-50"></div>
     
     <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
-
-    <!-- Firebase -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
@@ -130,6 +167,24 @@
             ]}
         });
 
+        const navLinks = document.querySelectorAll('.nav-link');
+        const adminSections = document.querySelectorAll('.admin-section');
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const targetId = link.dataset.target;
+                navLinks.forEach(l => {
+                    l.classList.remove('bg-blue-600', 'text-white');
+                    l.classList.add('text-slate-600', 'hover:bg-slate-200');
+                });
+                link.classList.add('bg-blue-600', 'text-white');
+                link.classList.remove('text-slate-600', 'hover:bg-slate-200');
+                adminSections.forEach(section => {
+                    section.id === `${targetId}-section` ? section.classList.remove('hidden') : section.classList.add('hidden');
+                });
+            });
+        });
+
         const loginContainer = document.getElementById('login-container');
         const adminPanel = document.getElementById('admin-panel');
         const loginForm = document.getElementById('login-form');
@@ -141,6 +196,8 @@
         const addCategoryForm = document.getElementById('add-category-form');
         const categoryListContainer = document.getElementById('category-list');
         const newsCategorySelect = document.getElementById('news-category');
+        const scriptForm = document.getElementById('script-form');
+        const scriptListContainer = document.getElementById('script-list');
         
         let existingImageUrls = [];
 
@@ -171,6 +228,7 @@
                 adminPanel.classList.remove('hidden');
                 loadNews();
                 loadCategories();
+                loadScripts();
             } else {
                 loginContainer.classList.remove('hidden');
                 adminPanel.classList.add('hidden');
@@ -212,14 +270,11 @@
 
                 querySnapshot.forEach(doc => {
                     const category = doc.data();
-                    
-                    // Populate management list
                     const categoryDiv = document.createElement('div');
                     categoryDiv.className = 'flex justify-between items-center p-2 border rounded-lg';
                     categoryDiv.innerHTML = `<span>${category.name}</span><button class="delete-category-btn bg-red-500 text-white text-xs px-2 py-1 rounded hover:bg-red-600" data-id="${doc.id}">Eliminar</button>`;
                     categoryListContainer.appendChild(categoryDiv);
 
-                    // Populate form select dropdown
                     const option = document.createElement('option');
                     option.value = category.name;
                     option.textContent = category.name;
@@ -227,7 +282,6 @@
                 });
             } catch (error) {
                 showNotification(`Error al cargar categorías: ${error.message}`, true);
-                console.error("Error fetching categories:", error);
             }
         }
 
@@ -252,6 +306,84 @@
                 showNotification(`Error al cargar noticias: ${error.message}`, true);
             }
         }
+
+        async function loadScripts() {
+            scriptListContainer.innerHTML = '<p>Cargando guiones...</p>';
+            try {
+                const querySnapshot = await getDocs(query(collection(db, "scripts"), orderBy("createdAt", "desc")));
+                scriptListContainer.innerHTML = '';
+                if (querySnapshot.empty) {
+                    scriptListContainer.innerHTML = '<p>No hay guiones subidos.</p>';
+                    return;
+                }
+                querySnapshot.forEach(doc => {
+                    const script = doc.data();
+                    const div = document.createElement('div');
+                    div.className = 'flex justify-between items-center p-2 border rounded-lg';
+                    div.innerHTML = `<span>${script.title}</span><button class="delete-script-btn bg-red-500 text-white text-xs px-2 py-1 rounded hover:bg-red-600" data-id="${doc.id}">Eliminar</button>`;
+                    scriptListContainer.appendChild(div);
+                });
+            } catch (error) {
+                showNotification(`Error al cargar guiones: ${error.message}`, true);
+            }
+        }
+
+        scriptForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const file = e.target['script-file'].files[0];
+            if (!file) {
+                showNotification('Por favor, selecciona un archivo.', true);
+                return;
+            }
+
+            let title = file.name.substring(0, file.name.lastIndexOf('.')) || file.name;
+            title = title.replace(/[-_]/g, ' ');
+
+            const saveBtn = document.getElementById('save-script-btn');
+            saveBtn.disabled = true;
+            saveBtn.textContent = 'Subiendo...';
+            try {
+                const storageRef = ref(storage, `diocesan-scripts/${Date.now()}_${file.name}`);
+                await uploadBytesResumable(storageRef, file);
+                const downloadURL = await getDownloadURL(storageRef);
+                await addDoc(collection(db, "scripts"), {
+                    title,
+                    downloadURL,
+                    fileName: file.name,
+                    createdAt: serverTimestamp()
+                });
+                showNotification('Guion subido con éxito.');
+                scriptForm.reset();
+                loadScripts();
+            } catch (error) {
+                showNotification(`Error al subir el guion: ${error.message}`, true);
+            } finally {
+                saveBtn.disabled = false;
+                saveBtn.textContent = 'Subir Guion';
+            }
+        });
+
+        scriptListContainer.addEventListener('click', async (e) => {
+            if (e.target.classList.contains('delete-script-btn')) {
+                const scriptId = e.target.dataset.id;
+                if (confirm('¿Seguro que quieres eliminar este guion?')) {
+                    try {
+                        const docRef = doc(db, "scripts", scriptId);
+                        const docSnap = await getDoc(docRef);
+                        if (docSnap.exists()) {
+                            const fileURL = docSnap.data().downloadURL;
+                            const fileRef = ref(storage, fileURL);
+                            await deleteObject(fileRef);
+                        }
+                        await deleteDoc(docRef);
+                        showNotification('Guion eliminado con éxito.');
+                        loadScripts();
+                    } catch (error) {
+                         showNotification(`Error al eliminar el guion: ${error.message}`, true);
+                    }
+                }
+            }
+        });
 
         addCategoryForm.addEventListener('submit', async (e) => {
             e.preventDefault();
