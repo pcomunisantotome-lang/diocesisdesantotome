@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Noticias - Diócesis de Santo Tomé</title>
+    <link rel="icon" href="https://firebasestorage.googleapis.com/v0/b/diocesisdesantotome.firebasestorage.app/o/LOGOS%2Flogo%20iglesia%20samaritana.png?alt=media&token=56fd32c1-bb7d-4537-83f7-ace6662ff768" type="image/png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-gray-50">
+
+    <header class="bg-white/95 backdrop-blur-sm shadow-md sticky top-0 z-50">
+        <nav class="container mx-auto px-4 lg:px-6 py-2.5">
+            <div class="flex flex-wrap justify-between items-center">
+                <a href="./index.html" class="flex items-center group">
+                    <img src="https://firebasestorage.googleapis.com/v0/b/diocesisdesantotome.firebasestorage.app/o/LOGOS%2Flogo%20iglesia%20samaritana.png?alt=media&token=56fd32c1-bb7d-4537-83f7-ace6662ff768" class="mr-3 h-12 transition-transform duration-300 group-hover:rotate-[10deg] group-hover:scale-110" alt="Logo Diócesis" />
+                    <div class="hidden sm:flex sm:flex-col">
+                        <span class="text-xl font-semibold whitespace-nowrap text-gray-800 transition-colors duration-300 group-hover:text-blue-600">Diócesis de Santo Tomé</span>
+                        <span class="text-sm font-light italic text-gray-500">Corrientes, Argentina</span>
+                    </div>
+                </a>
+                 <div class="flex items-center lg:order-2">
+                    <a href="./index.html" class="text-gray-800 hover:bg-gray-50 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 focus:outline-none">Volver al Inicio</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h1 class="text-4xl font-bold text-center text-gray-800 mb-12">Todas las Noticias</h1>
+            <div id="all-news-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Skeletons -->
+                <div class="bg-gray-200 rounded-lg shadow-lg h-96 animate-pulse"></div>
+                <div class="bg-gray-200 rounded-lg shadow-lg h-96 animate-pulse"></div>
+                <div class="bg-gray-200 rounded-lg shadow-lg h-96 animate-pulse"></div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-gray-900 text-white py-8">
+        <div class="container mx-auto px-6 text-center">
+            <p>&copy; 2025 Diócesis de Santo Tomé. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getFirestore, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCIC457rky1NFQCas3uWFfIDVRBHfdbEAQ",
+            authDomain: "diocesisdesantotome.firebaseapp.com",
+            projectId: "diocesisdesantotome",
+            storageBucket: "diocesisdesantotome.firebasestorage.app",
+            messagingSenderId: "313851932898",
+            appId: "1:313851932898:web:0b7e65d0da8d09d762aebb"
+        };
+        
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        const allNewsGrid = document.getElementById('all-news-grid');
+
+        const createNewsCard = (newsDoc) => {
+            const news = newsDoc.data();
+            const placeholderImg = 'https://placehold.co/600x400/e2e8f0/e2e8f0?text=...';
+            const imageUrl = news.featuredImageUrl || placeholderImg;
+            const card = document.createElement('div');
+            card.className = 'bg-white rounded-lg shadow-lg overflow-hidden flex flex-col group';
+            card.innerHTML = `
+                <a href="./noticia.html?id=${newsDoc.id}" class="block">
+                    <div class="relative overflow-hidden">
+                        <div class="aspect-video">
+                           <img src="${imageUrl}" alt="${news.title || ''}" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" onerror="this.onerror=null;this.src='${placeholderImg}';">
+                        </div>
+                        <span class="absolute top-3 right-3 bg-blue-600 text-white text-xs font-semibold px-3 py-1.5 rounded-full">${news.category || 'General'}</span>
+                    </div>
+                    <div class="p-6 flex-grow flex flex-col">
+                        <h3 class="text-xl font-bold mb-3 text-gray-800 group-hover:text-blue-600 transition-colors">${news.title || 'Título no disponible'}</h3>
+                        <div class="text-gray-600 mb-4 flex-grow leading-relaxed">${(news.summary || 'Resumen no disponible').replace(/<[^>]+>/g, '').substring(0, 120)}...</div>
+                        <span class="mt-auto self-start font-semibold text-blue-600 hover:text-blue-700">Leer más &rarr;</span>
+                    </div>
+                </a>
+            `;
+            return card;
+        };
+
+        async function loadAllNews() {
+            try {
+                const q = query(collection(db, "noticias"), orderBy("createdAt", "desc"));
+                const querySnapshot = await getDocs(q);
+                allNewsGrid.innerHTML = '';
+                if (querySnapshot.empty) {
+                    allNewsGrid.innerHTML = '<p class="col-span-full text-center">No hay noticias para mostrar.</p>';
+                    return;
+                }
+                querySnapshot.forEach(doc => {
+                    allNewsGrid.appendChild(createNewsCard(doc));
+                });
+            } catch (error) {
+                console.error("Error al cargar las noticias:", error);
+                allNewsGrid.innerHTML = '<p class="col-span-full text-center text-red-600">Error al cargar noticias.</p>';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', loadAllNews);
+    </script>
+
+</body>
+</html>
