@@ -603,9 +603,16 @@
             });
         });
 
+        const mobileMenu = document.getElementById('mobile-menu');
         document.getElementById('mobile-menu-button').addEventListener('click', () => {
-            document.getElementById('mobile-menu').classList.toggle('hidden');
+            mobileMenu.classList.toggle('hidden');
         });
+        mobileMenu.addEventListener('click', (e) => {
+            if (e.target.closest('A')) {
+                setTimeout(() => { mobileMenu.classList.add('hidden'); }, 150);
+            }
+        });
+
 
         document.querySelectorAll('.back-to-main-btn, #logo-link, #menu-inicio').forEach(btn => {
             btn.addEventListener('click', (e) => {
