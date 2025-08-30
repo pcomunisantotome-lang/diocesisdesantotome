@@ -82,7 +82,24 @@
                                 </ul>
                             </div>
                         </li>
-                        <li><a href="#" id="menu-obispo" class="block py-2 pr-4 pl-3 text-gray-700 hover:text-blue-600 lg:p-0">Nuestro Obispo</a></li>
+                        <li class="relative">
+                            <button type="button" data-dropdown-toggle="obispo-dropdown" class="flex items-center py-2 pr-4 pl-3 text-gray-700 hover:text-blue-600 lg:p-0">
+                                Nuestro Obispo
+                                <svg class="w-2.5 h-2.5 ml-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                                </svg>
+                            </button>
+                            <div id="obispo-dropdown" class="dropdown-menu absolute z-10 hidden bg-white rounded-lg shadow-lg w-48 mt-2">
+                                <ul class="py-2 text-sm text-gray-700">
+                                    <li>
+                                        <a href="#" id="menu-obispo-bio" class="block px-4 py-2 hover:bg-gray-100">Biografía</a>
+                                    </li>
+                                    <li>
+                                        <a href="https://drive.google.com/drive/folders/1SPIm6NBpsnHA3iesSUzR_5zgh26nNPNj" target="_blank" rel="noopener noreferrer" class="block px-4 py-2 hover:bg-gray-100">Homilías</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
                         <li class="relative">
                             <button type="button" data-dropdown-toggle="decretos-dropdown" class="flex items-center py-2 pr-4 pl-3 text-gray-700 hover:text-blue-600 lg:p-0">
                                 Decretos
@@ -591,15 +608,18 @@
 
         const menuMapping = {
             'menu-recursos': 'recursos', 
-            'menu-obispo': 'obispo',
+            'menu-obispo-bio': 'obispo',
             'menu-jubilar': 'jubilar'
         };
 
         for (const [btnId, sectionId] of Object.entries(menuMapping)) {
-            document.getElementById(btnId).addEventListener('click', (e) => {
-                e.preventDefault();
-                showCleanSection(sectionId);
-            });
+            const btn = document.getElementById(btnId);
+            if (btn) {
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    showCleanSection(sectionId);
+                });
+            }
         }
         
         document.getElementById('download-scripts-btn').addEventListener('click', openScriptsModal);
