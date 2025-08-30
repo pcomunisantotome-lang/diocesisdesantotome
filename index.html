@@ -64,14 +64,14 @@
                      <ul class="flex flex-col mt-4 font-medium lg:flex-row lg:space-x-8 lg:mt-0">
                         <li><a href="#" id="menu-inicio" class="block py-2 pr-4 pl-3 text-gray-700 hover:text-blue-600 lg:p-0">Inicio</a></li>
                         <li><a href="#" id="menu-recursos" class="block py-2 pr-4 pl-3 text-gray-700 hover:text-blue-600 lg:p-0">Recursos</a></li>
-                        <li class="relative group">
-                            <a href="#" class="flex items-center py-2 pr-4 pl-3 text-gray-700 hover:text-blue-600 lg:p-0" onclick="return false;">
+                        <li class="relative">
+                            <button type="button" data-dropdown-toggle="fragiles-dropdown" class="flex items-center py-2 pr-4 pl-3 text-gray-700 hover:text-blue-600 lg:p-0">
                                 Cuidado de los Frágiles
                                 <svg class="w-2.5 h-2.5 ml-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
                                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
                                 </svg>
-                            </a>
-                            <div class="absolute z-10 hidden group-hover:block bg-white rounded-lg shadow-lg w-48 mt-2">
+                            </button>
+                            <div id="fragiles-dropdown" class="dropdown-menu absolute z-10 hidden bg-white rounded-lg shadow-lg w-48 mt-2">
                                 <ul class="py-2 text-sm text-gray-700">
                                     <li>
                                         <a href="https://drive.google.com/uc?export=download&id=1CRCS9XPy9_jGXBff4nccUzbpKBkFFMQI" download class="block px-4 py-2 hover:bg-gray-100">Normas de prevención</a>
@@ -83,7 +83,24 @@
                             </div>
                         </li>
                         <li><a href="#" id="menu-obispo" class="block py-2 pr-4 pl-3 text-gray-700 hover:text-blue-600 lg:p-0">Nuestro Obispo</a></li>
-                        <li><a href="#" id="menu-decretos" class="block py-2 pr-4 pl-3 text-gray-700 hover:text-blue-600 lg:p-0">Decretos</a></li>
+                        <li class="relative">
+                            <button type="button" data-dropdown-toggle="decretos-dropdown" class="flex items-center py-2 pr-4 pl-3 text-gray-700 hover:text-blue-600 lg:p-0">
+                                Decretos
+                                <svg class="w-2.5 h-2.5 ml-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                                </svg>
+                            </button>
+                            <div id="decretos-dropdown" class="dropdown-menu absolute z-10 hidden bg-white rounded-lg shadow-lg w-52 mt-2">
+                                <ul class="py-2 text-sm text-gray-700">
+                                    <li>
+                                        <a href="https://drive.google.com/uc?export=download&id=1Q_O6oXWNhO5uHecnG5MjrNK6_wFdPoGq" download class="block px-4 py-2 hover:bg-gray-100">Decreto sobre padrinos</a>
+                                    </li>
+                                    <li>
+                                        <a href="https://drive.google.com/uc?export=download&id=19uu48ZkYIzstOJKtjAt3-iWHlnDyfVTT" download class="block px-4 py-2 hover:bg-gray-100">Pastoral sacramental</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
                         <li><a href="#" id="menu-jubilar" class="block py-2 pr-4 pl-3 text-gray-700 hover:text-blue-600 lg:p-0">Año Jubilar</a></li>
                         <li><a href="#footer-contact" class="block py-2 pr-4 pl-3 text-gray-700 hover:text-blue-600 lg:p-0">Contacto</a></li>
                     </ul>
@@ -207,7 +224,6 @@
         </section>
 
         <section id="obispo" class="py-12 hidden clean-section"><div class="container mx-auto px-6"><button class="back-to-main-btn mb-6 text-blue-600 font-semibold hover:underline">&larr; Volver al Inicio</button><h2 class="text-3xl font-bold text-center text-gray-800 mb-8">Nuestro Obispo</h2><p class="text-center text-gray-600">Contenido para la sección de Nuestro Obispo...</p></div></section>
-        <section id="decretos" class="py-12 bg-white hidden clean-section"><div class="container mx-auto px-6"><button class="back-to-main-btn mb-6 text-blue-600 font-semibold hover:underline">&larr; Volver al Inicio</button><h2 class="text-3xl font-bold text-center text-gray-800 mb-8">Decretos</h2><p class="text-center text-gray-600">Contenido para la sección de Decretos...</p></div></section>
         <section id="jubilar" class="py-12 hidden clean-section"><div class="container mx-auto px-6"><button class="back-to-main-btn mb-6 text-blue-600 font-semibold hover:underline">&larr; Volver al Inicio</button><h2 class="text-3xl font-bold text-center text-gray-800 mb-8">Año Jubilar</h2><p class="text-center text-gray-600">Contenido para la sección de Año Jubilar...</p></div></section>
     </div>
 
@@ -475,6 +491,31 @@
             }, 300);
         }
 
+        // --- Dropdown Menu Logic ---
+        document.querySelectorAll('[data-dropdown-toggle]').forEach(toggle => {
+            const menuId = toggle.getAttribute('data-dropdown-toggle');
+            const menu = document.getElementById(menuId);
+
+            toggle.addEventListener('click', (event) => {
+                event.stopPropagation();
+                // Close other open menus
+                document.querySelectorAll('.dropdown-menu').forEach(openMenu => {
+                    if (openMenu.id !== menuId) {
+                        openMenu.classList.add('hidden');
+                    }
+                });
+                menu.classList.toggle('hidden');
+            });
+        });
+
+        // Close dropdowns when clicking outside
+        window.addEventListener('click', () => {
+            document.querySelectorAll('.dropdown-menu').forEach(menu => {
+                menu.classList.add('hidden');
+            });
+        });
+
+
         document.getElementById('mobile-menu-button').addEventListener('click', () => {
             document.getElementById('mobile-menu').classList.toggle('hidden');
         });
@@ -511,7 +552,7 @@
 
         const menuMapping = {
             'menu-recursos': 'recursos', 
-            'menu-obispo': 'obispo', 'menu-decretos': 'decretos',
+            'menu-obispo': 'obispo',
             'menu-jubilar': 'jubilar'
         };
 
