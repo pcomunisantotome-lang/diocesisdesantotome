@@ -126,6 +126,24 @@
                     updateMetaTags(news);
                     const allImages = [news.featuredImageUrl, ...(news.galleryUrls || [])].filter(Boolean);
                     
+                    let imageDisplayHTML = '';
+                    if (allImages.length > 1) {
+                        imageDisplayHTML = `
+                            <div class="swiper-container my-8 rounded-lg overflow-hidden bg-gray-200 aspect-video">
+                                <div class="swiper-wrapper">
+                                    ${allImages.map(url => `<div class="swiper-slide"><img src="${url}" class="w-full h-full object-cover cursor-pointer lightbox-trigger"></div>`).join('')}
+                                </div>
+                                <div class="swiper-pagination"></div>
+                                <div class="swiper-button-next"></div>
+                                <div class="swiper-button-prev"></div>
+                            </div>`;
+                    } else if (allImages.length === 1) {
+                        imageDisplayHTML = `
+                            <div class="my-8">
+                                <img src="${allImages[0]}" alt="${news.title}" class="w-full max-h-[500px] object-contain rounded-lg shadow-md cursor-pointer lightbox-trigger mx-auto">
+                            </div>`;
+                    }
+
                     singleNewsView.innerHTML = `
                         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
                         <article class="bg-white p-6 md:p-8 rounded-lg shadow-xl">
@@ -133,13 +151,7 @@
                             <h1 class="text-3xl md:text-4xl font-bold text-gray-800">${news.title}</h1>
                             <p class="mt-2 text-sm text-gray-500 font-semibold uppercase">${news.category || 'General'}</p>
                             <div class="prose max-w-none lg:prose-lg mt-6">${news.summary}</div>
-                            <div class="swiper-container my-8 rounded-lg overflow-hidden bg-gray-200 aspect-video">
-                                <div class="swiper-wrapper">
-                                    ${allImages.map(url => `<div class="swiper-slide"><img src="${url}" class="w-full h-full object-cover cursor-pointer lightbox-trigger"></div>`).join('')}
-                                </div>
-                                <div class="swiper-pagination"></div>
-                                ${allImages.length > 1 ? '<div class="swiper-button-next"></div><div class="swiper-button-prev"></div>' : ''}
-                            </div>
+                            ${imageDisplayHTML}
                             <!-- Share Buttons -->
                             <div class="mt-8 pt-6 border-t border-gray-200">
                                 <h4 class="text-lg font-semibold text-gray-800 mb-4 text-center">Compartir esta noticia</h4>
@@ -158,11 +170,13 @@
                         </div>
                     `;
                     
-                    new Swiper('.swiper-container', {
-                        loop: allImages.length > 1,
-                        pagination: { el: '.swiper-pagination', clickable: true },
-                        navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
-                    });
+                    if (allImages.length > 1) {
+                        new Swiper('.swiper-container', {
+                            loop: true,
+                            pagination: { el: '.swiper-pagination', clickable: true },
+                            navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
+                        });
+                    }
 
                     // Lightbox functionality
                     document.querySelectorAll('.lightbox-trigger').forEach(img => {
