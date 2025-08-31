@@ -52,6 +52,8 @@
                 animation: zoom-in 20s ease-in-out infinite alternate;
             }
         }
+        .text-shadow { text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8); }
+        .animate-fade-in-up { animation: fade-in-up 1s ease-out forwards; }
     </style>
 </head>
 <body class="bg-gray-50">
@@ -160,10 +162,10 @@
     <main id="main-content-container">
         <section id="inicio-banner" class="relative w-full h-64 sm:h-80 lg:h-96 bg-cover bg-center bg-no-repeat banner-animated" style="background-image: url('https://firebasestorage.googleapis.com/v0/b/diocesisdesantotome.firebasestorage.app/o/LOGOS%2FEncabezado%20para%20Paginas.png?alt=media&token=38a267bb-78ba-4cb-a6b5-86d457b07473');">
             <div class="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-center items-center">
-                <div class="container mx-auto px-6 text-center text-white fade-in-content">
-                    <img src="https://firebasestorage.googleapis.com/v0/b/diocesisdesantotome.firebasestorage.app/o/LOGOS%2Flogo%20iglesia%20samaritana.png?alt=media&token=56fd32c1-bb7d-4537-83f7-ace6662ff768" class="h-16 md:h-24 mb-4 mx-auto" alt="Logo Diócesis" />
-                    <h1 class="text-2xl md:text-4xl font-bold">Diócesis de Santo Tomé</h1>
-                    <p class="text-lg md:text-2xl mt-2 italic">Iglesia peregrina, sembradora de esperanza</p>
+                <div class="container mx-auto px-6 text-center text-white">
+                    <img src="https://firebasestorage.googleapis.com/v0/b/diocesisdesantotome.firebasestorage.app/o/LOGOS%2Flogo%20iglesia%20samaritana.png?alt=media&token=56fd32c1-bb7d-4537-83f7-ace6662ff768" class="h-16 md:h-24 mb-4 mx-auto opacity-0 animate-fade-in-up" style="animation-delay: 0.2s;" alt="Logo Diócesis" />
+                    <h1 class="text-3xl md:text-5xl lg:text-6xl font-bold text-shadow opacity-0 animate-fade-in-up" style="animation-delay: 0.5s;">Diócesis de Santo Tomé</h1>
+                    <p class="text-xl md:text-2xl lg:text-3xl mt-4 italic text-shadow opacity-0 animate-fade-in-up" style="animation-delay: 0.8s;">Iglesia peregrina, sembradora de esperanza</p>
                 </div>
             </div>
         </section>
@@ -311,7 +313,7 @@
                 </div>
                 <!-- Google Map -->
                 <div>
-                     <iframe src="https://www.google.com/maps/embed?pb=!1m18!m12!1m3!1d3504.629334586227!2d-56.04250268529583!3d-28.58082998245006!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9454f9175704b2c1%3A0x7d6c5a528e515e0!2sMitre%20930%2C%20W3340%20Santo%20Tom%C3%A9%2C%20Corrientes!5e0!3m2!1ses-419!2sar!4v1672876800000!5m2!1ses-419!2sar" width="100%" height="250" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" class="rounded-lg shadow-lg"></iframe>
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3504.629334586227!2d-56.04250268529583!3d-28.58082998245006!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9454f9175704b2c1%3A0x7d6c5a528e515e0!2sMitre%20930%2C%20W3340%20Santo%20Tom%C3%A9%2C%20Corrientes!5e0!3m2!1ses-419!2sar!4v1672876800000!5m2!1ses-419!2sar" width="100%" height="250" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" class="rounded-lg shadow-lg"></iframe>
                 </div>
             </div>
             <div class="border-t border-gray-700 mt-8 pt-6 text-center text-gray-500">
@@ -551,50 +553,6 @@
         });
 
     </script>
-     <script>
-        function initMap() {
-          const obispadoLocation = { lat: -28.58083, lng: -56.04031 }; 
-          const map = new google.maps.Map(document.getElementById("map"), {
-            zoom: 17,
-            center: obispadoLocation,
-            mapTypeId: 'roadmap',
-            disableDefaultUI: true,
-            zoomControl: true,
-          });
-          
-          const infowindow = new google.maps.InfoWindow({
-            content: `
-                <div class="p-2 font-sans">
-                    <h4 class="font-bold text-base text-gray-800">Obispado de Santo Tomé</h4>
-                    <p class="text-gray-600">Mitre 930, Santo Tomé, Corrientes</p>
-                </div>
-            `,
-          });
-
-          const logoMarker = new google.maps.Marker({
-            position: obispadoLocation,
-            map: map,
-            icon: {
-              url: "https://firebasestorage.googleapis.com/v0/b/diocesisdesantotome.firebasestorage.app/o/LOGOS%2Flogo%20iglesia%20samaritana.png?alt=media&token=56fd32c1-bb7d-4537-83f7-ace6662ff768",
-              scaledSize: new google.maps.Size(60, 60)
-            },
-            title: "Obispado de Santo Tomé"
-          });
-
-          infowindow.open({
-            anchor: logoMarker,
-            map,
-          });
-
-          logoMarker.addListener("click", () => {
-            infowindow.open({
-                anchor: logoMarker,
-                map,
-            });
-          });
-        }
-    </script>
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA7IF05PEr18qAzqsHPkFa16ld5wxq1ocM&callback=initMap"></script>
 </body>
 </html>
 
