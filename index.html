@@ -557,10 +557,19 @@
           const map = new google.maps.Map(document.getElementById("map"), {
             zoom: 17,
             center: obispadoLocation,
-            mapId: 'DIOCESIS_MAP_STYLE', // Puedes crear un estilo personalizado en Google Cloud
+            mapTypeId: 'roadmap',
             disableDefaultUI: true,
           });
           
+          const infowindow = new google.maps.InfoWindow({
+            content: `
+                <div class="p-2 font-sans">
+                    <h4 class="font-bold text-base text-gray-800">Obispado de Santo Tomé</h4>
+                    <p class="text-gray-600">Mitré 930, Santo Tomé, Corrientes</p>
+                </div>
+            `,
+          });
+
           const logoMarker = new google.maps.Marker({
             position: obispadoLocation,
             map: map,
@@ -569,6 +578,13 @@
               scaledSize: new google.maps.Size(60, 60)
             },
             title: "Obispado de Santo Tomé"
+          });
+
+          logoMarker.addListener("click", () => {
+            infowindow.open({
+                anchor: logoMarker,
+                map,
+            });
           });
         }
     </script>
