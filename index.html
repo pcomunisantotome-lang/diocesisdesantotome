@@ -557,15 +557,15 @@
           const map = new google.maps.Map(document.getElementById("map"), {
             zoom: 17,
             center: obispadoLocation,
-            mapTypeId: 'roadmap',
             disableDefaultUI: true,
+            zoomControl: true,
           });
           
           const infowindow = new google.maps.InfoWindow({
             content: `
                 <div class="p-2 font-sans">
                     <h4 class="font-bold text-base text-gray-800">Obispado de Santo Tomé</h4>
-                    <p class="text-gray-600">Mitré 930, Santo Tomé, Corrientes</p>
+                    <p class="text-gray-600">Mitre 930, Santo Tomé, Corrientes</p>
                 </div>
             `,
           });
