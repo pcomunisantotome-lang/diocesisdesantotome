@@ -15,6 +15,24 @@
         ::-webkit-scrollbar-track { background: #f1f5f9; }
         ::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #64748b; }
+        /* Estilos para el input de color */
+        input[type="color"] {
+            -webkit-appearance: none;
+            border: none;
+            width: 40px;
+            height: 40px;
+            padding: 0;
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: pointer;
+        }
+        input[type="color"]::-webkit-color-swatch-wrapper {
+            padding: 0;
+        }
+        input[type="color"]::-webkit-color-swatch {
+            border: none;
+            border-radius: 6px;
+        }
     </style>
 </head>
 <body class="bg-slate-100">
@@ -138,8 +156,10 @@
                             <h2 class="text-2xl font-bold mb-4">Gestionar Categorías</h2>
                             <form id="add-category-form" class="flex items-center space-x-2 mb-4">
                                 <input type="text" id="category-name" placeholder="Nombre de la nueva categoría" class="w-full p-2 border rounded-lg" required>
-                                <button type="submit" class="bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 whitespace-nowrap">Agregar Categoría</button>
+                                <input type="color" id="category-color" value="#4F46E5">
+                                <button type="submit" class="bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 whitespace-nowrap">Agregar</button>
                             </form>
+                            <h3 class="text-xl font-bold mt-6 mb-4">Categorías Existentes</h3>
                             <div id="category-list" class="space-y-2"><p>Cargando categorías...</p></div>
                         </div>
                     </div>
@@ -202,7 +222,6 @@
                 adminSections.forEach(section => {
                     section.id === `${targetId}-section` ? section.classList.remove('hidden') : section.classList.add('hidden');
                 });
-                // Close mobile menu on navigation
                 sidebar.classList.add('-translate-x-full');
                 mobileMenuBackdrop.classList.add('hidden');
             });
@@ -306,12 +325,19 @@
                     const category = doc.data();
                     const categoryDiv = document.createElement('div');
                     categoryDiv.className = 'flex justify-between items-center p-2 border rounded-lg';
-                    categoryDiv.innerHTML = `<span>${category.name}</span><button class="delete-category-btn bg-red-500 text-white text-xs px-2 py-1 rounded hover:bg-red-600" data-id="${doc.id}">Eliminar</button>`;
+                    categoryDiv.innerHTML = `
+                        <div class="flex items-center gap-3">
+                            <span class="block w-5 h-5 rounded-full" style="background-color: ${category.color || '#cccccc'};"></span>
+                            <span>${category.name}</span>
+                        </div>
+                        <button class="delete-category-btn bg-red-500 text-white text-xs px-2 py-1 rounded hover:bg-red-600" data-id="${doc.id}">Eliminar</button>
+                    `;
                     categoryListContainer.appendChild(categoryDiv);
 
                     const option = document.createElement('option');
                     option.value = category.name;
                     option.textContent = category.name;
+                    option.dataset.color = category.color; // Store color in dataset
                     newsCategorySelect.appendChild(option);
                 });
             } catch (error) {
@@ -399,21 +425,21 @@
         scriptListContainer.addEventListener('click', async (e) => {
             if (e.target.classList.contains('delete-script-btn')) {
                 const scriptId = e.target.dataset.id;
-                if (confirm('¿Seguro que quieres eliminar este guion?')) {
-                    try {
-                        const docRef = doc(db, "scripts", scriptId);
-                        const docSnap = await getDoc(docRef);
-                        if (docSnap.exists()) {
-                            const fileURL = docSnap.data().downloadURL;
+                try {
+                    const docRef = doc(db, "scripts", scriptId);
+                    const docSnap = await getDoc(docRef);
+                    if (docSnap.exists()) {
+                        const fileURL = docSnap.data().downloadURL;
+                        if (fileURL) {
                             const fileRef = ref(storage, fileURL);
                             await deleteObject(fileRef);
                         }
-                        await deleteDoc(docRef);
-                        showNotification('Guion eliminado con éxito.');
-                        loadScripts();
-                    } catch (error) {
-                         showNotification(`Error al eliminar el guion: ${error.message}`, true);
                     }
+                    await deleteDoc(docRef);
+                    showNotification('Guion eliminado con éxito.');
+                    loadScripts();
+                } catch (error) {
+                     showNotification(`Error al eliminar el guion: ${error.message}`, true);
                 }
             }
         });
@@ -421,12 +447,17 @@
         addCategoryForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const categoryNameInput = e.target['category-name'];
+            const categoryColorInput = e.target['category-color'];
             const categoryName = categoryNameInput.value.trim();
             if (categoryName) {
                 try {
-                    await addDoc(collection(db, "categories"), { name: categoryName });
+                    await addDoc(collection(db, "categories"), { 
+                        name: categoryName,
+                        color: categoryColorInput.value
+                    });
                     showNotification('Categoría agregada con éxito.');
-                    categoryNameInput.value = '';
+                    addCategoryForm.reset();
+                    categoryColorInput.value = "#4F46E5"; // Reset to default
                     loadCategories();
                 } catch (error) {
                     showNotification(`Error al agregar categoría: ${error.message}`, true);
@@ -437,14 +468,12 @@
         categoryListContainer.addEventListener('click', async (e) => {
             if (e.target.classList.contains('delete-category-btn')) {
                 const categoryId = e.target.dataset.id;
-                if (confirm('¿Estás seguro de que quieres eliminar esta categoría?')) {
-                    try {
-                        await deleteDoc(doc(db, "categories", categoryId));
-                        showNotification('Categoría eliminada con éxito.');
-                        loadCategories();
-                    } catch (error) {
-                        showNotification(`Error al eliminar categoría: ${error.message}`, true);
-                    }
+                try {
+                    await deleteDoc(doc(db, "categories", categoryId));
+                    showNotification('Categoría eliminada con éxito.');
+                    loadCategories();
+                } catch (error) {
+                    showNotification(`Error al eliminar categoría: ${error.message}`, true);
                 }
             }
         });
@@ -453,7 +482,9 @@
             e.preventDefault();
             const newsId = e.target['news-id'].value;
             const title = e.target['news-title'].value;
-            const category = e.target['news-category'].value;
+            const selectedOption = newsCategorySelect.options[newsCategorySelect.selectedIndex];
+            const category = selectedOption.value;
+            const categoryColor = selectedOption.dataset.color;
             const summary = quill.root.innerHTML;
             const files = e.target['news-images'].files;
             const saveBtn = document.getElementById('save-news-btn');
@@ -469,7 +500,7 @@
                 const newImageUrls = await Promise.all(snapshots.map(s => getDownloadURL(s.ref)));
                 const allImageUrls = [...newImageUrls, ...existingImageUrls];
                 const newsData = {
-                    title, category, summary,
+                    title, category, categoryColor, summary,
                     featuredImageUrl: allImageUrls[0] || null,
                     galleryUrls: allImageUrls.slice(1) || [],
                     updatedAt: serverTimestamp(),
@@ -531,24 +562,22 @@
             }
 
             if (e.target.classList.contains('delete-btn')) {
-                if (confirm('¿Estás seguro de que quieres eliminar esta noticia?')) {
-                    try {
-                        const docSnap = await getDoc(doc(db, "noticias", id));
-                        if(docSnap.exists()){
-                            const newsData = docSnap.data();
-                            const imagesToDelete = [newsData.featuredImageUrl, ...(newsData.galleryUrls || [])].filter(Boolean);
-                            const deletePromises = imagesToDelete.map(url => {
-                                try { return deleteObject(ref(storage, url)); } 
-                                catch (e) { console.log("Error deleting image: ", e); return Promise.resolve(); }
-                            });
-                            await Promise.all(deletePromises);
-                        }
-                        await deleteDoc(doc(db, "noticias", id));
-                        showNotification('Noticia eliminada con éxito.');
-                        loadNews();
-                    } catch (error) {
-                        showNotification(`Error al eliminar la noticia: ${error.message}`, true);
+                try {
+                    const docSnap = await getDoc(doc(db, "noticias", id));
+                    if(docSnap.exists()){
+                        const newsData = docSnap.data();
+                        const imagesToDelete = [newsData.featuredImageUrl, ...(newsData.galleryUrls || [])].filter(Boolean);
+                        const deletePromises = imagesToDelete.map(url => {
+                            try { return deleteObject(ref(storage, url)); } 
+                            catch (e) { console.log("Error deleting image: ", e); return Promise.resolve(); }
+                        });
+                        await Promise.all(deletePromises);
                     }
+                    await deleteDoc(doc(db, "noticias", id));
+                    showNotification('Noticia eliminada con éxito.');
+                    loadNews();
+                } catch (error) {
+                    showNotification(`Error al eliminar la noticia: ${error.message}`, true);
                 }
             }
         });
