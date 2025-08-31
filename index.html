@@ -8,7 +8,8 @@
     <meta property="og:title" content="Diócesis de Santo Tomé">
     <meta property="og:description" content="Sitio web oficial de la Diócesis de Santo Tomé, Corrientes, Argentina.">
     <meta property="og:image" content="https://firebasestorage.googleapis.com/v0/b/diocesisdesantotome.firebasestorage.app/o/LOGOS%2Flogo%20iglesia%20samaritana.png?alt=media&token=56fd32c1-bb7d-4537-83f7-ace6662ff768">
-    <meta property="og:url" content="https://diocesisdesantotome.com"> <!-- Reemplaza esto con tu URL final -->
+    <!-- Reemplaza el content con la URL final de tu sitio web -->
+    <meta property="og:url" content="https://URL-DE-TU-SITIO-PUBLICADO.com">
     <meta property="og:type" content="website">
     <meta property="fb:app_id" content="1497738074977879" />
     
@@ -310,7 +311,7 @@
                 </div>
                 <!-- Google Map -->
                 <div>
-                     <iframe src="https://www.google.com/maps/embed?pb=!1m18!m12!1m3!1d3504.629334586227!2d-56.04250268529583!3d-28.58082998245006!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9454f9175704b2c1%3A0x7d6c5a528e515e0!2sMitre%20930%2C%20W3340%20Santo%20Tom%C3%A9%2C%20Corrientes!5e0!3m2!1ses-419!2sar!4v1672876800000!5m2!1ses-419!2sar" width="100%" height="250" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" class="rounded-lg shadow-lg"></iframe>
+                     <div id="map" class="w-full h-[250px] rounded-lg shadow-lg"></div>
                 </div>
             </div>
             <div class="border-t border-gray-700 mt-8 pt-6 text-center text-gray-500">
@@ -550,5 +551,28 @@
         });
 
     </script>
+     <script>
+        function initMap() {
+          const obispadoLocation = { lat: -28.58083, lng: -56.04031 }; 
+          const map = new google.maps.Map(document.getElementById("map"), {
+            zoom: 17,
+            center: obispadoLocation,
+            mapId: 'DIOCESIS_MAP_STYLE', // Puedes crear un estilo personalizado en Google Cloud
+            disableDefaultUI: true,
+          });
+          
+          const logoMarker = new google.maps.Marker({
+            position: obispadoLocation,
+            map: map,
+            icon: {
+              url: "https://firebasestorage.googleapis.com/v0/b/diocesisdesantotome.firebasestorage.app/o/LOGOS%2Flogo%20iglesia%20samaritana.png?alt=media&token=56fd32c1-bb7d-4537-83f7-ace6662ff768",
+              scaledSize: new google.maps.Size(60, 60)
+            },
+            title: "Obispado de Santo Tomé"
+          });
+        }
+    </script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA7IF05PEr18qAzqsHPkFa16ld5wxq1ocM&callback=initMap"></script>
 </body>
 </html>
+
