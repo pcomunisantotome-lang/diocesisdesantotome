@@ -39,9 +39,11 @@
 
     <!-- Admin Panel (hidden by default) -->
     <div id="admin-panel" class="hidden">
-        <div class="flex h-screen bg-slate-100">
+        <div class="relative min-h-screen md:flex">
+            <!-- Mobile Menu Backdrop -->
+            <div id="mobile-menu-backdrop" class="bg-black/50 fixed inset-0 z-20 hidden md:hidden"></div>
             <!-- Sidebar -->
-            <aside class="w-64 bg-white shadow-lg flex flex-col">
+            <aside id="sidebar" class="bg-white text-white w-64 fixed inset-y-0 left-0 transform -translate-x-full md:relative md:translate-x-0 transition-transform duration-200 ease-in-out z-30 shadow-lg flex flex-col">
                 <div class="p-4 border-b border-slate-200 flex items-center space-x-3">
                      <img src="https://firebasestorage.googleapis.com/v0/b/diocesisdesantotome.firebasestorage.app/o/LOGOS%2Flogo%20iglesia%20samaritana.png?alt=media&token=56fd32c1-bb7d-4537-83f7-ace6662ff768" alt="Logo" class="h-10">
                     <span class="text-slate-800 font-bold text-lg">Admin Panel</span>
@@ -69,67 +71,80 @@
             </aside>
 
             <!-- Main Content -->
-            <main class="flex-1 p-6 lg:p-8 overflow-y-auto">
-                <div id="noticias-section" class="admin-section">
-                    <div class="bg-white p-6 rounded-lg shadow-md">
-                        <h2 class="text-2xl font-bold mb-4" id="form-title">Agregar Nueva Noticia</h2>
-                        <form id="news-form">
-                            <input type="hidden" id="news-id">
-                            <div class="mb-4">
-                                <label for="news-title" class="block text-gray-700">Título</label>
-                                <input type="text" id="news-title" class="w-full mt-2 p-2 border rounded-lg" required>
-                            </div>
-                            <div class="mb-4">
-                                <label for="news-category" class="block text-gray-700">Categoría</label>
-                                <select id="news-category" class="w-full mt-2 p-2 border rounded-lg bg-white" required></select>
-                            </div>
-                            <div class="mb-4">
-                                <label class="block text-gray-700">Contenido</label>
-                                <div id="editor" class="mt-2 bg-white"></div>
-                            </div>
-                            <div class="mb-4">
-                                <label class="block text-gray-700">Imágenes (la primera será la destacada)</label>
-                                <input type="file" id="news-images" class="w-full mt-2 p-2 border rounded-lg" multiple accept="image/*">
-                                <div id="image-previews" class="mt-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4"></div>
-                            </div>
-                            <div class="flex items-center space-x-4">
-                                <button type="submit" id="save-news-btn" class="bg-green-600 text-white font-bold py-2 px-6 rounded-lg hover:bg-green-700">Guardar Noticia</button>
-                                <button type="button" id="cancel-edit-btn" class="bg-gray-500 text-white font-bold py-2 px-6 rounded-lg hover:bg-gray-600 hidden">Cancelar Edición</button>
-                            </div>
-                        </form>
+            <div class="flex-1 flex flex-col">
+                <!-- Mobile Header -->
+                <header class="md:hidden bg-white shadow p-4 flex justify-between items-center sticky top-0 z-10">
+                    <div class="flex items-center space-x-2">
+                        <img src="https://firebasestorage.googleapis.com/v0/b/diocesisdesantotome.firebasestorage.app/o/LOGOS%2Flogo%20iglesia%20samaritana.png?alt=media&token=56fd32c1-bb7d-4537-83f7-ace6662ff768" alt="Logo" class="h-8">
+                        <span class="text-slate-800 font-bold">Admin Panel</span>
                     </div>
-                    <div class="bg-white p-6 rounded-lg shadow-md mt-8">
-                        <h2 class="text-2xl font-bold mb-4">Noticias Existentes</h2>
-                        <div id="existing-news" class="space-y-4"><p>Cargando noticias...</p></div>
-                    </div>
-                </div>
+                    <button id="mobile-menu-btn" class="text-slate-600">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                    </button>
+                </header>
 
-                <div id="guiones-section" class="admin-section hidden">
-                     <div class="bg-white p-6 rounded-lg shadow-md">
-                        <h2 class="text-2xl font-bold mb-4">Gestionar Guiones Diocesanos</h2>
-                        <form id="script-form" class="space-y-4">
-                            <div>
-                                <label for="script-file" class="block text-gray-700">Archivo (PDF, Word, etc.)</label>
-                                <input type="file" id="script-file" class="w-full mt-2 p-2 border rounded-lg" required>
-                            </div>
-                            <button type="submit" id="save-script-btn" class="w-full bg-purple-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-purple-700">Subir Guion</button>
-                        </form>
-                        <h3 class="text-xl font-bold mt-6 mb-4">Guiones Subidos</h3>
-                        <div id="script-list" class="space-y-2"><p>Cargando guiones...</p></div>
+                <main class="flex-1 p-6 lg:p-8 overflow-y-auto">
+                    <div id="noticias-section" class="admin-section">
+                        <div class="bg-white p-6 rounded-lg shadow-md">
+                            <h2 class="text-2xl font-bold mb-4" id="form-title">Agregar Nueva Noticia</h2>
+                            <form id="news-form">
+                                <input type="hidden" id="news-id">
+                                <div class="mb-4">
+                                    <label for="news-title" class="block text-gray-700">Título</label>
+                                    <input type="text" id="news-title" class="w-full mt-2 p-2 border rounded-lg" required>
+                                </div>
+                                <div class="mb-4">
+                                    <label for="news-category" class="block text-gray-700">Categoría</label>
+                                    <select id="news-category" class="w-full mt-2 p-2 border rounded-lg bg-white" required></select>
+                                </div>
+                                <div class="mb-4">
+                                    <label class="block text-gray-700">Contenido</label>
+                                    <div id="editor" class="mt-2 bg-white"></div>
+                                </div>
+                                <div class="mb-4">
+                                    <label class="block text-gray-700">Imágenes (la primera será la destacada)</label>
+                                    <input type="file" id="news-images" class="w-full mt-2 p-2 border rounded-lg" multiple accept="image/*">
+                                    <div id="image-previews" class="mt-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4"></div>
+                                </div>
+                                <div class="flex items-center space-x-4">
+                                    <button type="submit" id="save-news-btn" class="bg-green-600 text-white font-bold py-2 px-6 rounded-lg hover:bg-green-700">Guardar Noticia</button>
+                                    <button type="button" id="cancel-edit-btn" class="bg-gray-500 text-white font-bold py-2 px-6 rounded-lg hover:bg-gray-600 hidden">Cancelar Edición</button>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow-md mt-8">
+                            <h2 class="text-2xl font-bold mb-4">Noticias Existentes</h2>
+                            <div id="existing-news" class="space-y-4"><p>Cargando noticias...</p></div>
+                        </div>
                     </div>
-                </div>
 
-                <div id="categorias-section" class="admin-section hidden">
-                    <div class="bg-white p-6 rounded-lg shadow-md">
-                        <h2 class="text-2xl font-bold mb-4">Gestionar Categorías</h2>
-                        <form id="add-category-form" class="flex items-center space-x-2 mb-4">
-                            <input type="text" id="category-name" placeholder="Nombre de la nueva categoría" class="w-full p-2 border rounded-lg" required>
-                            <button type="submit" class="bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 whitespace-nowrap">Agregar Categoría</button>
-                        </form>
-                        <div id="category-list" class="space-y-2"><p>Cargando categorías...</p></div>
+                    <div id="guiones-section" class="admin-section hidden">
+                         <div class="bg-white p-6 rounded-lg shadow-md">
+                            <h2 class="text-2xl font-bold mb-4">Gestionar Guiones Diocesanos</h2>
+                            <form id="script-form" class="space-y-4">
+                                <div>
+                                    <label for="script-file" class="block text-gray-700">Archivo (PDF, Word, etc.)</label>
+                                    <input type="file" id="script-file" class="w-full mt-2 p-2 border rounded-lg" required>
+                                </div>
+                                <button type="submit" id="save-script-btn" class="w-full bg-purple-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-purple-700">Subir Guion</button>
+                            </form>
+                            <h3 class="text-xl font-bold mt-6 mb-4">Guiones Subidos</h3>
+                            <div id="script-list" class="space-y-2"><p>Cargando guiones...</p></div>
+                        </div>
                     </div>
-                </div>
-            </main>
+
+                    <div id="categorias-section" class="admin-section hidden">
+                        <div class="bg-white p-6 rounded-lg shadow-md">
+                            <h2 class="text-2xl font-bold mb-4">Gestionar Categorías</h2>
+                            <form id="add-category-form" class="flex items-center space-x-2 mb-4">
+                                <input type="text" id="category-name" placeholder="Nombre de la nueva categoría" class="w-full p-2 border rounded-lg" required>
+                                <button type="submit" class="bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 whitespace-nowrap">Agregar Categoría</button>
+                            </form>
+                            <div id="category-list" class="space-y-2"><p>Cargando categorías...</p></div>
+                        </div>
+                    </div>
+                </main>
+            </div>
         </div>
     </div>
 
@@ -167,6 +182,10 @@
                 ['link'], ['clean']
             ]}
         });
+        
+        const sidebar = document.getElementById('sidebar');
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenuBackdrop = document.getElementById('mobile-menu-backdrop');
 
         const navLinks = document.querySelectorAll('.nav-link');
         const adminSections = document.querySelectorAll('.admin-section');
@@ -183,8 +202,22 @@
                 adminSections.forEach(section => {
                     section.id === `${targetId}-section` ? section.classList.remove('hidden') : section.classList.add('hidden');
                 });
+                // Close mobile menu on navigation
+                sidebar.classList.add('-translate-x-full');
+                mobileMenuBackdrop.classList.add('hidden');
             });
         });
+        
+        mobileMenuBtn.addEventListener('click', () => {
+            sidebar.classList.remove('-translate-x-full');
+            mobileMenuBackdrop.classList.remove('hidden');
+        });
+
+        mobileMenuBackdrop.addEventListener('click', () => {
+            sidebar.classList.add('-translate-x-full');
+            mobileMenuBackdrop.classList.add('hidden');
+        });
+
 
         const loginScreen = document.getElementById('login-screen');
         const adminPanel = document.getElementById('admin-panel');
