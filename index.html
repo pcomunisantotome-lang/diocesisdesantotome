@@ -371,13 +371,16 @@
             const imageUrl = news.featuredImageUrl || placeholderImg;
             const card = document.createElement('div');
             card.className = 'bg-white rounded-lg shadow-lg overflow-hidden flex flex-col group';
+            const categoryColor = news.categoryColor || '#3B82F6';
+            const darkerCategoryColor = lightenDarkenColor(categoryColor, -40);
+
             card.innerHTML = `
                 <a href="./noticia.html?id=${newsDoc.id}" class="block">
                     <div class="relative overflow-hidden">
                         <div class="aspect-video">
                            <img src="${imageUrl}" alt="${news.title || ''}" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" onerror="this.onerror=null;this.src='${placeholderImg}';">
                         </div>
-                        <span class="absolute top-3 right-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white text-xs font-semibold px-3 py-1.5 rounded-full">${news.category || 'General'}</span>
+                        <span class="absolute top-3 right-3 text-white text-xs font-semibold px-3 py-1.5 rounded-full" style="background-image: linear-gradient(to right, ${categoryColor}, ${darkerCategoryColor})">${news.category || 'General'}</span>
                     </div>
                     <div class="p-6 flex-grow flex flex-col">
                         <h3 class="text-xl font-bold mb-3 text-gray-800 group-hover:text-blue-600 transition-colors">${news.title || 'Título no disponible'}</h3>
@@ -389,6 +392,25 @@
             return card;
         };
         
+        const lightenDarkenColor = (col, amt) => {
+            let usePound = false;
+            if (col.startsWith("#")) {
+                col = col.slice(1);
+                usePound = true;
+            }
+            const num = parseInt(col, 16);
+            let r = (num >> 16) + amt;
+            if (r > 255) r = 255;
+            else if  (r < 0) r = 0;
+            let b = ((num >> 8) & 0x00FF) + amt;
+            if (b > 255) b = 255;
+            else if  (b < 0) b = 0;
+            let g = (num & 0x0000FF) + amt;
+            if (g > 255) g = 255;
+            else if (g < 0) g = 0;
+            return (usePound ? "#" : "") + (g | (b << 8) | (r << 16)).toString(16).padStart(6, '0');
+        };
+
         async function loadAllNews() {
             if (allNewsData.length > 0) return;
             try {
@@ -477,7 +499,7 @@
             }
         });
 
-        document.querySelectorAll('.back-to-main-btn, #logo-link, #menu-inicio').forEach(btn => {
+        document.querySelectorAll('.back-to-main-btn, #logo-link').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 e.preventDefault();
                 showMainView();
@@ -531,4 +553,3 @@
     </script>
 </body>
 </html>
-
