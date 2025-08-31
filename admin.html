@@ -132,6 +132,12 @@
                         </div>
                         <div class="bg-white p-6 rounded-lg shadow-md mt-8">
                             <h2 class="text-2xl font-bold mb-4">Noticias Existentes</h2>
+                            <div class="mb-4">
+                                <a href="https://developers.facebook.com/tools/debug/" target="_blank" class="inline-flex items-center bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition">
+                                    Depurar en Facebook
+                                    <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                                </a>
+                            </div>
                             <div id="existing-news" class="space-y-4"><p>Cargando noticias...</p></div>
                         </div>
                     </div>
@@ -358,8 +364,13 @@
                 querySnapshot.forEach(doc => {
                     const news = doc.data();
                     const newsDiv = document.createElement('div');
-                    newsDiv.className = 'flex justify-between items-center p-3 border rounded-lg';
-                    newsDiv.innerHTML = `<span>${news.title}</span><div><button class="edit-btn bg-yellow-500 text-white px-3 py-1 rounded-lg hover:bg-yellow-600 mr-2" data-id="${doc.id}">Editar</button><button class="delete-btn bg-red-500 text-white px-3 py-1 rounded-lg hover:bg-red-600" data-id="${doc.id}">Eliminar</button></div>`;
+                    newsDiv.className = 'flex flex-col sm:flex-row justify-between items-start sm:items-center p-3 border rounded-lg gap-2';
+                    newsDiv.innerHTML = `
+                        <span class="flex-1">${news.title}</span>
+                        <div class="flex-shrink-0 flex items-center gap-2">
+                            <button class="edit-btn bg-yellow-500 text-white text-xs px-3 py-1 rounded-lg hover:bg-yellow-600" data-id="${doc.id}">Editar</button>
+                            <button class="delete-btn bg-red-500 text-white text-xs px-3 py-1 rounded-lg hover:bg-red-600" data-id="${doc.id}">Eliminar</button>
+                        </div>`;
                     existingNewsContainer.appendChild(newsDiv);
                 });
             } catch (error) {
@@ -540,6 +551,7 @@
         existingNewsContainer.addEventListener('click', async (e) => {
             const id = e.target.dataset.id;
             if (!id) return;
+            
             if (e.target.classList.contains('edit-btn')) {
                 const docSnap = await getDoc(doc(db, "noticias", id));
                 if (docSnap.exists()) {
@@ -587,3 +599,4 @@
     </script>
 </body>
 </html>
+
