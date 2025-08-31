@@ -4,7 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- Metadatos para Redes Sociales (se llenan dinámicamente) -->
+    <!-- 
+      Estos metadatos ahora son un 'fallback'. 
+      La función del servidor los reemplazará para los robots de redes sociales.
+    -->
     <meta property="og:title" content="Diócesis de Santo Tomé">
     <meta property="og:description" content="Noticias y actualidad de la Diócesis de Santo Tomé.">
     <meta property="og:image" content="https://firebasestorage.googleapis.com/v0/b/diocesisdesantotome.firebasestorage.app/o/LOGOS%2Flogo%20iglesia%20samaritana.png?alt=media&token=56fd32c1-bb7d-4537-83f7-ace6662ff768">
@@ -85,31 +88,10 @@
         const lightboxImage = document.getElementById('lightbox-image');
         const closeLightboxBtn = document.getElementById('close-lightbox-btn');
         
-        function updateMetaTags(news) {
+        // Esta función ahora solo actualiza el título del navegador para el usuario.
+        // Los metadatos para los bots los maneja el servidor.
+        function updateClientSideTitle(news) {
             document.title = `${news.title} | Diócesis de Santo Tomé`;
-            // Meta tags OG para Facebook, etc.
-            document.querySelector('meta[property="og:title"]').setAttribute('content', news.title);
-            const description = (news.summary || '').replace(/<[^>]+>/g, '').substring(0, 160);
-            document.querySelector('meta[property="og:description"]').setAttribute('content', description);
-            document.querySelector('meta[property="og:image"]').setAttribute('content', news.featuredImageUrl || 'https://firebasestorage.googleapis.com/v0/b/diocesisdesantotome.firebasestorage.app/o/LOGOS%2Flogo%20iglesia%20samaritana.png?alt=media&token=56fd32c1-bb7d-4537-83f7-ace6662ff768');
-            document.querySelector('meta[property="og:url"]').setAttribute('content', window.location.href);
-
-            // Datos estructurados JSON-LD para Google y otros rastreadores
-            const structuredDataScript = document.getElementById('structured-data');
-            const data = {
-                "@context": "https://schema.org",
-                "@type": "NewsArticle",
-                "headline": news.title,
-                "image": [news.featuredImageUrl, ...(news.galleryUrls || [])].filter(Boolean),
-                "datePublished": new Date(news.createdAt?.seconds * 1000).toISOString(),
-                "dateModified": new Date(news.updatedAt?.seconds * 1000).toISOString(),
-                "author": {
-                    "@type": "Organization",
-                    "name": "Diócesis de Santo Tomé"
-                },
-                 "description": description
-            };
-            structuredDataScript.textContent = JSON.stringify(data);
         }
 
         async function showSingleNews(newsId) {
@@ -125,7 +107,7 @@
 
                 if (docSnap.exists()) {
                     const news = docSnap.data();
-                    updateMetaTags(news);
+                    updateClientSideTitle(news);
                     const allImages = [news.featuredImageUrl, ...(news.galleryUrls || [])].filter(Boolean);
                     
                     let imageDisplayHTML = '';
@@ -228,3 +210,4 @@
     </script>
 </body>
 </html>
+
