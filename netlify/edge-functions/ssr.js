@@ -89,3 +89,4 @@ export default async (request, context) => {
         return context.next(); // En caso de error, devolvemos la página original
     }
 };
+
