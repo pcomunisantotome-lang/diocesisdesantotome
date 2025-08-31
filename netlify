@@ -1,7 +1,0 @@
-# Este archivo le dice a Netlify cómo construir y desplegar tu sitio.
-
-# Configuración de la función del servidor (Edge Function)
-[[edge_functions]]
-# Aplica esta función a todas las peticiones para la página de noticia
-path = "/noticia.html"
-function = "ssr"
