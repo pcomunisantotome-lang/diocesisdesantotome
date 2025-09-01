@@ -54,6 +54,76 @@
         }
         .text-shadow { text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8); }
         .animate-fade-in-up { animation: fade-in-up 1s ease-out forwards; }
+
+        .whatsapp-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .whatsapp-link {
+            display: block;
+            width: 64px;
+            height: 64px;
+            border-radius: 9999px;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.25);
+            animation: pulse-whatsapp 2s infinite;
+            position: relative;
+        }
+
+        .whatsapp-text {
+            visibility: hidden;
+            width: 220px;
+            background-color: #374151;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 8px;
+            position: absolute;
+            z-index: 1;
+            right: 110%;
+            top: 50%;
+            transform: translateY(-50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .whatsapp-link:hover .whatsapp-text {
+            visibility: visible;
+            opacity: 1;
+        }
+        
+        #close-whatsapp {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            width: 24px;
+            height: 24px;
+            background-color: #e53e3e;
+            color: white;
+            border-radius: 9999px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            border: 2px solid white;
+            transition: background-color 0.2s;
+        }
+        #close-whatsapp:hover {
+            background-color: #c53030;
+        }
+
+        @keyframes pulse-whatsapp {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(37, 211, 102, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
+        }
     </style>
 </head>
 <body class="bg-gray-50">
@@ -313,7 +383,7 @@
                 </div>
                 <!-- Google Map -->
                 <div>
-                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3504.629334586227!2d-56.04250268529583!3d-28.58082998245006!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9454f9175704b2c1%3A0x7d6c5a528e515e0!2sMitre%20930%2C%20W3340%20Santo%20Tom%C3%A9%2C%20Corrientes!5e0!3m2!1ses-419!2sar!4v1672876800000!5m2!1ses-419!2sar" width="100%" height="250" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" class="rounded-lg shadow-lg"></iframe>
+                     <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3504.629334586227!2d-56.04250268529583!3d-28.58082998245006!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9454f9175704b2c1%3A0x7d6c5a528e515e0!2sMitre%20930%2C%20W3340%20Santo%20Tom%C3%A9%2C%20Corrientes!5e0!3m2!1ses-419!2sar!4v1672876800000!5m2!1ses-419!2sar" width="100%" height="250" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" class="rounded-lg shadow-lg"></iframe>
                 </div>
             </div>
             <div class="border-t border-gray-700 mt-8 pt-6 text-center text-gray-500">
@@ -337,6 +407,15 @@
                 Doná por Programa Fe
             </a>
         </div>
+    </div>
+
+    <!-- Botón Flotante de WhatsApp -->
+    <div id="whatsapp-container" class="whatsapp-container">
+        <a href="https://whatsapp.com/channel/0029VaF5ENvEgGfTYyLKgO47" target="_blank" rel="noopener noreferrer" class="whatsapp-link">
+            <span class="whatsapp-text">Unite al grupo de noticias y novedades</span>
+            <img class="w-full h-full object-cover rounded-full" src="https://firebasestorage.googleapis.com/v0/b/diocesisdesantotome.firebasestorage.app/o/LOGOS%2FIcono%20del%20logotipo%20de%20Whatsapp%20Aplicaci%C3%B3n%20de%20redes%20sociales%20Aplicaci%C3%B3n%20de%20red%20Marca%20editorial%20popular%20Ilustraci%C3%B3n%20vectorial%20_%20Vector%20Premium.jpg?alt=media&token=0e9e3fc5-49e8-4c43-98b1-874c8a6317ef" alt="Unirse al grupo de WhatsApp">
+        </a>
+        <button id="close-whatsapp" title="Cerrar">&times;</button>
     </div>
 
 
@@ -364,6 +443,8 @@
         const donateModal = document.getElementById('donate-modal');
         const donateModalContent = document.getElementById('donate-modal-content');
         const closeDonateModalBtn = document.getElementById('close-donate-modal-btn');
+        const whatsappContainer = document.getElementById('whatsapp-container');
+        const closeWhatsappBtn = document.getElementById('close-whatsapp');
         
         let allNewsData = [];
 
@@ -531,6 +612,16 @@
             if (event.target === donateModal) {
                 closeDonateModal();
             }
+        });
+
+        closeWhatsappBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            whatsappContainer.style.transition = 'opacity 0.3s';
+            whatsappContainer.style.opacity = '0';
+            setTimeout(() => {
+                whatsappContainer.style.display = 'none';
+            }, 300);
         });
 
         document.addEventListener('DOMContentLoaded', () => {
