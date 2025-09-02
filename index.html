@@ -38,7 +38,7 @@
             animation: fade-in-up 1.5s ease-out forwards;
         }
         
-        #donate-modal-content {
+        #donate-modal-content, #banner-modal-content {
             transition: transform 0.3s ease-out, opacity 0.3s ease-out;
         }
         
@@ -235,7 +235,7 @@
                 <div class="container mx-auto px-6 text-center text-white">
                     <img src="https://firebasestorage.googleapis.com/v0/b/diocesisdesantotome.firebasestorage.app/o/LOGOS%2Flogo%20iglesia%20samaritana.png?alt=media&token=56fd32c1-bb7d-4537-83f7-ace6662ff768" class="h-16 md:h-24 mb-4 mx-auto opacity-0 animate-fade-in-up" style="animation-delay: 0.2s;" alt="Logo Diócesis" />
                     <h1 class="text-3xl md:text-5xl lg:text-6xl font-bold text-shadow opacity-0 animate-fade-in-up" style="animation-delay: 0.5s;">Diócesis de Santo Tomé</h1>
-                    <p class="text-xl md:text-2xl lg:text-3xl mt-4 italic text-shadow opacity-0 animate-fade-in-up" style="animation-delay: 0.8s;">Iglesia peregrina, sembradora de esperanza</p>
+                    <p class="text-xl md:text-2xl lg:text-3xl mt-4 italic text-shadow opacity-0 animate-fade-in-up" style="animation-delay: 0.8s;">Iglesia Samaritana, Sembradora de Esperanza</p>
                 </div>
             </div>
         </section>
@@ -418,6 +418,17 @@
         <button id="close-whatsapp" title="Cerrar">&times;</button>
     </div>
 
+    <!-- Modal Banner Emergente -->
+    <div id="banner-modal" class="fixed inset-0 bg-black bg-opacity-75 z-[70] hidden flex items-center justify-center p-4 transition-opacity duration-300 opacity-0">
+        <div id="banner-modal-content" class="bg-white rounded-lg shadow-xl w-full max-w-lg mx-auto text-center p-4 relative transform transition-all duration-300 scale-95 opacity-0 max-h-[90vh] overflow-y-auto">
+            <button id="close-banner-modal-btn" class="absolute -top-3 -right-3 bg-red-600 text-white rounded-full h-8 w-8 flex items-center justify-center text-lg font-bold hover:bg-red-700 transition">&times;</button>
+            <img src="https://firebasestorage.googleapis.com/v0/b/diocesisdesantotome.firebasestorage.app/o/imagenes%2FScreenshot_20250901_210152_Adobe%20Acrobat.jpg?alt=media&token=397dc074-6085-4126-aa9f-ae17cfbac1fe" alt="Banner Anuncio" class="rounded-md w-full">
+            <a href="./recursos.html" id="banner-modal-action-btn" class="mt-4 inline-block w-full bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-bold py-3 px-8 rounded-lg transition-transform duration-300 transform hover:scale-105">
+                Descargar
+            </a>
+        </div>
+    </div>
+
 
     <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
     <script type="module">
@@ -445,6 +456,10 @@
         const closeDonateModalBtn = document.getElementById('close-donate-modal-btn');
         const whatsappContainer = document.getElementById('whatsapp-container');
         const closeWhatsappBtn = document.getElementById('close-whatsapp');
+        const bannerModal = document.getElementById('banner-modal');
+        const bannerModalContent = document.getElementById('banner-modal-content');
+        const closeBannerModalBtn = document.getElementById('close-banner-modal-btn');
+        const bannerModalActionBtn = document.getElementById('banner-modal-action-btn');
         
         let allNewsData = [];
 
@@ -549,6 +564,22 @@
             }, 300);
         }
 
+        function openBannerModal() {
+            bannerModal.classList.remove('hidden');
+            setTimeout(() => {
+                bannerModal.classList.remove('opacity-0');
+                bannerModalContent.classList.remove('scale-95', 'opacity-0');
+            }, 10);
+        }
+
+        function closeBannerModal() {
+            bannerModal.classList.add('opacity-0');
+            bannerModalContent.classList.add('scale-95', 'opacity-0');
+            setTimeout(() => {
+                bannerModal.classList.add('hidden');
+            }, 300);
+        }
+
         // --- Dropdown Menu Logic ---
         document.querySelectorAll('[data-dropdown-toggle]').forEach(toggle => {
             const menuId = toggle.getAttribute('data-dropdown-toggle');
@@ -613,7 +644,7 @@
                 closeDonateModal();
             }
         });
-
+        
         closeWhatsappBtn.addEventListener('click', (e) => {
             e.preventDefault();
             e.stopPropagation();
@@ -623,6 +654,21 @@
                 whatsappContainer.style.display = 'none';
             }, 300);
         });
+
+        closeBannerModalBtn.addEventListener('click', closeBannerModal);
+        bannerModal.addEventListener('click', (e) => {
+            if (e.target === bannerModal) {
+                closeBannerModal();
+            }
+        });
+        bannerModalActionBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            closeBannerModal();
+            setTimeout(() => {
+                window.location.href = e.currentTarget.href;
+            }, 300);
+        });
+
 
         document.addEventListener('DOMContentLoaded', () => {
             populateNewsPreview();
@@ -641,9 +687,15 @@
                     crossFade: true
                 },
             });
+            
+            if (!sessionStorage.getItem('bannerShown')) {
+                setTimeout(() => {
+                    openBannerModal();
+                    sessionStorage.setItem('bannerShown', 'true');
+                }, 1500);
+            }
         });
 
     </script>
 </body>
 </html>
-
