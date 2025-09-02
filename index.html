@@ -34,9 +34,6 @@
             0% { opacity: 0; transform: translateY(20px); }
             100% { opacity: 1; transform: translateY(0); }
         }
-        .fade-in-content {
-            animation: fade-in-up 1.5s ease-out forwards;
-        }
         
         #donate-modal-content, #banner-modal-content {
             transition: transform 0.3s ease-out, opacity 0.3s ease-out;
@@ -420,7 +417,7 @@
 
     <!-- Modal Banner Emergente -->
     <div id="banner-modal" class="fixed inset-0 bg-black bg-opacity-75 z-[70] hidden flex items-center justify-center p-4 transition-opacity duration-300 opacity-0">
-        <div id="banner-modal-content" class="bg-white rounded-lg shadow-xl w-full max-w-lg mx-auto text-center p-4 relative transform transition-all duration-300 scale-95 opacity-0 max-h-[90vh] overflow-y-auto">
+        <div id="banner-modal-content" class="bg-white rounded-lg shadow-xl w-full max-w-md mx-auto text-center p-4 relative transform transition-all duration-300 scale-95 opacity-0 max-h-[90vh] overflow-y-auto">
             <button id="close-banner-modal-btn" class="absolute -top-3 -right-3 bg-red-600 text-white rounded-full h-8 w-8 flex items-center justify-center text-lg font-bold hover:bg-red-700 transition">&times;</button>
             <img src="https://firebasestorage.googleapis.com/v0/b/diocesisdesantotome.firebasestorage.app/o/imagenes%2FScreenshot_20250901_210152_Adobe%20Acrobat.jpg?alt=media&token=397dc074-6085-4126-aa9f-ae17cfbac1fe" alt="Banner Anuncio" class="rounded-md w-full">
             <a href="./recursos.html" id="banner-modal-action-btn" class="mt-4 inline-block w-full bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-bold py-3 px-8 rounded-lg transition-transform duration-300 transform hover:scale-105">
@@ -663,9 +660,10 @@
         });
         bannerModalActionBtn.addEventListener('click', (e) => {
             e.preventDefault();
+            const destinationUrl = e.currentTarget.href;
             closeBannerModal();
             setTimeout(() => {
-                window.location.href = e.currentTarget.href;
+                window.location.href = destinationUrl;
             }, 300);
         });
 
@@ -699,3 +697,4 @@
     </script>
 </body>
 </html>
+
