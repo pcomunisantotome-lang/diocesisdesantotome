@@ -686,12 +686,10 @@
                 },
             });
             
-            if (!sessionStorage.getItem('bannerShown')) {
-                setTimeout(() => {
-                    openBannerModal();
-                    sessionStorage.setItem('bannerShown', 'true');
-                }, 1500);
-            }
+            // Muestra el banner en cada carga de página
+            setTimeout(() => {
+                openBannerModal();
+            }, 1500);
         });
 
     </script>
