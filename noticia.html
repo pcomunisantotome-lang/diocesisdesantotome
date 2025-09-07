@@ -27,8 +27,6 @@
         .prose img { border-radius: 0.5rem; }
         .prose p { text-align: justify; }
     </style>
-    <!-- Script de datos estructurados (JSON-LD) que se llenará dinámicamente -->
-    <script type="application/ld+json" id="structured-data"></script>
 </head>
 <body class="bg-gray-50">
 
@@ -87,19 +85,13 @@
         const lightboxModal = document.getElementById('lightbox-modal');
         const lightboxImage = document.getElementById('lightbox-image');
         const closeLightboxBtn = document.getElementById('close-lightbox-btn');
-        
-        // Esta función ahora solo actualiza el título del navegador para el usuario.
-        // Los metadatos para los bots los maneja el servidor.
-        function updateClientSideTitle(news) {
-            document.title = `${news.title} | Diócesis de Santo Tomé`;
-        }
 
         async function showSingleNews(newsId) {
             if (!newsId) {
                 singleNewsView.innerHTML = `<div class="text-center text-red-500 max-w-2xl mx-auto"><h2 class="text-2xl font-bold mb-2">Error de Carga</h2><p>No se encontró el identificador de la noticia en la URL. Asegúrate de llegar aquí haciendo clic en un enlace de "Leer más".</p></div>`;
                 return;
             }
-             singleNewsView.innerHTML = `<p class="text-center text-gray-600">Buscando noticia con ID: ${newsId}...</p>`;
+             singleNewsView.innerHTML = `<p class="text-center text-gray-600">Cargando noticia...</p>`;
 
             try {
                 const docRef = doc(db, "noticias", newsId);
@@ -107,7 +99,7 @@
 
                 if (docSnap.exists()) {
                     const news = docSnap.data();
-                    updateClientSideTitle(news);
+                    document.title = `${news.title} | Diócesis de Santo Tomé`;
                     const allImages = [news.featuredImageUrl, ...(news.galleryUrls || [])].filter(Boolean);
                     
                     let imageDisplayHTML = '';
@@ -162,7 +154,6 @@
                         });
                     }
 
-                    // Lightbox functionality
                     document.querySelectorAll('.lightbox-trigger').forEach(img => {
                         img.addEventListener('click', () => {
                             lightboxImage.src = img.src;
@@ -210,3 +201,4 @@
     </script>
 </body>
 </html>
+
