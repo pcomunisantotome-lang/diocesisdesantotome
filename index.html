@@ -8,8 +8,7 @@
     <meta property="og:title" content="Diócesis de Santo Tomé">
     <meta property="og:description" content="Sitio web oficial de la Diócesis de Santo Tomé, Corrientes, Argentina.">
     <meta property="og:image" content="https://firebasestorage.googleapis.com/v0/b/diocesisdesantotome.firebasestorage.app/o/LOGOS%2Flogo%20iglesia%20samaritana.png?alt=media&token=56fd32c1-bb7d-4537-83f7-ace6662ff768">
-    <!-- Reemplaza el content con la URL final de tu sitio web -->
-    <meta property="og:url" content="https://URL-DE-TU-SITIO-PUBLICADO.com">
+    <meta property="og:url" content="https://diocesisdesantotome.com">
     <meta property="og:type" content="website">
     <meta property="fb:app_id" content="1497738074977879" />
     
@@ -39,7 +38,6 @@
             transition: transform 0.3s ease-out, opacity 0.3s ease-out;
         }
         
-        /* Animación del banner solo para pantallas grandes (desktop) */
         @media (min-width: 768px) {
             @keyframes zoom-in {
                 0% { background-size: 100%; }
@@ -57,43 +55,19 @@
             bottom: 20px;
             right: 20px;
             z-index: 100;
+        }
+        .whatsapp-link {
             display: flex;
             align-items: center;
             justify-content: center;
-        }
-
-        .whatsapp-link {
-            display: block;
             width: 64px;
             height: 64px;
             border-radius: 9999px;
+            background-color: #25D366;
             box-shadow: 0 4px 14px rgba(0,0,0,0.25);
             animation: pulse-whatsapp 2s infinite;
             position: relative;
         }
-
-        .whatsapp-text {
-            visibility: hidden;
-            width: 220px;
-            background-color: #374151;
-            color: #fff;
-            text-align: center;
-            border-radius: 6px;
-            padding: 8px;
-            position: absolute;
-            z-index: 1;
-            right: 110%;
-            top: 50%;
-            transform: translateY(-50%);
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-
-        .whatsapp-link:hover .whatsapp-text {
-            visibility: visible;
-            opacity: 1;
-        }
-        
         #close-whatsapp {
             position: absolute;
             top: -5px;
@@ -408,8 +382,7 @@
 
     <!-- Botón Flotante de WhatsApp -->
     <div id="whatsapp-container" class="whatsapp-container">
-        <a href="https://whatsapp.com/channel/0029VaF5ENvEgGfTYyLKgO47" target="_blank" rel="noopener noreferrer" class="whatsapp-link">
-            <span class="whatsapp-text">Unite al grupo de noticias y novedades</span>
+        <a href="https://whatsapp.com/channel/0029VaF5ENvEgGfTYyLKgO47" target="_blank" rel="noopener noreferrer" class="whatsapp-link bg-white flex items-center justify-center">
             <img class="w-full h-full object-cover rounded-full" src="https://firebasestorage.googleapis.com/v0/b/diocesisdesantotome.firebasestorage.app/o/LOGOS%2FIcono%20del%20logotipo%20de%20Whatsapp%20Aplicaci%C3%B3n%20de%20redes%20sociales%20Aplicaci%C3%B3n%20de%20red%20Marca%20editorial%20popular%20Ilustraci%C3%B3n%20vectorial%20_%20Vector%20Premium.jpg?alt=media&token=0e9e3fc5-49e8-4c43-98b1-874c8a6317ef" alt="Unirse al grupo de WhatsApp">
         </a>
         <button id="close-whatsapp" title="Cerrar">&times;</button>
@@ -686,7 +659,6 @@
                 },
             });
             
-            // Muestra el banner en cada carga de página
             setTimeout(() => {
                 openBannerModal();
             }, 1500);
@@ -695,3 +667,4 @@
     </script>
 </body>
 </html>
+
