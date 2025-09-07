@@ -1,1 +1,9 @@
-[Immersive content redacted for brevity.]
+{
+  "rewrites": [
+    {
+      "source": "/noticia.html",
+      "destination": "/api/noticia"
+    }
+  ]
+}
+
