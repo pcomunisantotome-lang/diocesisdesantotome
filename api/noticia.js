@@ -46,6 +46,14 @@ export default async function handler(req, res) {
                 page = page.replace(/<meta property="og:description" content=".*?">/, `<meta property="og:description" content="${description}">`);
                 page = page.replace(/<meta property="og:image" content=".*?">/, `<meta property="og:image" content="${imageUrl}">`);
                 page = page.replace(/<meta property="og:url" content=".*?">/, `<meta property="og:url" content="${fullUrl}">`);
+                
+                // Aseguramos que la etiqueta fb:app_id esté presente y correcta.
+                if (page.includes('<meta property="fb:app_id"')) {
+                    page = page.replace(/<meta property="fb:app_id" content=".*?" \/>/, `<meta property="fb:app_id" content="1497738074977879" />`);
+                } else {
+                    // Si no existe, la inyectamos antes del </head>
+                    page = page.replace('</head>', `    <meta property="fb:app_id" content="1497738074977879" />\n</head>`);
+                }
             }
         }
         
