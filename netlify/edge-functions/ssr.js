@@ -44,18 +44,18 @@ export default async (request, context) => {
             const fullUrl = url.href;
 
             metaTags = `
-                <meta property="og:title" content="${title}">
-                <meta property="og:description" content="${description}">
-                <meta property="og:image" content="${imageUrl}">
-                <meta property="og:url" content="${fullUrl}">
-                <meta property="og:type" content="article">
+                <meta property="og:title" content="${title}" />
+                <meta property="og:description" content="${description}" />
+                <meta property="og:image" content="${imageUrl}" />
+                <meta property="og:url" content="${fullUrl}" />
+                <meta property="og:type" content="article" />
                 <meta property="fb:app_id" content="1497738074977879" />
             `;
             page = page.replace(/<title>.*?<\/title>/, `<title>${title} | Diócesis de Santo Tomé</title>`);
         }
 
         page = page.replace(metaBlockRegex, metaTags);
-        return new Response(page, response);
+        return new Response(page, { headers: { 'Content-Type': 'text/html' } });
 
     } catch (error) {
         console.error("Error en la Edge Function:", error);
