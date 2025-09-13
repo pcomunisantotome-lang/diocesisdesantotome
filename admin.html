@@ -8,15 +8,14 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
     <style>
         body { font-family: 'Inter', sans-serif; }
         .ql-editor { min-height: 150px; }
-         /* Estilo para el scrollbar */
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: #f1f5f9; }
         ::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #64748b; }
-        /* Estilos para el input de color */
         input[type="color"] {
             -webkit-appearance: none;
             border: none;
@@ -37,6 +36,12 @@
         .image-preview-item.featured {
             border: 4px solid #3b82f6;
             box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
+        }
+        .swiper-button-next, .swiper-button-prev {
+            color: #1f2937; 
+        }
+        .swiper-pagination-bullet-active {
+            background: #1f2937;
         }
     </style>
 </head>
@@ -127,7 +132,7 @@
                                 <div class="mb-4">
                                     <label class="block text-gray-700">Imágenes (la primera será la destacada)</label>
                                     <input type="file" id="news-images" class="w-full mt-2 p-2 border rounded-lg" multiple accept="image/*">
-                                    <div id="image-previews" class="mt-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4"></div>
+                                    <div id="image-previews" class="mt-4 min-h-[144px]"></div>
                                 </div>
                                 <div class="flex items-center space-x-4">
                                     <button type="submit" id="save-news-btn" class="bg-green-600 text-white font-bold py-2 px-6 rounded-lg hover:bg-green-700">Guardar Noticia</button>
@@ -176,6 +181,7 @@
     <div id="notification-container" class="fixed top-5 right-5 z-50"></div>
     
     <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
@@ -258,6 +264,7 @@
         const scriptListContainer = document.getElementById('script-list');
         
         let imageFiles = [];
+        let imageSwiper = null;
 
         const slugify = (text) => {
           const a = 'àáâäæãåāăąçćčđďèéêëēėęěğǵḧîïíīįìłḿñńǹňôöòóœøōõőṕŕřßśšşșťțûüùúūǘůűųẃẍÿýžźż·/_,:;'
@@ -302,23 +309,67 @@
         logoutBtn.addEventListener('click', () => signOut(auth));
         
         function renderImagePreviews() {
+            if (imageSwiper) {
+                imageSwiper.destroy(true, true);
+                imageSwiper = null;
+            }
+            
             imagePreviewsContainer.innerHTML = '';
-            imageFiles.forEach((img, index) => {
-                const previewDiv = document.createElement('div');
-                previewDiv.className = `relative group rounded-lg overflow-hidden image-preview-item ${img.isFeatured ? 'featured' : ''}`;
-                const imageUrl = (typeof img.source === 'string') ? img.source : URL.createObjectURL(img.source);
 
+            if (imageFiles.length === 0) return;
+
+            if (imageFiles.length === 1) {
+                const img = imageFiles[0];
+                const imageUrl = (typeof img.source === 'string') ? img.source : URL.createObjectURL(img.source);
+                const previewDiv = document.createElement('div');
+                previewDiv.className = `relative group rounded-lg overflow-hidden image-preview-item featured w-1/3`;
                 previewDiv.innerHTML = `
                     <img src="${imageUrl}" class="w-full h-32 object-cover">
                     <div class="absolute inset-0 bg-black bg-opacity-50 flex flex-col items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <button type="button" class="set-featured-btn" data-index="${index}" title="Marcar como destacada">
-                            <svg class="w-6 h-6 ${img.isFeatured ? 'text-yellow-400' : 'text-white'}" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
-                        </button>
-                        <button type="button" class="delete-img-btn bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center" data-index="${index}" title="Eliminar imagen">&times;</button>
+                       <button type="button" class="delete-img-btn bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center" data-index="0" title="Eliminar imagen">&times;</button>
                     </div>
                 `;
-                imagePreviewsContainer.appendChild(previewDiv);
-            });
+                 imagePreviewsContainer.appendChild(previewDiv);
+            } else {
+                const swiperHTML = `
+                    <div class="swiper-container image-swiper-container rounded-lg bg-slate-100 p-4" style="height: 160px;">
+                        <div class="swiper-wrapper">
+                            ${imageFiles.map((img, index) => {
+                                const imageUrl = (typeof img.source === 'string') ? img.source : URL.createObjectURL(img.source);
+                                return `
+                                <div class="swiper-slide flex items-center justify-center">
+                                    <div class="relative group rounded-lg overflow-hidden image-preview-item ${img.isFeatured ? 'featured' : ''}" style="width: 100%; height: 128px;">
+                                        <img src="${imageUrl}" class="w-full h-full object-contain">
+                                        <div class="absolute inset-0 bg-black bg-opacity-50 flex flex-col items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                            <button type="button" class="set-featured-btn" data-index="${index}" title="Marcar como destacada">
+                                                <svg class="w-6 h-6 ${img.isFeatured ? 'text-yellow-400' : 'text-white'}" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                                            </button>
+                                            <button type="button" class="delete-img-btn bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center" data-index="${index}" title="Eliminar imagen">&times;</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                `;
+                            }).join('')}
+                        </div>
+                        <div class="swiper-button-next"></div>
+                        <div class="swiper-button-prev"></div>
+                        <div class="swiper-pagination"></div>
+                    </div>
+                `;
+                imagePreviewsContainer.innerHTML = swiperHTML;
+                imageSwiper = new Swiper('.image-swiper-container', {
+                    slidesPerView: 'auto',
+                    spaceBetween: 16,
+                    navigation: {
+                        nextEl: '.swiper-button-next',
+                        prevEl: '.swiper-button-prev',
+                    },
+                    pagination: {
+                        el: '.swiper-pagination',
+                        clickable: true,
+                    },
+                });
+            }
 
             document.querySelectorAll('.delete-img-btn').forEach(btn => {
                 btn.onclick = (e) => {
@@ -528,8 +579,16 @@
             const categoryColor = selectedOption.dataset.color;
             const summary = quill.root.innerHTML;
             const saveBtn = document.getElementById('save-news-btn');
+            
             saveBtn.disabled = true;
-            saveBtn.textContent = 'Guardando...';
+            saveBtn.innerHTML = `
+                <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Guardando...
+            `;
+            saveBtn.classList.add('inline-flex', 'items-center');
 
             try {
                 const uploadPromises = imageFiles
@@ -569,7 +628,8 @@
                 showNotification(`Error al guardar la noticia: ${error.message}`, true);
             } finally {
                 saveBtn.disabled = false;
-                saveBtn.textContent = 'Guardar Noticia';
+                saveBtn.innerHTML = 'Guardar Noticia';
+                saveBtn.classList.remove('inline-flex', 'items-center');
             }
         });
         
