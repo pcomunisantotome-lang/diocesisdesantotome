@@ -1,3 +1,5 @@
+// Importante: Este archivo debe estar en la carpeta principal de tu proyecto.
+
 export async function onRequest(context) {
     // Obtenemos la página original que el visitante iba a recibir
     const response = await context.next();
@@ -8,7 +10,7 @@ export async function onRequest(context) {
     const isBot = /bot|facebook|whatsapp|twitter|slack|linkedin|googlebot|bingbot/i.test(userAgent);
 
     // Solo continuamos si estamos en la página de noticia y el visitante es un bot
-    if (url.pathname === '/noticia.html' && isBot) {
+    if (url.pathname.endsWith('/noticia.html') && isBot) {
         const newsId = url.searchParams.get('id');
         if (!newsId) {
             return response; // No hay ID, devolvemos la página original
@@ -16,7 +18,7 @@ export async function onRequest(context) {
 
         try {
             // ----- Obtenemos los datos de la noticia desde Firebase -----
-            const projectId = 'diocesisdesantotome'; // diocesisdesantotome
+            const projectId = 'diocesisdesantotome'; // ID del proyecto ya insertado
             const firestoreUrl = `https://firestore.googleapis.com/v1/projects/${projectId}/databases/(default)/documents/noticias/${newsId}`;
 
             const firestoreResponse = await fetch(firestoreUrl);
@@ -36,7 +38,7 @@ export async function onRequest(context) {
             let page = await response.text();
 
             const description = (news.summary || '').replace(/<[^>]+>/g, '').substring(0, 160);
-            const imageUrl = news.featuredImageUrl || '[https://firebasestorage.googleapis.com/v0/b/diocesisdesantotome.firebasestorage.app/o/LOGOS%2Flogo%20iglesia%20samaritana.png?alt=media&token=56fd32c1-bb7d-4537-83f7-ace6662ff768](https://firebasestorage.googleapis.com/v0/b/diocesisdesantotome.firebasestorage.app/o/LOGOS%2Flogo%20iglesia%20samaritana.png?alt=media&token=56fd32c1-bb7d-4537-83f7-ace6662ff768)';
+            const imageUrl = news.featuredImageUrl || 'https://firebasestorage.googleapis.com/v0/b/diocesisdesantotome.firebasestorage.app/o/LOGOS%2Flogo%20iglesia%20samaritana.png?alt=media&token=56fd32c1-bb7d-4537-83f7-ace6662ff768';
             const fullUrl = url.href;
 
             // Construimos el bloque completo de metadatos
@@ -67,3 +69,4 @@ export async function onRequest(context) {
     // Si no es un bot o no es la página de noticia, simplemente devolvemos la página original sin cambios.
     return response;
 }
+
