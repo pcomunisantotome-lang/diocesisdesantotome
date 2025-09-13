@@ -188,7 +188,6 @@
                 if (navigator.share) {
                     await navigator.share(shareData);
                 } else {
-                    // Fallback for browsers that don't support Web Share API
                     navigator.clipboard.writeText(window.location.href).then(() => {
                         alert('Enlace copiado al portapapeles.');
                     });
