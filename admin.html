@@ -34,6 +34,10 @@
             border: none;
             border-radius: 6px;
         }
+        .image-preview-item.featured {
+            border: 4px solid #3b82f6;
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
+        }
     </style>
 </head>
 <body class="bg-slate-100">
@@ -253,7 +257,7 @@
         const scriptForm = document.getElementById('script-form');
         const scriptListContainer = document.getElementById('script-list');
         
-        let existingImageUrls = [];
+        let imageFiles = [];
 
         const slugify = (text) => {
           const a = 'àáâäæãåāăąçćčđďèéêëēėęěğǵḧîïíīįìłḿñńǹňôöòóœøōõőṕŕřßśšşșťțûüùúūǘůűųẃẍÿýžźż·/_,:;'
@@ -296,20 +300,52 @@
         });
 
         logoutBtn.addEventListener('click', () => signOut(auth));
-
-        imageInput.addEventListener('change', () => {
+        
+        function renderImagePreviews() {
             imagePreviewsContainer.innerHTML = '';
-            existingImageUrls = [];
-            Array.from(imageInput.files).forEach(file => {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    const previewDiv = document.createElement('div');
-                    previewDiv.className = 'relative group';
-                    previewDiv.innerHTML = `<img src="${e.target.result}" class="w-full h-32 object-cover rounded-lg"><div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"><span class="text-white text-xs text-center p-1">${file.name}</span></div>`;
-                    imagePreviewsContainer.appendChild(previewDiv);
-                };
-                reader.readAsDataURL(file);
+            imageFiles.forEach((img, index) => {
+                const previewDiv = document.createElement('div');
+                previewDiv.className = `relative group rounded-lg overflow-hidden image-preview-item ${img.isFeatured ? 'featured' : ''}`;
+                const imageUrl = (typeof img.source === 'string') ? img.source : URL.createObjectURL(img.source);
+
+                previewDiv.innerHTML = `
+                    <img src="${imageUrl}" class="w-full h-32 object-cover">
+                    <div class="absolute inset-0 bg-black bg-opacity-50 flex flex-col items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <button type="button" class="set-featured-btn" data-index="${index}" title="Marcar como destacada">
+                            <svg class="w-6 h-6 ${img.isFeatured ? 'text-yellow-400' : 'text-white'}" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                        </button>
+                        <button type="button" class="delete-img-btn bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center" data-index="${index}" title="Eliminar imagen">&times;</button>
+                    </div>
+                `;
+                imagePreviewsContainer.appendChild(previewDiv);
             });
+
+            document.querySelectorAll('.delete-img-btn').forEach(btn => {
+                btn.onclick = (e) => {
+                    const index = parseInt(e.currentTarget.dataset.index);
+                    imageFiles.splice(index, 1);
+                    if (imageFiles.length > 0 && !imageFiles.some(f => f.isFeatured)) {
+                        imageFiles[0].isFeatured = true;
+                    }
+                    renderImagePreviews();
+                };
+            });
+
+            document.querySelectorAll('.set-featured-btn').forEach(btn => {
+                btn.onclick = (e) => {
+                    const index = parseInt(e.currentTarget.dataset.index);
+                    imageFiles.forEach((file, i) => file.isFeatured = (i === index));
+                    renderImagePreviews();
+                };
+            });
+        }
+        
+        imageInput.addEventListener('change', () => {
+            imageFiles = Array.from(imageInput.files).map((file, index) => ({
+                source: file,
+                isFeatured: index === 0 
+            }));
+            renderImagePreviews();
         });
 
         async function loadCategories() {
@@ -338,7 +374,7 @@
                     const option = document.createElement('option');
                     option.value = category.name;
                     option.textContent = category.name;
-                    option.dataset.color = category.color; // Store color in dataset
+                    option.dataset.color = category.color;
                     newsCategorySelect.appendChild(option);
                 });
             } catch (error) {
@@ -403,7 +439,6 @@
             }
 
             const title = file.name.substring(0, file.name.lastIndexOf('.')) || file.name;
-
             const saveBtn = document.getElementById('save-script-btn');
             saveBtn.disabled = true;
             saveBtn.textContent = 'Subiendo...';
@@ -463,7 +498,7 @@
                     });
                     showNotification('Categoría agregada con éxito.');
                     addCategoryForm.reset();
-                    categoryColorInput.value = "#4F46E5"; // Reset to default
+                    categoryColorInput.value = "#4F46E5";
                     loadCategories();
                 } catch (error) {
                     showNotification(`Error al agregar categoría: ${error.message}`, true);
@@ -492,23 +527,28 @@
             const category = selectedOption.value;
             const categoryColor = selectedOption.dataset.color;
             const summary = quill.root.innerHTML;
-            const files = e.target['news-images'].files;
             const saveBtn = document.getElementById('save-news-btn');
             saveBtn.disabled = true;
             saveBtn.textContent = 'Guardando...';
 
             try {
-                const uploadTasks = Array.from(files).map(file => {
-                    const storageRef = ref(storage, `news-images/${Date.now()}_${file.name}`);
-                    return uploadBytesResumable(storageRef, file);
-                });
-                const snapshots = await Promise.all(uploadTasks);
-                const newImageUrls = await Promise.all(snapshots.map(s => getDownloadURL(s.ref)));
-                const allImageUrls = [...newImageUrls, ...existingImageUrls];
+                const uploadPromises = imageFiles
+                    .filter(img => typeof img.source !== 'string')
+                    .map(img => {
+                        const storageRef = ref(storage, `news-images/${Date.now()}_${img.source.name}`);
+                        return uploadBytesResumable(storageRef, img.source).then(snapshot => getDownloadURL(snapshot.ref));
+                    });
+
+                const newImageUrls = await Promise.all(uploadPromises);
+                let urlIndex = 0;
+                const allImageUrls = imageFiles.map(img => (typeof img.source === 'string') ? img.source : newImageUrls[urlIndex++]);
+                
+                const featuredImageUrl = allImageUrls[imageFiles.findIndex(f => f.isFeatured)] || null;
+                const galleryUrls = allImageUrls.filter(url => url !== featuredImageUrl);
+
                 const newsData = {
                     title, category, categoryColor, summary,
-                    featuredImageUrl: allImageUrls[0] || null,
-                    galleryUrls: allImageUrls.slice(1) || [],
+                    featuredImageUrl, galleryUrls,
                     updatedAt: serverTimestamp(),
                 };
 
@@ -536,11 +576,11 @@
         function resetForm() {
             newsForm.reset();
             quill.setContents([]);
-            imagePreviewsContainer.innerHTML = '';
+            imageFiles = [];
+            renderImagePreviews();
             document.getElementById('news-id').value = '';
             document.getElementById('form-title').textContent = 'Agregar Nueva Noticia';
             document.getElementById('cancel-edit-btn').classList.add('hidden');
-            existingImageUrls = [];
         }
 
         existingNewsContainer.addEventListener('click', async (e) => {
@@ -555,13 +595,15 @@
                     document.getElementById('news-title').value = news.title;
                     document.getElementById('news-category').value = news.category || '';
                     quill.root.innerHTML = news.summary;
-                    existingImageUrls = [news.featuredImageUrl, ...(news.galleryUrls || [])].filter(Boolean);
-                    imagePreviewsContainer.innerHTML = '';
-                    existingImageUrls.forEach(url => {
-                         const previewDiv = document.createElement('div');
-                         previewDiv.innerHTML = `<img src="${url}" class="w-full h-32 object-cover rounded-lg">`;
-                         imagePreviewsContainer.appendChild(previewDiv);
-                    });
+                    
+                    const featured = news.featuredImageUrl;
+                    const gallery = news.galleryUrls || [];
+                    imageFiles = [featured, ...gallery].filter(Boolean).map(url => ({
+                        source: url,
+                        isFeatured: url === featured
+                    }));
+                    
+                    renderImagePreviews();
                     document.getElementById('form-title').textContent = 'Editando Noticia';
                     document.getElementById('cancel-edit-btn').classList.remove('hidden');
                     window.scrollTo(0, 0);
