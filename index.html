@@ -57,33 +57,16 @@
             z-index: 100;
         }
         .whatsapp-link {
-            display: block;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             width: 64px;
             height: 64px;
             border-radius: 9999px;
+            background-color: #25D366;
             box-shadow: 0 4px 14px rgba(0,0,0,0.25);
             animation: pulse-whatsapp 2s infinite;
             position: relative;
-        }
-        .whatsapp-text {
-            visibility: hidden;
-            width: 220px;
-            background-color: #374151;
-            color: #fff;
-            text-align: center;
-            border-radius: 6px;
-            padding: 8px;
-            position: absolute;
-            z-index: 1;
-            right: 110%;
-            top: 50%;
-            transform: translateY(-50%);
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-        .whatsapp-link:hover .whatsapp-text {
-            visibility: visible;
-            opacity: 1;
         }
         #close-whatsapp {
             position: absolute;
@@ -111,6 +94,21 @@
             0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7); }
             70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(37, 211, 102, 0); }
             100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
+        }
+
+        @keyframes section-fade-in {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes section-fade-out {
+            from { opacity: 1; transform: translateY(0); }
+            to { opacity: 0; transform: translateY(-10px); }
+        }
+        .animate-section-in {
+            animation: section-fade-in 0.4s ease-out forwards;
+        }
+        .animate-section-out {
+            animation: section-fade-out 0.3s ease-in forwards;
         }
     </style>
 </head>
@@ -449,11 +447,23 @@
         const bannerModalActionBtn = document.getElementById('banner-modal-action-btn');
         
         let allNewsData = [];
+        let currentActiveSection = 'main-content-container';
 
         const createNewsCard = (newsDoc) => {
             const news = newsDoc.data();
-            const placeholderImg = 'https://placehold.co/600x400/e2e8f0/e2e8f0?text=...';
-            const imageUrl = news.featuredImageUrl || placeholderImg;
+            
+            const originalUrl = news.featuredImageUrl || 'https://placehold.co/600x400/e2e8f0/e2e8f0?text=...';
+            let optimizedUrl = originalUrl;
+
+            if (originalUrl.includes('firebasestorage')) {
+                const urlParts = originalUrl.split('?');
+                const basePath = urlParts[0];
+                const token = urlParts[1];
+                const fileExtension = basePath.substring(basePath.lastIndexOf('.'));
+                const pathWithoutExtension = basePath.substring(0, basePath.lastIndexOf('.'));
+                optimizedUrl = `${pathWithoutExtension}_600x400${fileExtension}?${token}`;
+            }
+
             const card = document.createElement('div');
             card.className = 'bg-white rounded-lg shadow-lg overflow-hidden flex flex-col group';
             const categoryColor = news.categoryColor || '#3B82F6';
@@ -463,7 +473,7 @@
                 <a href="./noticia.html?id=${newsDoc.id}" class="block">
                     <div class="relative overflow-hidden">
                         <div class="aspect-video">
-                           <img src="${imageUrl}" alt="${news.title || ''}" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" onerror="this.onerror=null;this.src='${placeholderImg}';">
+                           <img src="${optimizedUrl}" alt="${news.title || ''}" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" onerror="this.onerror=null;this.src='${originalUrl}';">
                         </div>
                         <span class="absolute top-3 right-3 text-white text-xs font-semibold px-3 py-1.5 rounded-full" style="background-image: linear-gradient(to right, ${categoryColor}, ${darkerCategoryColor})">${news.category || 'General'}</span>
                     </div>
@@ -521,18 +531,38 @@
             });
         }
         
-        function showMainView() {
-            mainContentContainer.classList.remove('hidden');
-            cleanSectionsContainer.classList.add('hidden');
-            window.scrollTo(0, 0);
-        }
+        function switchView(targetId) {
+            if (currentActiveSection === targetId) return;
 
-        function showCleanSection(sectionId) {
-            mainContentContainer.classList.add('hidden');
-            cleanSectionsContainer.classList.remove('hidden');
-            allCleanSections.forEach(section => section.classList.add('hidden'));
-            document.getElementById(sectionId).classList.remove('hidden');
-            window.scrollTo(0, 0);
+            const currentSectionEl = document.getElementById(currentActiveSection);
+            const targetSectionEl = document.getElementById(targetId);
+            
+            if (!currentSectionEl || !targetSectionEl) return;
+
+            currentSectionEl.classList.add('animate-section-out');
+            
+            currentSectionEl.addEventListener('animationend', () => {
+                currentSectionEl.classList.add('hidden');
+                currentSectionEl.classList.remove('animate-section-out');
+
+                if (targetId === 'main-content-container') {
+                    cleanSectionsContainer.classList.add('hidden');
+                } else {
+                    mainContentContainer.classList.add('hidden');
+                    cleanSectionsContainer.classList.remove('hidden');
+                    allCleanSections.forEach(s => s.id === targetId ? s.classList.remove('hidden') : s.classList.add('hidden'));
+                }
+                
+                targetSectionEl.classList.remove('hidden');
+                targetSectionEl.classList.add('animate-section-in');
+                currentActiveSection = targetId;
+                window.scrollTo(0, 0);
+                
+                targetSectionEl.addEventListener('animationend', () => {
+                    targetSectionEl.classList.remove('animate-section-in');
+                }, { once: true });
+
+            }, { once: true });
         }
 
         function openDonateModal() {
@@ -600,23 +630,20 @@
             }
         });
 
-        document.querySelectorAll('.back-to-main-btn, #logo-link').forEach(btn => {
+        document.querySelectorAll('.back-to-main-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 e.preventDefault();
-                showMainView();
+                switchView('main-content-container');
             });
         });
 
-        const menuMapping = {
-            'menu-obispo-bio': 'obispo'
-        };
-
+        const menuMapping = { 'menu-obispo-bio': 'obispo' };
         for (const [btnId, sectionId] of Object.entries(menuMapping)) {
             const btn = document.getElementById(btnId);
             if (btn) {
                 btn.addEventListener('click', (e) => {
                     e.preventDefault();
-                    showCleanSection(sectionId);
+                    switchView(sectionId);
                 });
             }
         }
@@ -656,7 +683,6 @@
                 window.location.href = destinationUrl;
             }, 300);
         });
-
 
         document.addEventListener('DOMContentLoaded', () => {
             populateNewsPreview();
