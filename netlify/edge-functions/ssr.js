@@ -40,8 +40,22 @@ export default async (request, context) => {
             const news = docSnap.data();
             const description = (news.summary || '').replace(/<[^>]+>/g, '').substring(0, 160).replace(/"/g, '&quot;');
             const title = (news.title || 'Noticia').replace(/"/g, '&quot;');
-            const imageUrl = news.featuredImageUrl || 'https://firebasestorage.googleapis.com/v0/b/diocesisdesantotome.firebasestorage.app/o/LOGOS%2Flogo%20iglesia%20samaritana.png?alt=media&token=56fd32c1-bb7d-4537-83f7-ace6662ff768';
             const fullUrl = url.href;
+
+            let imageUrl = news.featuredImageUrl || 'https://firebasestorage.googleapis.com/v0/b/diocesisdesantotome.firebasestorage.app/o/LOGOS%2Flogo%20iglesia%20samaritana.png?alt=media&token=56fd32c1-bb7d-4537-83f7-ace6662ff768';
+            
+            // INTELIGENCIA PARA USAR LA IMAGEN REDIMENSIONADA
+            if (news.featuredImageUrl && news.featuredImageUrl.includes('firebasestorage')) {
+                const urlParts = news.featuredImageUrl.split('?');
+                const basePath = urlParts[0];
+                const token = urlParts[1];
+                const fileExtension = basePath.substring(basePath.lastIndexOf('.'));
+                const pathWithoutExtension = basePath.substring(0, basePath.lastIndexOf('.'));
+                
+                // Construye la URL de la imagen optimizada (1200x630)
+                const resizedImageUrl = `${pathWithoutExtension}_1200x630${fileExtension}?${token}`;
+                imageUrl = resizedImageUrl;
+            }
 
             metaTags = `
                 <meta property="og:title" content="${title}" />
@@ -62,4 +76,3 @@ export default async (request, context) => {
         return context.next();
     }
 };
-
