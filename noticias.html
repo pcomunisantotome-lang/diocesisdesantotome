@@ -115,8 +115,18 @@
 
         const createNewsListItem = (newsDoc) => {
             const news = newsDoc.data();
-            const placeholderImg = 'https://placehold.co/400x400/e2e8f0/e2e8f0?text=...';
-            const imageUrl = news.featuredImageUrl || placeholderImg;
+            const originalUrl = news.featuredImageUrl || 'https://placehold.co/400x400/e2e8f0/e2e8f0?text=...';
+            let optimizedUrl = originalUrl;
+
+            if (originalUrl.includes('firebasestorage')) {
+                const urlParts = originalUrl.split('?');
+                const basePath = urlParts[0];
+                const token = urlParts[1];
+                const fileExtension = basePath.substring(basePath.lastIndexOf('.'));
+                const pathWithoutExtension = basePath.substring(0, basePath.lastIndexOf('.'));
+                optimizedUrl = `${pathWithoutExtension}_600x400${fileExtension}?${token}`;
+            }
+
             const categoryColor = news.categoryColor || '#3B82F6'; // Default to blue
             const darkerCategoryColor = lightenDarkenColor(categoryColor, -40);
 
@@ -125,7 +135,7 @@
             item.innerHTML = `
                 <div class="md:w-1/3 flex-shrink-0">
                     <a href="./noticia.html?id=${newsDoc.id}" class="block relative overflow-hidden aspect-video md:aspect-square">
-                        <img src="${imageUrl}" alt="${news.title || ''}" class="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" onerror="this.onerror=null;this.src='${placeholderImg}';">
+                        <img src="${optimizedUrl}" alt="${news.title || ''}" class="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" onerror="this.onerror=null;this.src='${originalUrl}';">
                         <span class="absolute top-3 right-3 text-white text-xs font-semibold px-3 py-1.5 rounded-full" style="background-image: linear-gradient(to right, ${categoryColor}, ${darkerCategoryColor})">${news.category || 'General'}</span>
                     </a>
                 </div>
