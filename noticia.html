@@ -26,7 +26,7 @@
         .swiper-button-next::after, .swiper-button-prev::after { font-size: 18px; font-weight: bold; }
         .swiper-pagination-bullet-active { background: #ffffff; }
         .prose img { border-radius: 0.5rem; }
-        .prose p { text-align: justify; }
+        .prose p { text-align: left; } /* Mejorado para legibilidad móvil */
     </style>
 </head>
 <body class="bg-gray-50">
@@ -48,7 +48,7 @@
         </nav>
     </header>
 
-    <main id="single-news-view" class="py-12">
+    <main id="single-news-view" class="py-8 sm:py-12">
         <!-- Contenido de la noticia se carga aquí -->
         <p class="text-center text-gray-600">Cargando noticia...</p>
     </main>
@@ -87,6 +87,23 @@
         const lightboxImage = document.getElementById('lightbox-image');
         const closeLightboxBtn = document.getElementById('close-lightbox-btn');
 
+        // Función para obtener la URL de imagen optimizada
+        function getOptimizedImageUrl(originalUrl) {
+            if (originalUrl && originalUrl.includes('firebasestorage')) {
+                try {
+                    const urlParts = originalUrl.split('?');
+                    const basePath = urlParts[0];
+                    const token = urlParts[1];
+                    const fileExtension = basePath.substring(basePath.lastIndexOf('.'));
+                    const pathWithoutExtension = basePath.substring(0, basePath.lastIndexOf('.'));
+                    return `${pathWithoutExtension}_600x400${fileExtension}?${token}`;
+                } catch (e) {
+                    return originalUrl; // Devuelve la original si hay algún error
+                }
+            }
+            return originalUrl;
+        }
+
         async function showSingleNews(newsId) {
             if (!newsId) {
                 singleNewsView.innerHTML = `<div class="text-center text-red-500 max-w-2xl mx-auto"><h2 class="text-2xl font-bold mb-2">Error de Carga</h2><p>No se encontró el identificador de la noticia en la URL. Asegúrate de llegar aquí haciendo clic en un enlace de "Leer más".</p></div>`;
@@ -101,6 +118,7 @@
                 if (docSnap.exists()) {
                     const news = docSnap.data();
                     document.title = `${news.title} | Diócesis de Santo Tomé`;
+                    
                     const allImages = [news.featuredImageUrl, ...(news.galleryUrls || [])].filter(Boolean);
                     
                     let imageDisplayHTML = '';
@@ -108,9 +126,9 @@
                         imageDisplayHTML = `
                             <div class="swiper-container my-8 rounded-lg overflow-hidden bg-gray-200 aspect-video">
                                 <div class="swiper-wrapper">
-                                    ${allImages.map(url => `
+                                    ${allImages.map(originalUrl => `
                                         <div class="swiper-slide flex items-center justify-center">
-                                            <img src="${url}" class="w-full h-full object-contain cursor-pointer lightbox-trigger">
+                                            <img src="${getOptimizedImageUrl(originalUrl)}" data-full-src="${originalUrl}" class="w-full h-full object-contain cursor-pointer lightbox-trigger" onerror="this.onerror=null;this.src='${originalUrl}';">
                                         </div>
                                     `).join('')}
                                 </div>
@@ -119,9 +137,10 @@
                                 <div class="swiper-button-prev"></div>
                             </div>`;
                     } else if (allImages.length === 1) {
+                        const originalUrl = allImages[0];
                         imageDisplayHTML = `
                             <div class="my-8">
-                                <img src="${allImages[0]}" alt="${news.title}" class="w-full max-h-[500px] object-contain rounded-lg shadow-md cursor-pointer lightbox-trigger mx-auto">
+                                <img src="${getOptimizedImageUrl(originalUrl)}" data-full-src="${originalUrl}" alt="${news.title}" class="w-full max-h-[500px] object-contain rounded-lg shadow-md cursor-pointer lightbox-trigger mx-auto" onerror="this.onerror=null;this.src='${originalUrl}';">
                             </div>`;
                     }
 
@@ -129,7 +148,7 @@
                         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
                         <article class="bg-white p-6 md:p-8 rounded-lg shadow-xl">
                             <a href="./noticias.html" class="mb-6 inline-block text-blue-600 font-semibold hover:underline">&larr; Volver a Todas las Noticias</a>
-                            <h1 class="text-3xl md:text-4xl font-bold text-gray-800">${news.title}</h1>
+                            <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800">${news.title}</h1>
                             <p class="mt-2 text-sm text-gray-500 font-semibold uppercase">${news.category || 'General'}</p>
                             <div class="prose max-w-none lg:prose-lg mt-6">${news.summary}</div>
                             ${imageDisplayHTML}
@@ -160,8 +179,8 @@
                     }
 
                     document.querySelectorAll('.lightbox-trigger').forEach(img => {
-                        img.addEventListener('click', () => {
-                            lightboxImage.src = img.src;
+                        img.addEventListener('click', (e) => {
+                            lightboxImage.src = e.currentTarget.dataset.fullSrc || e.currentTarget.src;
                             lightboxModal.classList.remove('hidden');
                         });
                     });
@@ -206,3 +225,4 @@
     </script>
 </body>
 </html>
+
