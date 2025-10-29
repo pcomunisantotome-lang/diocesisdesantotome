@@ -144,10 +144,10 @@
                             <h2 class="text-2xl font-bold mb-4">Gestionar Guiones Diocesanos</h2>
                             <form id="script-form" class="space-y-4">
                                 <div>
-                                    <label for="script-file" class="block text-gray-700">Archivo (PDF, Word, etc.)</label>
-                                    <input type="file" id="script-file" class="w-full mt-2 p-2 border rounded-lg" required>
+                                    <label for="script-file" class="block text-gray-700">Archivo(s) (PDF, Word, etc.)</label>
+                                    <input type="file" id="script-file" class="w-full mt-2 p-2 border rounded-lg" required multiple>
                                 </div>
-                                <button type="submit" id="save-script-btn" class="w-full bg-purple-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-purple-700">Subir Guion</button>
+                                <button type="submit" id="save-script-btn" class="w-full bg-purple-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-purple-700">Subir Guion(es)</button>
                             </form>
                             <h3 class="text-xl font-bold mt-6 mb-4">Guiones Subidos</h3>
                             <div id="script-list" class="space-y-2"><p>Cargando guiones...</p></div>
@@ -174,6 +174,8 @@
     <div id="notification-container" class="fixed top-5 right-5 z-50"></div>
     
     <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+    <!-- Import Swiper JS (solo necesario si no estaba ya importado) -->
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
@@ -320,6 +322,7 @@
 
             document.querySelectorAll('.delete-img-btn').forEach(btn => {
                 btn.onclick = (e) => {
+                    e.preventDefault();
                     const index = parseInt(e.currentTarget.dataset.index);
                     imageFiles.splice(index, 1);
                     if (imageFiles.length > 0 && !imageFiles.some(f => f.isFeatured)) {
@@ -331,6 +334,7 @@
 
             document.querySelectorAll('.set-featured-btn').forEach(btn => {
                 btn.onclick = (e) => {
+                    e.preventDefault();
                     const index = parseInt(e.currentTarget.dataset.index);
                     imageFiles.forEach((file, i) => file.isFeatured = (i === index));
                     renderImagePreviews();
@@ -430,34 +434,48 @@
 
         scriptForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            const file = e.target['script-file'].files[0];
-            if (!file) {
-                showNotification('Por favor, selecciona un archivo.', true);
+            const files = e.target['script-file'].files; // <-- Changed to 'files' (plural)
+            if (!files || files.length === 0) { // <-- Updated check
+                showNotification('Por favor, selecciona uno o más archivos.', true);
                 return;
             }
 
-            const title = file.name.substring(0, file.name.lastIndexOf('.')) || file.name;
             const saveBtn = document.getElementById('save-script-btn');
             saveBtn.disabled = true;
             saveBtn.textContent = 'Subiendo...';
-            try {
+            
+            const uploadTasks = [];
+
+            for (const file of files) {
+                const title = file.name.substring(0, file.name.lastIndexOf('.')) || file.name;
                 const storageRef = ref(storage, `diocesan-scripts/${Date.now()}_${file.name}`);
-                await uploadBytesResumable(storageRef, file);
-                const downloadURL = await getDownloadURL(storageRef);
-                await addDoc(collection(db, "scripts"), {
-                    title,
-                    downloadURL,
-                    fileName: file.name,
-                    createdAt: serverTimestamp()
-                });
-                showNotification('Guion subido con éxito.');
+                
+                // Creamos una promesa para cada subida y guardado
+                const uploadTask = async () => {
+                    await uploadBytesResumable(storageRef, file);
+                    const downloadURL = await getDownloadURL(storageRef);
+                    await addDoc(collection(db, "scripts"), {
+                        title,
+                        downloadURL,
+                        fileName: file.name,
+                        createdAt: serverTimestamp()
+                    });
+                };
+                uploadTasks.push(uploadTask());
+            }
+
+            try {
+                // Esperamos a que todas las promesas de subida se completen
+                await Promise.all(uploadTasks);
+                
+                showNotification(`¡${files.length} guion(es) subido(s) con éxito!`);
                 scriptForm.reset();
                 loadScripts();
             } catch (error) {
-                showNotification(`Error al subir el guion: ${error.message}`, true);
+                showNotification(`Error al subir los guiones: ${error.message}`, true);
             } finally {
                 saveBtn.disabled = false;
-                saveBtn.textContent = 'Subir Guion';
+                saveBtn.textContent = 'Subir Guion(es)';
             }
         });
 
@@ -643,4 +661,5 @@
     </script>
 </body>
 </html>
+
 
