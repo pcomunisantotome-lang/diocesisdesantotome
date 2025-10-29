@@ -67,11 +67,11 @@
     <!-- Modal para Guiones Diocesanos -->
     <div id="scripts-cards-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white rounded-lg shadow-xl w-full max-w-4xl max-h-[90vh] flex flex-col">
-            <div class="p-4 border-b flex justify-between items-center">
-                <h2 class="text-xl font-bold text-gray-800">Guiones Diocesanos</h2>
-                <button id="close-scripts-cards-modal-btn" class="text-2xl font-bold text-gray-500 hover:text-gray-800">&times;</button>
+            <div class="p-4 border-b relative flex justify-center items-center">
+                <h2 class="text-xl font-bold text-gray-800 text-center">Guiones Diocesanos</h2>
+                <button id="close-scripts-cards-modal-btn" class="absolute top-1/2 right-4 -translate-y-1/2 text-3xl font-light text-gray-500 hover:text-gray-800">&times;</button>
             </div>
-            <div id="scripts-cards-list" class="p-6 overflow-y-auto grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div id="scripts-cards-list" class="p-6 overflow-y-auto flex flex-wrap justify-center gap-6">
                 <!-- Los guiones se cargarán aquí -->
             </div>
         </div>
@@ -80,9 +80,9 @@
     <!-- Modal para Subsidios Pastorales -->
     <div id="subsidios-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white rounded-lg shadow-xl w-full max-w-4xl max-h-[90vh] flex flex-col">
-            <div class="p-4 border-b flex justify-between items-center">
-                <h2 class="text-xl font-bold text-gray-800">Subsidios Pastorales</h2>
-                <button id="close-subsidios-modal-btn" class="text-2xl font-bold text-gray-500 hover:text-gray-800">&times;</button>
+            <div class="p-4 border-b relative flex justify-center items-center">
+                <h2 class="text-xl font-bold text-gray-800 text-center">Subsidios Pastorales</h2>
+                <button id="close-subsidios-modal-btn" class="absolute top-1/2 right-4 -translate-y-1/2 text-3xl font-light text-gray-500 hover:text-gray-800">&times;</button>
             </div>
             <div class="p-6 overflow-y-auto">
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -131,20 +131,20 @@
 
         async function openScriptsModal() {
             scriptsCardsModal.classList.remove('hidden');
-            scriptsCardsList.innerHTML = '<p class="col-span-full">Cargando guiones...</p>';
+            scriptsCardsList.innerHTML = '<p class="text-gray-500">Cargando guiones...</p>';
             try {
                 const querySnapshot = await getDocs(query(collection(db, "scripts"), orderBy("createdAt", "desc")));
                 scriptsCardsList.innerHTML = '';
                 if (querySnapshot.empty) {
-                    scriptsCardsList.innerHTML = '<p class="col-span-full">No hay guiones disponibles.</p>';
+                    scriptsCardsList.innerHTML = '<p class="text-gray-500">No hay guiones disponibles.</p>';
                 } else {
                     querySnapshot.forEach(doc => {
                         const script = doc.data();
                         const card = document.createElement('div');
-                        card.className = "flex flex-col items-center text-center p-4 rounded-lg hover:shadow-md transition-shadow bg-gray-50";
+                        card.className = "flex flex-col items-center text-center p-4 rounded-lg hover:shadow-md transition-shadow bg-gray-50 w-full sm:w-72";
                         card.innerHTML = `
-                            <div class="flex-shrink-0 flex items-center justify-center w-full h-40 bg-gray-200 rounded-lg shadow-sm mb-4">
-                                <svg class="w-16 h-16 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                            <div class="flex-shrink-0 flex items-center justify-center w-full h-40 bg-gray-200 rounded-lg shadow-sm mb-4 p-4">
+                                <img src="https://firebasestorage.googleapis.com/v0/b/diocesisdesantotome.firebasestorage.app/o/LOGOS%2Fmicrosoft-word-mobile-apps-icon-free-png.png?alt=media&token=809b0bbf-6d0a-4d27-957b-bbe93c28fc3a" alt="Icono de Documento" class="w-24 h-24 object-contain">
                             </div>
                             <h3 class="font-bold mb-2 flex-grow">${script.title}</h3>
                             <a href="${script.downloadURL}" download target="_blank" class="w-full mt-auto bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-semibold py-2 px-4 rounded-lg transition">Descargar</a>
